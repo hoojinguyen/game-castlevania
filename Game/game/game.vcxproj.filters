@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Goomba.cpp" />
+    <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="main.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Framework\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="define.cpp">
+      <Filter>Framework\Define</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Framework\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Framework\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="GTexture.cpp">
+      <Filter>Framework\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="GSprite.cpp">
+      <Filter>Framework\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Object\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Torch.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="MorningStar.cpp">
+      <Filter>Object\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Framework\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderBBOX.cpp">
+      <Filter>Framework\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="LargeHeart.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="VariableGlobal.cpp">
+      <Filter>Framework\Define</Filter>
+    </ClCompile>
+    <ClCompile Include="UpgradeMorningStar.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Goomba.h" />
+    <ClInclude Include="Mario.h" />
+    <ClInclude Include="define.h">
+      <Filter>Framework\Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Framework\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Framework\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Framework\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="GTexture.h">
+      <Filter>Framework\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="GSprite.h">
+      <Filter>Framework\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Object\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Torch.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="MorningStar.h">
+      <Filter>Object\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Framework\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderBBOX.h">
+      <Filter>Framework\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="LargeHeart.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="VariableGlobal.h">
+      <Filter>Framework\Define</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeMorningStar.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{59c90432-2e1f-4ef8-a1a8-7f7e46ab8123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Define">
+      <UniqueIdentifier>{a4b56e58-ce8f-4290-a703-10207636f8c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{a1462d77-ab06-4dec-9408-86c35e4bab07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Map">
+      <UniqueIdentifier>{0faecd9b-1d9d-4a7f-8fbd-cb69b31c0599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Camera">
+      <UniqueIdentifier>{d94051ad-a4c4-4685-aff1-7168095dc6f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{07c8ee41-a12d-4074-ab7a-94fdc80360be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Ground">
+      <UniqueIdentifier>{72083239-6ae6-4d0a-951d-8f493ec85e3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Grid">
+      <UniqueIdentifier>{04c0e51c-83d1-4f59-8c3a-73884ce3fddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Animation">
+      <UniqueIdentifier>{860a8b8a-e5f8-409f-ba75-74bfa582b643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Weapon">
+      <UniqueIdentifier>{444901f6-5fb3-4466-b1ab-576f361cdd1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Debug">
+      <UniqueIdentifier>{dfb43383-ef23-4a2b-ba06-790f57a296f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{5c6daaa9-a099-4a7c-ab4d-2ff70a828313}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
