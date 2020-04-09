@@ -1,8 +1,4 @@
 ﻿#pragma once
-
-
- 
-
 #include "define.h"
 #include "GSprite.h"
 #include "GTexture.h"
@@ -13,7 +9,6 @@
 
 using namespace std;
 
- 
 class GameObject; 
 typedef GameObject * LPGAMEOBJECT;
 //
@@ -38,9 +33,6 @@ typedef GameObject * LPGAMEOBJECT;
 //};
 //
 
-
-
-
 class GameObject : public Object
 {
 protected:
@@ -49,12 +41,11 @@ protected:
 public:
 	int id; // ID của object
 	  
-	int trend;	// hướng -1 : trái, 1: phải
+	int direction;	// hướng -1 : trái, 1: phải
 	    
 	bool isTake;
 
 public:
-   
  
 	GameObject();
 
@@ -64,7 +55,7 @@ public:
  
 	int GetHealth();
 	void SubHealth(int th); 
-	void SetTrend(int Trend);
+	void SetDirection(int direction);
 	void SetId(int ID);
 	  
 	~GameObject();
@@ -89,7 +80,7 @@ class GameObject
 {
 protected:
 	int Health;
-	eID type; // Loại Object
+	eType type; // Loại Object
 
 
 public:
@@ -155,7 +146,7 @@ public:
 	void SetTrend(int Trend);
 	void SetId(int ID);
 
-	eID GetType();
+	eType GetType();
 
 
 

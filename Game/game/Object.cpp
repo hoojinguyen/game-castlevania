@@ -1,7 +1,5 @@
 ﻿#include "Object.h"
 
-
-
 void Object::RenderBoundingBox(Camera * camera)
 {
 	RECT rect;
@@ -19,9 +17,7 @@ void Object::RenderBoundingBox(Camera * camera)
 	LPDIRECT3DTEXTURE9  _Texture = DebugRenderBBOX::GetInstance()->GetTexture();
 
 	Game::GetInstance()->Draw(pos.x, pos.y, _Texture, rect.left, rect.top, rect.right, rect.bottom, 100);
-
 }
-
 
 
 /*
@@ -116,12 +112,9 @@ void Object::FilterCollision(
 			min_iy = i;
 		}
 	}
-
 	if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);
 	if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
 }
-
-
 
 
 Object::Object()

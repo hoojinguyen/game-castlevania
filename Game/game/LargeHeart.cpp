@@ -6,7 +6,7 @@ LargeHeart::LargeHeart()
 {
 	_texture = new GTexture("Resources\\item\\1.png");
 	_sprite = new GSprite(_texture, 100);
-	type = eID::LARGEHEART;
+	type = eType::LARGEHEART;
 }
 
 LargeHeart::LargeHeart(float X, float Y) : LargeHeart()
@@ -27,7 +27,6 @@ void LargeHeart::GetBoundingBox(float & left, float & top, float & right, float 
 
 void LargeHeart::Update(DWORD dt, vector<LPOBJECT>* listObject)
 {
-
 	TimeDisplayed += dt;
 	if (TimeDisplayed >= TimeDisplayMax)
 	{
@@ -35,14 +34,12 @@ void LargeHeart::Update(DWORD dt, vector<LPOBJECT>* listObject)
 		return;
 	}
 
-
 	dy = vy * dt;
-
 
 	vector<LPOBJECT> listObject_Brick;
 	listObject_Brick.clear();
 	for (int i = 0; i < listObject->size(); i++)
-		if (listObject->at(i)->GetType() == eID::BRICK)
+		if (listObject->at(i)->GetType() == eType::BRICK)
 			listObject_Brick.push_back(listObject->at(i));
 
 	vector<LPCOLLISIONEVENT> coEvents;

@@ -1,12 +1,10 @@
 ﻿#include "Simon.h"
 
-
-
 Simon::Simon()
 {
 	_texture = new GTexture("Resources\\simon.png", 8, 3, 24, SHOWBOX_PINK);
 	_sprite = new GSprite(_texture, 250);
-	type = eID::SIMON;
+	type = eType::SIMON;
 
 	isWalking = 0;
 	isJumping = 0;
@@ -30,17 +28,16 @@ void Simon::GetBoundingBox(float & left, float & top, float & right, float & bot
 	{
 		left = x + 15;
 		top = y - 1; // không chỉnh lại y bởi vì hàm Sit() đã điều chỉnh
-		right = x + SIMON_BBOX_WIDTH - 17+5;
+		right = x + SIMON_BBOX_WIDTH - 17 + 5;
 		bottom = y + SIMON_BBOX_SITTING_HEIGHT -3;
 	}
 	else
 	{ 
 		left = x +15;
 		top = y -1 ;
-		right = x + SIMON_BBOX_WIDTH - 17+5;
+		right = x + SIMON_BBOX_WIDTH - 17 + 5;
 		bottom = y + SIMON_BBOX_HEIGHT - 3;
 	}
- 	
 }
 
 void Simon::Update(DWORD dt, vector<LPOBJECT>* coObjects)
@@ -53,7 +50,6 @@ void Simon::Update(DWORD dt, vector<LPOBJECT>* coObjects)
 	if (x + SIMON_BBOX_WIDTH > MapWidth)
 		x = MapWidth - SIMON_BBOX_WIDTH;
 	/* Không cho lọt khỏi camera */
-
 
 	/* Update về sprite */
 
@@ -113,19 +109,11 @@ void Simon::Update(DWORD dt, vector<LPOBJECT>* coObjects)
 			}
 			else
 			{
-				_sprite->SelectIndex(SiMON_ANI_IDLE);		// SIMON đứng yên
+				_sprite->SelectIndex(SIMON_ANI_IDLE);		// SIMON đứng yên
 
 			}
 	 
 	/* Update về sprite */
-
-
-	
-
-
-	
-
-
 
 	GameObject::Update(dt);   
 	vy += SIMON_GRAVITY * dt;// Simple fall down
@@ -134,22 +122,11 @@ void Simon::Update(DWORD dt, vector<LPOBJECT>* coObjects)
 	vector<LPOBJECT> list_Brick;
 	list_Brick.clear();
 	for (int i = 0; i < coObjects->size(); i++)
-		if (coObjects->at(i)->GetType() == eID::BRICK)
+		if (coObjects->at(i)->GetType() == eType::BRICK)
 			list_Brick.push_back(coObjects->at(i));
 	CollisionWithBrick(&list_Brick); // check Collision and update x, y for simon
 
-
-
-
-
 	CollisionWithItem();
-
-
-
-
-
-
-
 
 	if (isAttacking == true) //  update postion roi sau vì kiểm tra va chạm bên trên có thể khiến x,y của simon thay đổi, gây lệch vị trí roi với simon
 	{
@@ -176,7 +153,7 @@ void Simon::Render(Camera* camera)
 
 	D3DXVECTOR2 pos = camera->Transform(x, y);
 	 
-	if (trend == -1)
+	if (direction == -1)
 		_sprite->Draw(pos.x, pos.y);
 	else
 		_sprite->DrawFlipX(pos.x, pos.y);
@@ -192,12 +169,12 @@ void Simon::Render(Camera* camera)
 
 void Simon::Left()
 {
-	trend = -1;
+	direction = -1;
 }
 
 void Simon::Right()
 {
-	trend = 1; // quay qua phải
+	direction = 1; // quay qua phải
 }
 
 void Simon::Go()
@@ -205,7 +182,7 @@ void Simon::Go()
 	if (isAttacking == true)
 		return;
 
-	vx = SIMON_WALKING_SPEED * trend;
+	vx = SIMON_WALKING_SPEED * direction;
 	isWalking = 1;
 	
 }
@@ -244,10 +221,10 @@ void Simon::Stop()
 	vx = 0;
 
 	//if (vx!=0)
-	//	vx -= dt*SIMON_GRAVITY*0.1*trend;
-	//if (trend == 1 && vx < 0) 
+	//	vx -= dt*SIMON_GRAVITY*0.1*direction;
+	//if (direction == 1 && vx < 0) 
 	//	vx = 0;
-	//if (trend == -1 && vx > 0) 
+	//if (direction == -1 && vx > 0) 
 	//	vx = 0;
 	// tóm lại là vx = 0 :v
 
@@ -418,5 +395,5 @@ void Simon::Attack(Weapon * w)
 		return;
 
 	isAttacking = true; // set trang thái tấn công
-	w->Create(this->x, this->y, this->trend); // set vị trí weapon theo simon
+	w->Create(this->x, this->y, this->direction); // set vị trí weapon theo simon
 }

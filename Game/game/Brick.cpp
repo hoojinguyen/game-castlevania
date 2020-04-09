@@ -3,9 +3,9 @@
 
 Brick::Brick(int X, int Y, int W, int H)
 {
-	type = eID::BRICK;
 	_texture = new GTexture("Resources\\ground\\2.png", 1, 1, 1, 0);
 	_sprite = new GSprite(_texture, 1000);
+	type = eType::BRICK;
 	this->x = X;
 	this->y = Y;
 	this->width = W;
@@ -14,10 +14,7 @@ Brick::Brick(int X, int Y, int W, int H)
 
 void Brick::Render(Camera * camera)
 {
-	
-
 	D3DXVECTOR2 pos = camera->Transform(x, y);
-
 	 
 	for (int i = 0; i < (int)ceil(width / BRICK_FRAME_WIDTH); i++)
 		for (int j = 0; j < (int)ceil(height / BRICK_FRAME_HEIGHT); j++)

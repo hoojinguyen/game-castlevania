@@ -1,17 +1,13 @@
 #include "Item.h"
 
-
-
 Item::Item()
 { 
 	TimeDisplayed = 0;
-
 }
-
 
 Item::~Item()
 {
-	 
+
 }
 
 void Item::Update(DWORD dt, vector<LPOBJECT> *listObject)
@@ -30,9 +26,6 @@ void Item::Render(Camera * camera)
 	if (IS_DEBUG_RENDER_BBOX)
 		RenderBoundingBox(camera);
 }
- 
-
-
 
 bool Item::GetFinish()
 {

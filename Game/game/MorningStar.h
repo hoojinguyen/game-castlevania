@@ -1,7 +1,6 @@
 #ifndef __MORNINGSTAR_H__
 #define __MORNINGSTAR_H__
 
-
 #define MORNINGSTAR_ANI_LEVEL0_START 0
 #define MORNINGSTAR_ANI_LEVEL0_END 3
 
@@ -12,7 +11,6 @@
 #include "GameObject.h"
 #include "VariableGlobal.h"
 #include "LargeHeart.h"
-
 
 class MorningStar : public Weapon
 {
@@ -33,7 +31,6 @@ public:
 	void CollisionWithObject(DWORD dt, vector<LPOBJECT>* listObj);
 
 	void UpgradeLevel();
-
 };
 
 

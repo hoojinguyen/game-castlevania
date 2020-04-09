@@ -11,8 +11,6 @@
 #include "LargeHeart.h"
 #include "UpgradeMorningStar.h"
 
-
-
 class Weapon : public Object
 {
 protected: 
@@ -20,8 +18,6 @@ protected:
 	int trend;		// hướng trái = -1, phải = 1;
 
 	bool isFinish;
-
-	 
 
 public:
 	Weapon();
@@ -35,24 +31,17 @@ public:
 
 	virtual void Update(DWORD dt, vector<LPOBJECT> *coObjects = NULL) ;
 
- 
-
  	virtual void Render(Camera *camera);
-
-	 
+ 
 	virtual void UpdatePositionFitSimon();
 	 
 	virtual void CollisionWithObject(DWORD dt, vector<LPOBJECT>* listObj) = 0;
-
 
 	int GetFinish();
 
 	void SetFinish(bool b);
 	  
-	static Item * GetNewItem(int Id, eID Type, float X, float Y);
+	static Item * GetNewItem(int Id, eType Type, float X, float Y);
 
 };
-
-
-
 #endif

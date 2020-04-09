@@ -1,17 +1,13 @@
 ﻿#ifndef __OBJECT_H__
 #define __OBJECT_H__
 
-
-
 #include "define.h"
 #include "GSprite.h"
 #include "GTexture.h"
 #include "Camera.h"
 #include "DebugRenderBBOX.h"
 
-
 using namespace std;
-
 
 class Object;
 typedef Object * LPOBJECT;
@@ -36,12 +32,10 @@ struct CollisionEvent
 	}
 };
 
-
-
 class Object
 {
 protected:
-	eID type; // Loại Object
+	eType type; // Loại Object
 
 	float x;
 	float y;
@@ -59,7 +53,7 @@ protected:
 
 public:
 	Object();
-	Object(eID _type) { this->type = _type; }
+	Object(eType _type) { this->type = _type; }
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
@@ -82,16 +76,11 @@ public:
 	int GetHeight() { return _texture->FrameHeight; }
 	int GetWidth() { return _texture->FrameWidth; }
 
-	eID GetType() { return type; }
-
-
-
+	eType GetType() { return type; }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPOBJECT> *coObjects = NULL) = 0;
 	virtual void Render(Camera * camera) = 0;
-
-
 
 	~Object();
 };

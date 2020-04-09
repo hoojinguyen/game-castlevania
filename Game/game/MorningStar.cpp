@@ -1,13 +1,11 @@
 ﻿#include "MorningStar.h"
 
-
-
 MorningStar::MorningStar()
 {
 	_texture = new GTexture("Resources\\weapon\\morningstar.png", 4, 3, 12, 0);
 	_sprite = new GSprite(_texture, 90);
 	this->level = 0;
-	type = eID::MORNINGSTAR;
+	type = eType::MORNINGSTAR;
 }
 
 
@@ -27,7 +25,6 @@ void MorningStar::Update(DWORD dt, vector<LPOBJECT>* coObjects)
 	//}
 
 	isFinish = (_sprite->GetIndex() == 3) + (_sprite->GetIndex() == 7) + (_sprite->GetIndex() == 11);
-
 
 	if (level == 0)
 	{
@@ -57,8 +54,6 @@ void MorningStar::Update(DWORD dt, vector<LPOBJECT>* coObjects)
 
 void MorningStar::Create(float simonX, float simonY, int simonTrend)
 {
- 
-
 	Weapon::Create(simonX, simonY, simonTrend);
 
 	//xBackup, yBackup
@@ -105,9 +100,7 @@ void MorningStar::GetBoundingBox(float & left, float & top, float & right, float
 			top = y + 15;
 			right = x + _texture->FrameWidth - 85;
 			bottom = y + _texture->FrameHeight - 30;
-
 		}
-
 	}
 
 	if (level == 1)
@@ -125,9 +118,7 @@ void MorningStar::GetBoundingBox(float & left, float & top, float & right, float
 			top = y + 15;
 			right = x + _texture->FrameWidth - 85;
 			bottom = y + _texture->FrameHeight - 30;
-
 		}
-
 	}
 
 }
@@ -147,10 +138,8 @@ void MorningStar::CollisionWithObject(DWORD dt, vector<LPOBJECT>* listObj)
 	rect.right = (int)r;
 	rect.bottom = (int)b;
 
-
-
 	for (int i = 0; i < listObj->size(); i++) // ngay đây có thể tối ưu thêm, từ từ fix :p
-		if (listObj->at(i)->GetType() == eID::TORCH)
+		if (listObj->at(i)->GetType() == eType::TORCH)
 		{
 			GameObject *obj = dynamic_cast<GameObject*>(listObj->at(i));
 			if (obj->GetHealth() > 0)
@@ -167,8 +156,6 @@ void MorningStar::CollisionWithObject(DWORD dt, vector<LPOBJECT>* listObj)
 				}
 			}
 		}
-	 
-
 }
 
 void MorningStar::UpgradeLevel()

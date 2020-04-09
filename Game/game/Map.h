@@ -1,14 +1,11 @@
 ﻿#ifndef __MAP_H__
 #define __MAP_H__
 
-
-
 #include "GTexture.h"
 #include "GSprite.h"
 #include "define.h"
 
 #include "Camera.h"
-
 
 #define TILE_FRAME_WIDTH 64
 #define TILE_FRAME_HEIGHT 64
@@ -31,11 +28,9 @@ private:
 	int TileMap[500][500];
 	int HeightBoard;
 
-
 	int row; // dòng hiện tại camera đang đứng
 	int column; //cột hiện tại camera đang đứng
 	int x, y;
-
 
 public:
 	Map();

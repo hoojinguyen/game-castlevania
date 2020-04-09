@@ -58,6 +58,12 @@ void GSprite::SetARGB(int r, int g, int b, int a)
 	A = a;
 }
 
+int GSprite::GetIndex()
+{
+	return _index;
+}
+
+
 void GSprite::Next()
 {
 	_index++;
@@ -93,8 +99,6 @@ void GSprite::Draw(int X, int Y)
 
 	LPD3DXSPRITE spriteHandler = Game::GetInstance()->GetSpriteHandler();
 
-
-
 	srect.left = (_index % _texture->Cols)*(_texture->FrameWidth);
 	srect.top = (_index / _texture->Cols)*(_texture->FrameHeight);
 	srect.right = srect.left + _texture->FrameWidth;
@@ -113,8 +117,6 @@ void GSprite::Draw(int X, int Y)
 	//	D3DCOLOR_XRGB(R, G, B) //color
 	//	);
 
- 
-
 	D3DXVECTOR3 p(X, Y, 0);
 	spriteHandler->Draw(
 		_texture->Texture,
@@ -123,8 +125,6 @@ void GSprite::Draw(int X, int Y)
 		&p,
 		D3DCOLOR_XRGB(R, G, B)
 	);
-
-
 }
 
 void GSprite::DrawRect(int X, int Y, RECT SrcRect)
@@ -168,8 +168,6 @@ void GSprite::DrawFlipX(int x, int y)
 void GSprite::DrawFlipY(int x, int y)
 {
 	LPD3DXSPRITE spriteHandler = Game::GetInstance()->GetSpriteHandler();
-
-
 
 	D3DXMATRIX oldMt;
 	spriteHandler->GetTransform(&oldMt);
@@ -215,7 +213,6 @@ void GSprite::DrawRaw(int X, int Y)
 	RECT srect;
 	LPD3DXSPRITE spriteHandler = Game::GetInstance()->GetSpriteHandler();
 
-
 	srect.left = (_index % _texture->Cols)*(_texture->FrameWidth); 
 	srect.top = (_index / _texture->Cols)*(_texture->FrameHeight); 
 	srect.right = srect.left + _texture->FrameWidth;
@@ -233,11 +230,6 @@ void GSprite::DrawRaw(int X, int Y)
 		D3DCOLOR_XRGB(R, G, B)  //color
 		);
 }
-int GSprite::GetIndex()
-{
-	return _index;
-}
-
 
 void GSprite::DrawApart(int x, int y, int w)
 {

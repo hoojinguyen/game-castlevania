@@ -66,9 +66,9 @@ void Weapon::SetFinish(bool b)
 }
  
 
-Item * Weapon::GetNewItem(int Id, eID Type, float X, float Y)
+Item * Weapon::GetNewItem(int Id, eType Type, float X, float Y)
 {
-	if (Type == eID::TORCH)
+	if (Type == eType::TORCH)
 	{
 		if (Id == 1 || Id == 4)
 			return new LargeHeart(X, Y);

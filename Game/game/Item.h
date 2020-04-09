@@ -26,7 +26,6 @@ public:
 	virtual void Render(Camera * camera);
 	virtual void SetReward() = 0; // Hàm cập nhật điểm cho người chơi
 	  
- 
  	bool GetFinish();
 	void SetFinish(bool b);
 };

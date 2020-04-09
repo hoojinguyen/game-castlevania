@@ -1,24 +1,15 @@
 ﻿#ifndef _DEFINE_H__
 #define _DEFINE_H__
-
 #define _USE_MATH_DEFINES
 
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <map>
+#include <Windows.h> 
+#include <dinput.h> 
+#include <stdio.h>
 #include "debug.h"
 
-#include <vector>
-
-#include <Windows.h> 
-
-#include <dinput.h> 
-
-
 #include <algorithm>
-
-
-#include <stdio.h>
 
 #include <fstream>
 #include <iostream>
@@ -26,28 +17,22 @@
 #include <iostream>
 #include <iomanip>
 
-
-
-using namespace std;
+#include <map>
+#include <vector>
 
 #define WINDOW_WIDTH 512
 #define WINDOW_HEIGHT 448
 
+#define SCREEN_WIDTH 528
+#define SCREEN_HEIGHT 480
+
 #define COLOR_BLACK D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)  
 #define COLOR_KEY D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f) 
 
-
 #define SHOWBOX_PINK 0
-
-
-
-
-#define SCREEN_WIDTH 512
-#define SCREEN_HEIGHT 448
-
-
 #define IS_DEBUG_RENDER_BBOX 1
- 
+
+using namespace std;
  
 extern int Window_Width;
 extern int Window_Height;
@@ -55,32 +40,19 @@ extern int Window_Height;
 extern int MapWidth;
 extern int MapHeight;
 
-
 extern int ScreenColumn;
 extern int ScreenRow;
 
-
 // ID của Sprite, object
-enum eID
+enum eType
 {
 	SIMON = 01,
-
-
-
 	BRICK = 21,
-
-
-
 	TORCH = 41,
-
 	MORNINGSTAR = 61,
-
-
-
 	LARGEHEART = 81,
 	UPGRADEMORNINGSTAR = 82
 };
- 
  
 enum eDirection
 {
@@ -91,14 +63,9 @@ enum eDirection
 	BOTTOM = (1 << 3)
 };
  
- 
-
 typedef D3DXVECTOR3 GVector3;
 typedef D3DXVECTOR2 GVector2;
 #define VECTOR2ZERO GVector2(0.0f, 0.0f)
-
-
-
 //
 //void GLTrace(char* format, ...)
 //{
@@ -141,13 +108,6 @@ typedef D3DXVECTOR2 GVector2;
 //
 //}
 //
-
-
-
-
-
-
-
 
 #ifndef SAFE_DELETE
 

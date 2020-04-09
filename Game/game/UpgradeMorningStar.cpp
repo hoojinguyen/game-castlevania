@@ -6,7 +6,7 @@ UpgradeMorningStar::UpgradeMorningStar()
 {
 	_texture = new GTexture("Resources\\item\\3.png");
 	_sprite = new GSprite(_texture, 100);
-	type = eID::UPGRADEMORNINGSTAR;
+	type = eType::UPGRADEMORNINGSTAR;
 }
 
 UpgradeMorningStar::UpgradeMorningStar(float X, float Y) : UpgradeMorningStar()
@@ -28,7 +28,6 @@ void UpgradeMorningStar::GetBoundingBox(float & left, float & top, float & right
 
 void UpgradeMorningStar::Update(DWORD dt, vector<LPOBJECT>* listObject)
 {
-
 	TimeDisplayed += dt;
 	if (TimeDisplayed >= TimeDisplayMax)
 	{
@@ -36,14 +35,12 @@ void UpgradeMorningStar::Update(DWORD dt, vector<LPOBJECT>* listObject)
 		return;
 	}
 
-
 	dy = vy * dt;
-
 
 	vector<LPOBJECT> listObject_Brick;
 	listObject_Brick.clear();
 	for (int i = 0; i < listObject->size(); i++)
-		if (listObject->at(i)->GetType() == eID::BRICK)
+		if (listObject->at(i)->GetType() == eType::BRICK)
 			listObject_Brick.push_back(listObject->at(i));
 
 	vector<LPCOLLISIONEVENT> coEvents;

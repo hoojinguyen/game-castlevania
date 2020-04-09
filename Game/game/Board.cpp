@@ -1,7 +1,5 @@
 #include "Board.h"
 
-
-
 Board::Board(int X, int Y)
 {
 	_texture = new GTexture("Resources\\blackboard.png");
@@ -14,7 +12,6 @@ void Board::Render(Camera * camera)
 {
 	_sprite->Draw(x, y);
 }
-
 
 Board::~Board()
 {

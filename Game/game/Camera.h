@@ -16,18 +16,15 @@ protected:
 public:
 	Camera(int w, int h/*, int b_left, int b_right*/);
 	~Camera();
-	 
-	void Update();
-
-	D3DXVECTOR2 Transform(float x, float y);
-
-	void SetPosition(int x, int y); 
-
-	D3DXVECTOR2 GetViewport();
 
 	int GetWidth();
 	int GetHeight();
+	D3DXVECTOR2 GetViewport();
+	D3DXVECTOR2 Transform(float x, float y);
 
+	void SetPosition(int x, int y);
+	 
+	void Update();
 };
 
 #endif

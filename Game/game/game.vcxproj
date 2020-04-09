@@ -131,14 +131,12 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Goomba.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GSprite.h" />
     <ClInclude Include="GTexture.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="LargeHeart.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="Mario.h" />
     <ClInclude Include="MorningStar.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Simon.h" />
@@ -156,7 +154,6 @@
     <ClCompile Include="define.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="GSprite.cpp" />
     <ClCompile Include="GTexture.cpp" />
@@ -164,7 +161,6 @@
     <ClCompile Include="LargeHeart.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MorningStar.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Simon.cpp" />

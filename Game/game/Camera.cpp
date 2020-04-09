@@ -1,9 +1,5 @@
 #include "Camera.h"
 
- 
-  
-
-
 Camera::Camera(int w, int h/*, int b_left, int b_right*/)
 {
 	_width = w;
@@ -25,6 +21,7 @@ void Camera::Update()
 		_viewport.x = MapWidth - Window_Width; 
 
 }
+
 D3DXVECTOR2 Camera::Transform(float x, float y)
 {
 	return D3DXVECTOR2(x - _viewport.x, y - _viewport.y);
@@ -36,7 +33,6 @@ void Camera::SetPosition(int x, int y)
 	_viewport.y = y;
 }
  
-
 D3DXVECTOR2 Camera::GetViewport()
 {
 	return _viewport;
