@@ -3,6 +3,18 @@
 
 Game * Game::__instance = NULL;
 
+Game* Game::GetInstance()
+{
+	if (__instance == NULL) __instance = new Game();
+	return __instance;
+}
+
+HWND Game::GetWindowHandle()
+{
+	return hWnd;
+}
+
+
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for 
 	rendering 2D images
@@ -172,7 +184,7 @@ void Game::ProcessKeyboard()
 		}
 		else
 		{
-			//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
+			DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
 			return;
 		}
 	}
@@ -309,20 +321,18 @@ void Game::SweptAABB(
 	}
 
 }
+/*  140	167	left
+	319	308	top
+	192	167	right	
+	342	308	bottom
+*/
 
-bool Game::AABBCheck(RECT b1, RECT b2)
+bool Game::CheckAABB(RECT b1, RECT b2)
 {
 	return !(b1.right < b2.left || b1.left > b2.right || /*b1.top < b2.bottom || b1.bottom > b2.top*/ b1.top > b2.bottom || b1.bottom < b2.top);
 }
 
-bool Game::AABBCheck(float b1left, float b1top, float b1right, float b1bottom, float b2left, float b2top, float b2right, float b2bottom )
+bool Game::CheckAABB(float b1left, float b1top, float b1right, float b1bottom, float b2left, float b2top, float b2right, float b2bottom )
 {
-	return !(b1right < b2left || b1left > b2right || /*b1.top < b2.bottom || b1.bottom > b2.top*/ b1top > b2bottom || b1bottom < b2top);
-}
-
-
-Game *Game::GetInstance()
-{
-	if (__instance == NULL) __instance = new Game();
-	return __instance;
+	return !(b1right < b2left || b1left > b2right || b1top > b2bottom + 15 || b1bottom < b2top);
 }

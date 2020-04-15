@@ -55,15 +55,15 @@
     <ClCompile Include="LargeHeart.cpp">
       <Filter>Object\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="VariableGlobal.cpp">
-      <Filter>Framework\Define</Filter>
-    </ClCompile>
     <ClCompile Include="UpgradeMorningStar.cpp">
       <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Framework\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectHidden.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,15 +118,15 @@
     <ClInclude Include="LargeHeart.h">
       <Filter>Object\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="VariableGlobal.h">
-      <Filter>Framework\Define</Filter>
-    </ClInclude>
     <ClInclude Include="UpgradeMorningStar.h">
       <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Framework\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectHidden.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

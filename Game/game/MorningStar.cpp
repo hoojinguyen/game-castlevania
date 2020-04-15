@@ -2,165 +2,200 @@
 
 MorningStar::MorningStar()
 {
-	_texture = new GTexture("Resources\\weapon\\morningstar.png", 4, 3, 12, 0);
-	_sprite = new GSprite(_texture, 90);
-	this->level = 0;
 	type = eType::MORNINGSTAR;
+	texture = TextureManager::GetInstance()->GetTexture(type);
+	sprite = new GSprite(texture, MORNINGSTAR_TIME_WAIT_ANI);
+	this->level = 0;
 }
-
 
 MorningStar::~MorningStar()
 {
 }
 
-void MorningStar::Update(DWORD dt, vector<LPOBJECT>* coObjects)
+void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//if (isFinish == false)
-	//{
-	//	if (level == 0 && _sprite->GetIndex() == MORNINGSTAR_ANI_LEVEL0_END) // nếu nó chạy frame cuối rồi
-	//	{
-	//		isFinish = true;
-	//		return;
-	//	} 
-	//}
+	GameObject::Update(dt);
 
-	isFinish = (_sprite->GetIndex() == 3) + (_sprite->GetIndex() == 7) + (_sprite->GetIndex() == 11);
+	// update for check collision
+	isFinish = (sprite->GetCurrentFrame() == 3 && level == 0) + (sprite->GetCurrentFrame() == 7 && level == 1) + (sprite->GetCurrentFrame() == 11 && level == 2);
 
-	if (level == 0)
+	int StartFrame = MORNINGSTAR_ANI_LEVEL0_START + 4 * level; // ánh xạ chỉ số frame bằng level thay vì ifelse 
+	int EndFrame = MORNINGSTAR_ANI_LEVEL0_END + 4 * level;
+
+
+	if (StartFrame <= sprite->GetCurrentFrame() && sprite->GetCurrentFrame() < EndFrame)
+		sprite->Update(dt);
+	else
 	{
-		if (MORNINGSTAR_ANI_LEVEL0_START <= _sprite->GetIndex() && _sprite->GetIndex() < MORNINGSTAR_ANI_LEVEL0_END)
-		{
-			_sprite->Update(dt);
-		}
-		else
-		{
-			_sprite->SelectIndex(MORNINGSTAR_ANI_LEVEL0_START);
-		}
+		sprite->SelectFrame(StartFrame);
 	}
 
-	if (level == 1)
-	{
-		if (MORNINGSTAR_ANI_LEVEL1_START <= _sprite->GetIndex() && _sprite->GetIndex() < MORNINGSTAR_ANI_LEVEL1_END)
-		{
-			_sprite->Update(dt);
-		}
-		else
-		{
-			_sprite->SelectIndex(MORNINGSTAR_ANI_LEVEL1_START);
-		}
-	}
+	//DebugOut(L"update ani Morningstar dt = %d, tich luy = %d\n", dt, sprite->timeAccumulated);
+
 }
- 
 
-void MorningStar::Create(float simonX, float simonY, int simonTrend)
+void MorningStar::Render(Camera* camera)
 {
-	Weapon::Create(simonX, simonY, simonTrend);
+	D3DXVECTOR2 pos = camera->Transform(x, y);
+	if (direction == -1)
+		sprite->Draw(pos.x, pos.y);
+	else
+		sprite->DrawFlipX(pos.x, pos.y);
 
-	//xBackup, yBackup
+
+	if (IS_DEBUG_RENDER_BBOX)
+	{
+		if (level == 0 && sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL0_START || sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL0_START + 1)
+			return; // frame đầu và frame chuẩn bị đánh thì vẽ BBOX
+
+		if (level == 1 && sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL1_START || sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL1_START + 1)
+			return;
+
+		if (level == 2 && sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL2_START || sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL2_START + 1)
+			return;
+		RenderBoundingBox(camera);
+	}
+
+}
+
+void MorningStar::Attack(float X, float Y, int Direction)
+{
+	Weapon::Attack(X, Y, Direction);
 
 	UpdatePositionFitSimon();
-
-	if (level == 0)
+	switch (level)
 	{
-		_sprite->SelectIndex(MORNINGSTAR_ANI_LEVEL0_START - 1); // đặt sai index cho hàm update cập nhật ngay frame đầu
-	}
+	case 0:
+		sprite->SelectFrame(MORNINGSTAR_ANI_LEVEL0_START);
+		sprite->ResetTime();
+		break;
+	case 1:
+		sprite->SelectFrame(MORNINGSTAR_ANI_LEVEL1_START);
+		sprite->ResetTime();
 
-	if (level == 1)
-	{
-		_sprite->SelectIndex(MORNINGSTAR_ANI_LEVEL1_START - 1); // đặt sai index cho hàm update cập nhật ngay frame đầu
+		break;
+	case 2:
+		sprite->SelectFrame(MORNINGSTAR_ANI_LEVEL2_START);
+		sprite->ResetTime();
+
+		break;
 	}
 }
 
 void MorningStar::UpdatePositionFitSimon()
 {
-	if (trend == -1)
+	if (direction == -1)
 	{
-		this->x = x - 65;
+		this->x = x - 75;
+		this->y -= 2;
+
 	}
 	else
 	{
-		this->x = x - 30;
+		this->x = x - 25;
+		this->y -= 2;
 	}
 }
 
-void MorningStar::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+void MorningStar::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (level == 0)
+	switch (level)
 	{
-		if (trend == 1)
+	case 0:
+	{
+		if (direction == 1)
 		{
-			left = x + 80;  
+			left = x + 78;
 			top = y + 15;
-			right = x + _texture->FrameWidth -30; 
-			bottom = y + _texture->FrameHeight - 30;
+			right = x + texture->GetFrameWidth() - 30;
+			bottom = y + texture->GetFrameHeight() - 30;
 		}
 		else
 		{
 			left = x + 30;
 			top = y + 15;
-			right = x + _texture->FrameWidth - 85;
-			bottom = y + _texture->FrameHeight - 30;
-		}
-	}
+			right = x + texture->GetFrameWidth() - 80;
+			bottom = y + texture->GetFrameHeight() - 30;
 
-	if (level == 1)
+		}
+		break;
+	}
+	case 1:
 	{
-		if (trend == 1)
+		if (direction == 1)
 		{
-			left = x + 80;
+			left = x + 78;
 			top = y + 15;
-			right = x + _texture->FrameWidth - 30;
-			bottom = y + _texture->FrameHeight - 30;
+			right = x + texture->GetFrameWidth() - 30;
+			bottom = y + texture->GetFrameHeight() - 30;
 		}
 		else
 		{
 			left = x + 30;
 			top = y + 15;
-			right = x + _texture->FrameWidth - 85;
-			bottom = y + _texture->FrameHeight - 30;
+			right = x + texture->GetFrameWidth() - 80;
+			bottom = y + texture->GetFrameHeight() - 30;
+
 		}
+		break;
+	}
+	case 2:
+	{
+		if (direction == 1)
+		{
+			left = x + 78;
+			top = y + 15;
+			right = x + texture->GetFrameWidth();
+			bottom = y + texture->GetFrameHeight() - 30;
+		}
+		else
+		{
+			left = x;
+			top = y + 15;
+			right = x + texture->GetFrameWidth() - 80;
+			bottom = y + texture->GetFrameHeight() - 30;
+
+		}
+		break;
+	}
+	default:
+		break;
 	}
 
 }
 
-void MorningStar::CollisionWithObject(DWORD dt, vector<LPOBJECT>* listObj)
+void MorningStar::RenderIcon(float X, float Y)
 {
-	if (_sprite->GetIndex() == MORNINGSTAR_ANI_LEVEL0_START || _sprite->GetIndex() == MORNINGSTAR_ANI_LEVEL0_START + 1)
-		return;
-
-	RECT rect, rect1;
-	float l, t, r, b;
-	float l1, t1, r1, b1;
-
-	GetBoundingBox(l, t, r, b);
-	rect.left = (int)l;
-	rect.top = (int)t;
-	rect.right = (int)r;
-	rect.bottom = (int)b;
-
-	for (int i = 0; i < listObj->size(); i++) // ngay đây có thể tối ưu thêm, từ từ fix :p
-		if (listObj->at(i)->GetType() == eType::TORCH)
-		{
-			GameObject *obj = dynamic_cast<GameObject*>(listObj->at(i));
-			if (obj->GetHealth() > 0)
-			{
-				listObj->at(i)->GetBoundingBox(l1, t1, r1, b1);
-				rect1.left = (int)l1;
-				rect1.top = (int)t1;
-				rect1.right = (int)r1;
-				rect1.bottom = (int)b1;
-				if (Game::GetInstance()->AABBCheck(rect, rect1))
-				{
-					obj->SubHealth(1);
-					VariableGlobal::GetInstance()->ListItem.push_back(Weapon::GetNewItem(obj->id, obj->GetType(), listObj->at(i)->GetX(), listObj->at(i)->GetY()));
-				}
-			}
-		}
 }
 
 void MorningStar::UpgradeLevel()
 {
 	if (level >= 2)
 		return;
+
 	level++;
+	if (isFinish == false) // nếu chưa đánh xong mà update thì phải update lại frame để sau khi Freezed xong sẽ chạy tiếp
+	{
+		sprite->SelectFrame(sprite->GetCurrentFrame() + 4);
+
+	}
+}
+
+int MorningStar::GetLevel()
+{
+	return level;
+}
+
+bool MorningStar::isCollision(GameObject* obj)
+{
+	if (level == 0 && sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL0_START || sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL0_START + 1)
+		return false; // frame đầu và frame chuẩn bị đánh thì ko xét va chạm
+
+	if (level == 1 && sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL1_START || sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL1_START + 1)
+		return false; // frame đầu và frame chuẩn bị đánh thì ko xét va chạm
+
+	if (level == 2 && sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL2_START || sprite->GetCurrentFrame() == MORNINGSTAR_ANI_LEVEL2_START + 1)
+		return false; // frame đầu và frame chuẩn bị đánh thì ko xét va chạm
+
+	return Weapon::isCollision(obj);
 }

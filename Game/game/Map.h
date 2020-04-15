@@ -1,6 +1,7 @@
 ﻿#ifndef __MAP_H__
 #define __MAP_H__
 
+#include "TextureManager.h"
 #include "GTexture.h"
 #include "GSprite.h"
 #include "define.h"
@@ -13,32 +14,33 @@
 class Map
 {
 private:
-	GTexture *TileTexture;
-	GSprite *TileSprite;
+	GTexture* _texture;
+	GSprite* _sprite;
 
 	int ScreenColumn;
 	int ScreenRow;
 
-	int RowMatrix; // số lượng dòng của ma trận tilemap txt
-	int ColumnMatrix;// số lượng cột của ma trận tilemap txt
+	int ColumnMap; // số lượng dòng của ma trận tilemap txt
+	int RowMap;// số lượng cột của ma trận tilemap txt
 
-	int ColTile; // số lượng cột tile trong texture
+	int ColumnTile; // số lượng cột tile trong texture
 	int RowTile;// số lượng dòng tile trong texture
-	int CountTileFrame; // tổng số lương tile trong texture 
-	int TileMap[500][500];
-	int HeightBoard;
+	int TotalTiles; // tổng số lương tile trong texture 
 
-	int row; // dòng hiện tại camera đang đứng
-	int column; //cột hiện tại camera đang đứng
-	int x, y;
+	int HeightBoard; // chiều cao board
+
+	int TileMap[500][500];
+
 
 public:
 	Map();
 	~Map();
-	void LoadMap();
-	void ReadMapTXT(char * filename);
-	void DrawMap(Camera * camera);
+	void LoadMap(eType type);
+	void ReadMapTXT(char* filename);
+	void DrawMap(Camera* camera);
 
+	int GetMapWidth();
+	int GetMapHeight();
 };
 
 

@@ -7,130 +7,105 @@ Grid::Grid()
  
 Grid::~Grid()
 {
-	
+	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
+		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
+		{
+			cells[i][j].clear();
+		}
 }
 
-void Grid::SetFile(char * filename)
+void Grid::SetFile(char* str)
 {
-	listObjectGame.clear(); 
-	int i, j; 
-
-	ifstream inp;
-	inp.open(filename, ios::in);
-	 
-	int id, type, direction;
-	float x, y, w, h;
-
-	if (inp)
-	{
-		while (inp >> id >> type >> direction >> x >> y >> w >> h)
-		{
-			Insert(id, type, direction, x, y, w, h);
-		}
-		inp.close();
-	} 
+	filepath = str;
 }
 
-void Grid::Insert(int id, int type, int direction, float x, float y, float w, float h)
-{ 
-	int Top = floor( y / (float)GRID_CELL_HEIGHT);
-	int Bottom = floor((y + h) / (float)GRID_CELL_HEIGHT);
-
-	int Left = floor(x / (float)GRID_CELL_WIDTH);
-	int Right = floor((x+w) / (float)GRID_CELL_WIDTH);
-
-	GameObject * obj = GetNewObject(type, x, y, w, h); 
-	if (obj == NULL)
-	{
-		DebugOut(L"[Insert Object GRID Fail] : Khong tao duoc object!\n");
-		return;
-	} 
-	obj->SetId(id);
-	obj->SetDirection(direction);
-	obj->isTake = false;
-
-	listObjectGame.push_back(obj);
-
-	for (int row = Top; row <= Bottom; row++)
-	{
-		for (int col = Left; col <= Right; col++)
+void Grid::ReloadGrid()
+{
+	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
+		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
 		{
-			cells[row + GRID_BASE][col + GRID_BASE].push_back(obj);
+			cells[i][j].clear();
 		}
+
+
+	int id, type, direction, w, h, model, n;
+	float x, y;
+
+	ifstream inp(filepath, ios::in);
+	inp >> n;
+	for (int i = 0; i < n; i++)
+	{
+		inp >> id >> type >> direction >> x >> y >> w >> h >> model;
+		Insert(id, type, direction, x, y, w, h, model);
 	}
-
+	inp.close();
 }
 
-GameObject * Grid::GetNewObject(int type, int x, int y,int w, int h)
+GameObject* Grid::GetNewObject(int type, float x, float y, int w, int h, int Model)
 {
-	if (type == eType::BRICK) return new Brick(x, y, w, h);
-	if (type == eType::TORCH) return new Torch(x, y);
+	switch (type)
+	{
+	case eType::BRICK:
+		return new Brick(x, y, w, h, Model);
+
+	case eType::TORCH:
+		return new Torch(x, y);
+
+	case eType::OBJECT_HIDDEN:
+		return new ObjectHidden(x, y, w, h);
+
+	}
 	return NULL;
 }
 
-void Grid::GetListObject(vector<Object*>& ListObj, Camera * camera)
+void Grid::GetListObject(vector<GameObject*>& ListObj, Camera* camera)
 {
-	ListObj.clear(); // clear list
-	ResetTake();
+	ListObj.clear();
 
-	int rowBottom = floor((camera->GetViewport().y + camera->GetHeight()) / (float)GRID_CELL_HEIGHT);
-	int rowTop = floor((camera->GetViewport().y) / (float)GRID_CELL_HEIGHT);
+	unordered_map<int, GameObject*> mapObject;
 
-	int colLeft = floor((camera->GetViewport().x) / (float)GRID_CELL_WIDTH);
-	int colRight = floor((camera->GetViewport().x + camera->GetWidth()) / (float)GRID_CELL_WIDTH);
+	int bottom = (int)((camera->GetYCam() + camera->GetHeight() - 1) / GRID_CELL_HEIGHT);
+	int top = (int)((camera->GetYCam() + 1) / GRID_CELL_HEIGHT);
 
+	int left = (int)((camera->GetXCam() + 1) / GRID_CELL_WIDTH);
+	int right = (int)((camera->GetXCam() + camera->GetWidth() - 1) / GRID_CELL_WIDTH);
 
-	for (int row = rowTop; row <= rowBottom; row++)
-		for (int col = colLeft; col <= colRight; col++)
-		{
-			for (int i = 0; i < cells[row + GRID_BASE][col + GRID_BASE].size(); i++)
+	for (int i = top; i <= bottom; i++)
+		for (int j = left; j <= right; j++)
+			for (UINT k = 0; k < cells[i][j].size(); k++)
 			{
-				if (cells[row + GRID_BASE][col + GRID_BASE].at(i)->GetHealth() > 0) // còn tồn tại
+				if (cells[i][j].at(k)->GetHealth() > 0) // còn tồn tại
 				{
-					if (cells[row + GRID_BASE][col + GRID_BASE].at(i)->isTake == false)
-					{
-						ListObj.push_back(cells[row + GRID_BASE][col + GRID_BASE].at(i));
-						cells[row + GRID_BASE][col + GRID_BASE].at(i)->isTake = true;
-					}
+					if (mapObject.find(cells[i][j].at(k)->GetId()) == mapObject.end()) // ko tìm thấy
+						mapObject[cells[i][j].at(k)->GetId()] = cells[i][j].at(k);
+				}
+				else
+				{
+					//	cells[i][j].erase(cells[i][j].begin() + k); // xóa luôn
 				}
 			}
-		}
-}
 
-void Grid::GetListObject(vector<Object*> &ListObj, GameObject * obj)
-{
-	ListObj.clear(); // clear list
-	ResetTake();
-
-	int rowBottom = floor((obj->GetY() + obj->GetHeight()) / (float)GRID_CELL_HEIGHT);
-	int rowTop = floor((obj->GetY()) / (float)GRID_CELL_HEIGHT);
-
-	int colLeft = floor((obj->GetX()) / (float)GRID_CELL_WIDTH);
-	int colRight = floor((obj->GetX() + obj->GetWidth()) / (float)GRID_CELL_WIDTH);
-
-
-	for (int row = rowTop; row <= rowBottom; row++)
-		for (int col = colLeft; col <= colRight; col++)
-		{
-			for (int i = 0; i < cells[row + GRID_BASE][col + GRID_BASE].size(); i++)
-			{
-				if (cells[row + GRID_BASE][col + GRID_BASE].at(i)->GetHealth() > 0) // còn tồn tại
-				{
-					if (cells[row + GRID_BASE][col + GRID_BASE].at(i)->isTake == false)
-					{
-						ListObj.push_back(cells[row + GRID_BASE][col + GRID_BASE].at(i));
-						cells[row + GRID_BASE][col + GRID_BASE].at(i)->isTake = true;
-					}
-				}
-			}
-		}
-}
-
-void Grid::ResetTake()
-{
-	for (int i = 0; i < listObjectGame.size(); i++)
+	for (auto& x : mapObject)
 	{
-		listObjectGame[i]->isTake = false;
+		ListObj.push_back(x.second);
 	}
 }
- 
+
+void Grid::Insert(int id, int type, int direction, float x, float y, int w, int h, int Model)
+{
+	int top = (int)(y / GRID_CELL_HEIGHT);
+	int bottom = (int)((y + h) / GRID_CELL_HEIGHT);
+	int left = (int)(x / GRID_CELL_WIDTH);
+	int right = (int)((x + w) / GRID_CELL_WIDTH);
+
+	GameObject* obj = GetNewObject(type, x, y, w, h, Model);
+	if (obj == NULL)
+		return;
+
+	obj->SetId(id);
+	obj->SetDirection(direction);
+
+	for (int i = top; i <= bottom; i++)
+		for (int j = left; j <= right; j++)
+			cells[i][j].push_back(obj);
+}

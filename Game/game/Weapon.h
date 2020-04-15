@@ -4,44 +4,40 @@
 #include "define.h"
 #include "Camera.h"
 #include "GTexture.h"
-#include "GSprite.h"
-#include "DebugRenderBBOX.h"
+#include "GSprite.h" 
 #include "GameObject.h"
 #include "Item.h"
 #include "LargeHeart.h"
 #include "UpgradeMorningStar.h"
 
-class Weapon : public Object
+class Weapon : public GameObject
 {
 protected: 
 	 
-	int trend;		// hướng trái = -1, phải = 1;
-
 	bool isFinish;
+	DWORD LastTimeAttack; // Thời điểm tấn công cuối cùng
 
 public:
 	Weapon();
 	~Weapon();			 
 
-	int GetTrend();
-	void SetTrend(int Trend);
+	int GetDirection();
+	void SetDirection(int Direction);
 
-	virtual void Create(float simonX, float simonY, int simonTrend);
- 
+	virtual void Attack(float X, float Y, int Direction);
 
-	virtual void Update(DWORD dt, vector<LPOBJECT> *coObjects = NULL) ;
-
- 	virtual void Render(Camera *camera);
- 
+	virtual void Render(Camera* camera);
 	virtual void UpdatePositionFitSimon();
-	 
-	virtual void CollisionWithObject(DWORD dt, vector<LPOBJECT>* listObj) = 0;
+	virtual bool isCollision(GameObject* obj); // kiểm tra vũ khí này có va chạm với object kia hay không?
+	virtual void RenderIcon(float X, float Y) = 0;
 
-	int GetFinish();
 
+	bool GetFinish();
 	void SetFinish(bool b);
-	  
-	static Item * GetNewItem(int Id, eType Type, float X, float Y);
+
+	DWORD GetLastTimeAttack();
+
+
 
 };
 #endif

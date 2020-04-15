@@ -47,12 +47,41 @@ extern int ScreenRow;
 enum eType
 {
 	SIMON = 01,
+	SIMON_TRANS = 02,
+	SIMON_DEADTH = 03,
+
+	// object nền
 	BRICK = 21,
+	TEX_BRICK_MODEL_1 = 22,
+	TEX_BRICK_MODEL_2 = 23,
+	TEX_BRICK_MODEL_3 = 24,
+	TEX_BRICK_TRANSPARENT = 25,
+	GATE = 26,
+	TEX_BRICK_MODEL_3_3_32 = 27,
+	TEX_BRICK_MODEL_3_4_32 = 28,
+
+	// object
+	OBJECT_HIDDEN = 42,
 	TORCH = 41,
+	CANDLE = 43,
+	STAIR = 44,
+	STAIR_BOTTOM = 47,
+	STAIR_TOP = 48,
+
+	// weapon
 	MORNINGSTAR = 61,
+
+	// item
 	LARGEHEART = 81,
-	UPGRADEMORNINGSTAR = 82
+	UPGRADEMORNINGSTAR = 82,
+
+	// other
+	MAP1 = 104,
+	RENDERBBOX = 105,
+
 };
+
+
  
 enum eDirection
 {
@@ -109,8 +138,13 @@ typedef D3DXVECTOR2 GVector2;
 //}
 //
 
-#ifndef SAFE_DELETE
+#ifndef CHECK_OBJECT_IN_CAMERA // Kiểm tra GameObject có nằm trong camera ko?
+#define CHECK_OBJECT_IN_CAMERA(obj) \
+checkObjectInCamera(obj->GetX(), obj->GetY(), (float)obj->GetWidth(),  (float)obj->GetHeight())
+#endif
 
+
+#ifndef SAFE_DELETE
 #define SAFE_DELETE(ptr) \
 if(ptr) \
 {\
@@ -118,6 +152,8 @@ if(ptr) \
 	ptr = nullptr; \
 } \
 
-#endif // !SAFE_DELETE
+#endif
 
 #endif // !_DEFINE_H__
+
+

@@ -1,6 +1,4 @@
-#include "Weapon.h"
-
-
+﻿#include "Weapon.h"
 
 Weapon::Weapon()
 {
@@ -12,71 +10,69 @@ Weapon::~Weapon()
 { 
 }
 
-int Weapon::GetTrend()
+int Weapon::GetDirection()
 {
-	return trend;
+	return direction;
 }
 
-void Weapon::SetTrend(int Trend)
+void Weapon::SetDirection(int d)
 {
-	this->trend = Trend;
+	this->direction = d;
 }
 
-void Weapon::Create(float simonX, float simonY, int simonTrend)
+void Weapon::Attack(float X, float Y, int Direction)
 {
-	this->x = simonX;
-	this->y = simonY;
-	this->trend = simonTrend;
-	isFinish = 0;
+	this->x = X;
+	this->y = Y;
+	this->direction = Direction;
+	isFinish = false; // chưa kết thúc
+
+
+	LastTimeAttack = GetTickCount(); // lưu lại thời điểm lúc vừa tấn công, làm đánh dấu tránh 1 hit đánh nhiều lần cho các object, có health >1.
 }
 
-void Weapon::Update(DWORD dt, vector<LPOBJECT>* coObjects)
+void Weapon::Render(Camera* camera)
 {
-	_sprite->Update(dt);
-}
- 
+	if (isFinish)
+		return;
 
-void Weapon::Render(Camera * camera)
-{
-	//DebugOut(L"WEAPON: index = %d \n", _sprite->GetIndex());
+	//DebugOut(L"WEAPON: index = %d \n", sprite->GetCurrentFrame());
 	D3DXVECTOR2 pos = camera->Transform(x, y);
-	if (trend == -1)
-		_sprite->Draw(pos.x, pos.y);
+	if (direction == -1)
+		sprite->Draw(pos.x, pos.y);
 	else
-		_sprite->DrawFlipX(pos.x, pos.y);
+		sprite->DrawFlipX(pos.x, pos.y);
 
 	if (IS_DEBUG_RENDER_BBOX)
 		RenderBoundingBox(camera);
 }
  
-
-void Weapon::UpdatePositionFitSimon()
-{
-}
- 
-
-int Weapon::GetFinish()
+bool Weapon::GetFinish()
 {
 	return isFinish;
 }
 
-void Weapon::SetFinish(bool b)
+void Weapon::SetFinish(bool finish)
 {
-	isFinish = b;
+	isFinish = finish;
+}
+
+DWORD Weapon::GetLastTimeAttack()
+{
+	return LastTimeAttack;
 }
  
-
-Item * Weapon::GetNewItem(int Id, eType Type, float X, float Y)
+bool Weapon::isCollision(GameObject* obj)
 {
-	if (Type == eType::TORCH)
-	{
-		if (Id == 1 || Id == 4)
-			return new LargeHeart(X, Y);
+	if (isFinish == true)
+		return false;
 
-		if (Id == 2 || Id == 3)
-			return new UpgradeMorningStar(X, Y);
+	// dt, dx, dy đã update 
+	if (obj->GetHealth() <= 0) // vật này die rồi thì ko va chạm
+		return false;
+	return isCollitionObjectWithObject(obj);
+}
 
-		return new LargeHeart(X, Y);
-
-	}
+void Weapon::UpdatePositionFitSimon()
+{
 }

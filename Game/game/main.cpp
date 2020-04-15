@@ -1,14 +1,17 @@
 ﻿#include "debug.h"
 #include "Game.h"
 #include "GameObject.h"
+#include "TextureManager.h"
+#include "GSprite.h"
 
 #include "Simon.h"
+#include "Brick.h"
+
 #include "Board.h"
 #include "Item.h" 
 #include "Camera.h"
 #include "Map.h"
 #include "Grid.h"
-#include "VariableGlobal.h"
 #include "define.h"
 
 #define WINDOW_CLASS_NAME L"Game"
@@ -18,13 +21,10 @@
 
 #define MAX_FRAME_RATE 60
 
-VariableGlobal * _variableGlobal;
-
 HWND hWnd; 
 
 Game *game;
 
-//extern Game *game;  
 Simon * simon;
 
 Camera *camera;
@@ -33,7 +33,8 @@ Map* TileMap;
 
 Board * board;
 
-vector<LPOBJECT> ListObj;
+vector<LPGAMEOBJECT> ListObj; // list chua cac object
+vector<Item*> ListItem; // list chứa các item
 
 class CSampleKeyHander: public KeyEventHandler
 {
@@ -65,13 +66,13 @@ void CSampleKeyHander::OnKeyDown(int KeyCode) // khi đè phím
 
 	if (KeyCode == DIK_1)
 	{
-		DebugOut(L"[SIMON] X = %f , Y = %f \n", simon->GetX()+10, simon->GetY());
+		DebugOut(L"[SIMON] X = %f , Y = %f \n", simon->GetX() + 10, simon->GetY());
 	}
 
 	if (KeyCode == DIK_X)
 	{
 		//DebugOut(L"[SIMON] X = %f , Y = %f \n", simon->x + 10, simon->y);
-		simon->Attack(simon->_ListWeapon[0]);
+		simon->Attack(eType::MORNINGSTAR);
 	}
  
 }
@@ -148,24 +149,29 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
  
 void LoadResources()
 {
-	_variableGlobal = VariableGlobal::GetInstance();
+	TextureManager* _textureManager = TextureManager::GetInstance(); // Đã gọi load resource
 
-	simon = new Simon();
 	TileMap = new Map();
-	camera = new Camera(Window_Width, Window_Height/*, Window_Width/2, MapWidth - Window_Width / 2*/);
-	camera->SetPosition(0, 0);
+	gridGame = new Grid();
+
+	camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
+	simon = new Simon(camera, &ListItem);
 
 	board = new Board(0, 0);
 
-	simon->SetPosition(SIMON_POSITION_DEFAULT);
-	simon->SetPosition(0, 0);
-	 
-	 
-	gridGame = new Grid();
-	gridGame->SetFile("Resources\\map\\Obj_1.txt"); // đọc các object từ file vào Grid
- 
-	_variableGlobal->ListItem.clear();
+	gridGame->SetFile("Resources\\map\\file_gameobject_map1.txt"); // đọc các object từ file vào Grid
+	gridGame->ReloadGrid();
+	TileMap->LoadMap(eType::MAP1);
 
+	camera->SetAllowFollowSimon(true);
+	camera->SetBoundary(0.0f, (float)(TileMap->GetMapWidth() - camera->GetWidth())); // set biên camera dựa vào kích thước map
+	camera->SetBoundaryBackup(camera->GetBoundaryLeft(), camera->GetBoundaryRight()); // backup lại biên
+	camera->SetPosition(0, 0);
+
+	simon->SetPosition(SIMON_POSITION_DEFAULT);
+	simon->SetPositionBackup(SIMON_POSITION_DEFAULT);
+
+	ListItem.clear();
 }
  
 void Update(DWORD dt)
@@ -175,17 +181,17 @@ void Update(DWORD dt)
 	gridGame->GetListObject(ListObj, camera); // lấy hết các object trong vùng camera;
 
 	simon->Update(dt, &ListObj);
-	camera->SetPosition(simon->GetX() - Window_Width/2 + 30, camera->GetViewport().y ); // cho camera chạy theo simon
-	camera->Update();
+	camera->SetPosition(simon->GetX() - Window_Width/2 + 30, camera->GetYCam() ); // cho camera chạy theo simon
+	camera->Update(dt);
 
 	for (int i = 0; i < ListObj.size(); i++)
 	{
 		ListObj[i]->Update(dt,&ListObj);
 	}
 
-	for (int i = 0; i < _variableGlobal->ListItem.size(); i++) // update các Item
+	for (int i = 0; i < ListItem.size(); i++) // update các Item
 	{
-		_variableGlobal->ListItem[i]->Update(dt, &ListObj);
+		ListItem[i]->Update(dt, &ListObj);
 	}
 
 }
@@ -206,11 +212,11 @@ void Render()
 
 		board->Render(camera);
 
-		for (int i = 0; i < ListObj.size(); i++)
+		for (UINT i = 0; i < ListObj.size(); i++)
 			ListObj[i]->Render(camera);
 
-		for (int i = 0; i < _variableGlobal->ListItem.size(); i++) // Draw các item
-			_variableGlobal->ListItem[i]->Render(camera);
+		for (UINT i = 0; i < ListItem.size(); i++)
+			ListItem[i]->Render(camera);
 
 		simon->Render(camera);
 

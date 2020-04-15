@@ -6,25 +6,54 @@
 class Camera
 {
 protected:
-	D3DXVECTOR2 _viewport;
+	float _xCam;
+	float _yCam;
+
+	float _xCamBackup;
+	float _yCamBackup;
+	float _boundaryLeftBackup;
+	float _boundaryRightBackup;
+
 	int _width;
 	int _height;
 
-	/*int _borderLeft;
-	int _borderRight;*/
+	float _boundaryLeft; // biên giới hạn bên trái 
+	float _boundaryRight; // biên giới hạn bên phải, không bao gồm đoạn simon đi được ở cuối - SCREEN_WIDTH 
+
+	float vx;
+	DWORD dt;
+
+	bool isAllowFollowSimon;
 
 public:
-	Camera(int w, int h/*, int b_left, int b_right*/);
+
+	Camera(int w, int h);
 	~Camera();
 
+	void Update(DWORD dt);
+	D3DXVECTOR2 Transform(float, float);
+
+	float GetXCam();
+	float GetYCam();
 	int GetWidth();
 	int GetHeight();
-	D3DXVECTOR2 GetViewport();
-	D3DXVECTOR2 Transform(float x, float y);
 
-	void SetPosition(int x, int y);
-	 
-	void Update();
+	void SetBoundary(float left, float right); // set biên giới hạn cho camera
+	float GetBoundaryRight();
+	float GetBoundaryLeft();
+
+	void SetBoundaryBackup(float l, float r);
+	void RestoreBoundary();
+
+	void SetPosition(float x, float y);
+	void SetPositionBackup(float X, float Y);
+	void RestorePosition();
+
+	void SetAllowFollowSimon(bool b);
+	bool AllowFollowSimon();
+
+	bool checkObjectInCamera(float x, float y, float w, float h);
+
 };
 
 #endif

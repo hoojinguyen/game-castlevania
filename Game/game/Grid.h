@@ -7,35 +7,37 @@
 #include "Map.h"
 #include "Torch.h"
 #include "Brick.h"
+#include "ObjectHidden.h"
 #include "define.h"
 
 
 using namespace std;
 
-#define GRID_CELL_WIDTH 256
-#define GRID_CELL_HEIGHT 224
-#define GRID_BASE 100
+#define GRID_CELL_WIDTH (SCREEN_WIDTH/4.0f)
+#define GRID_CELL_HEIGHT (SCREEN_HEIGHT/4.0f)
+
+#define GRID_CELL_MAX_ROW 20 // số dòng tối đa;
+#define GRID_CELL_MAX_COLUMN 100 // số cột tối đa
 
 class Grid
 { 
 
 private:
-	vector<GameObject*> listObjectGame;
-	vector<GameObject*> cells[500][500];
-
-	void ResetTake();
+	vector<GameObject*> cells[GRID_CELL_MAX_ROW][GRID_CELL_MAX_COLUMN];
+	char* filepath;
  
 public:
-	void SetFile(char * filename); // Đọc các object từ file
-	void GetListObject(vector<Object*>& ListObj, Camera * camera);
-	void GetListObject(vector<Object*> &ListObj, GameObject * obj);
-
-	void Insert(int id, int type, int direction, float x, float y, float w, float h); //Thêm object vào grid
-
-	GameObject * GetNewObject(int type, int x, int y, int w, int h);
 
 	Grid();
 	~Grid();
+
+	void SetFile(char* str); // Đọc các object từ file
+	void ReloadGrid();
+
+	GameObject* GetNewObject(int type, float x, float y, int w, int h, int Model);
+	void GetListObject(vector<GameObject*>& ListObj, Camera* camera);
+
+	void Insert(int id, int type, int direction, float x, float y, int w, int h, int Model); //Thêm object vào grid
 };
 
 #endif

@@ -1,10 +1,8 @@
 ﻿#include "Map.h"
 
-
-
 Map::Map()
 {
-	LoadMap();
+	LoadMap(eType::MAP1);
 }
 
 
@@ -12,77 +10,54 @@ Map::~Map()
 {
 }
 
-void Map::LoadMap()
+int Map::GetMapWidth()
 {
-	ReadMapTXT("Resources/map/1.txt");
-	TileTexture = new GTexture("Resources/map/1.png", ColTile, RowTile, CountTileFrame);
-	TileSprite = new GSprite(TileTexture, 100);
-	
-	MapWidth = (TileTexture->FrameHeight)*(ColumnMatrix);  // Chiều dài của MAP
-	MapHeight = (TileTexture->FrameHeight)*(RowMatrix* +1); //  chiều cao của MAP
-	
-	ScreenColumn = Window_Width / TileTexture->FrameWidth;
-	ScreenRow = Window_Height / TileTexture->FrameHeight;
+	return ColumnMap * _texture->GetFrameWidth();
 }
 
-void Map::ReadMapTXT(char * filename)
-{ 
-	ifstream fileIn;
-	fileIn.open(filename, ios::in);
+int Map::GetMapHeight()
+{
+	return RowMap * _texture->GetFrameHeight();
+}
 
-	if (fileIn)
-	{
-		fileIn >> RowMatrix >> ColumnMatrix >> ColTile >> RowTile >> CountTileFrame >> HeightBoard;
- 		for (int i = 0; i < RowMatrix; i++)
-		{
-			for (int j = 0; j < ColumnMatrix; j++)
-			{
-				fileIn >> TileMap[i][j]; 
-			}
-		}
-		fileIn.close(); 
+void Map::LoadMap(eType type)
+{
+	if (type == eType::MAP1) {
+		ReadMapTXT("Resources/map/readfile_map_1.txt");
 	} 
-}
-
-void Map::DrawMap(Camera *camera)
-{
-	/*
-	row = int(camera->GetViewport().y) / TileTexture->FrameHeight;
-	column = int(camera->GetViewport().x) / TileTexture->FrameHeight;
-
-	for (int i = 0; i < ScreenRow; i++)
-	{
-		for (int j = 0; j < ScreenColumn; j++)
-		{
-			TileSprite->SelectIndex(TileMap[i][j + column]);
-
-			//D3DXVECTOR2 pos = camera->Transform(0 + j * TILE_FRAME_HEIGHT, 0 + i * TILE_FRAME_WIDTH);
-			//TileSprite->Draw(pos.x, pos.y);
-
-			TileSprite->Draw(0 + j * TILE_FRAME_HEIGHT , 0 + i * TILE_FRAME_WIDTH);
-		}
+	else {
+		DebugOut(L"[MAP] Load map that bai!");
+		return;
 	}
-	*/
- 
-	row = int(camera->GetViewport().y) / TileTexture->FrameHeight;
-	column = int(camera->GetViewport().x) / TileTexture->FrameHeight;
 
-	x = -(int(camera->GetViewport().x) % TileTexture->FrameHeight);
-	y = -(int(camera->GetViewport().y) % TileTexture->FrameHeight);
+	_texture = TextureManager::GetInstance()->GetTexture(type);
+	_sprite = new GSprite(_texture, 100);
 
-	for (int i = 0; i < ScreenRow; i++)
-	{ 
-		{
-			for (int j = 0; j < ScreenColumn +1; j++) // ngay đây dư 1 nên... pla pla..
-			{
-				if (!(row + i < 0 || row + i>RowMatrix || j + column < 0 || j + column > ColumnMatrix))
- 				{
-					TileSprite->SelectIndex(TileMap[row + i][column + j]);
-					TileSprite->DrawRaw(x + TileTexture->FrameWidth*j, y + TileTexture->FrameHeight*i + HeightBoard);
- 				}
-			}
-		}
- 	}
- 
+}
+
+void Map::ReadMapTXT(char* filename)
+{
+	ifstream inp(filename, ios::in);
+	inp >> RowMap >> ColumnMap >> ColumnTile >> RowTile >> TotalTiles >> HeightBoard;
+	for (int i = 0; i < RowMap; i++)
+		for (int j = 0; j < ColumnMap; j++)
+			inp >> TileMap[i][j];
+	inp.close();
 }
  
+void Map::DrawMap(Camera* camera)
+{
+	int row = (int)(camera->GetYCam()) / _texture->GetFrameHeight();
+	int column = (int)(camera->GetXCam()) / _texture->GetFrameHeight();
+
+	float x = -(float)((int)(camera->GetXCam()) % _texture->GetFrameHeight());
+	float y = -(float)((int)(camera->GetYCam()) % _texture->GetFrameHeight());
+
+	for (int i = 0; i < SCREEN_HEIGHT / _texture->GetFrameHeight() + 1; i++)
+		for (int j = 0; j < SCREEN_WIDTH / _texture->GetFrameWidth() + 1; j++)
+		{
+			if (!(row + i < 0 || row + i >= RowMap || j + column < 0 || j + column > ColumnMap))
+				_sprite->DrawFrame(TileMap[row + i][column + j], x + _texture->GetFrameWidth() * j, y + _texture->GetFrameHeight() * i + HeightBoard);
+		}
+}
+

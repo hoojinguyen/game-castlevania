@@ -1,33 +1,66 @@
-#include "Brick.h"
+﻿#include "Brick.h"
  
-
-Brick::Brick(int X, int Y, int W, int H)
+Brick::Brick(float X, float Y, int W, int H, int Model)
 {
-	_texture = new GTexture("Resources\\ground\\2.png", 1, 1, 1, 0);
-	_sprite = new GSprite(_texture, 1000);
+	model = Model;
+	switch (Model)
+	{
+	case BRICK_MODEL_1:
+		texture = TextureManager::GetInstance()->GetTexture(eType::TEX_BRICK_MODEL_1); // loại màn 1
+		break;
+	case BRICK_MODEL_2:
+		texture = TextureManager::GetInstance()->GetTexture(eType::TEX_BRICK_MODEL_2); // loại màn 2
+		break;
+	case BRICK_MODEL_3:
+		texture = TextureManager::GetInstance()->GetTexture(eType::TEX_BRICK_MODEL_3); // loại nhỏ 16px
+		break;
+	case BRICK_MODEL_TRANSPARENT:
+		texture = TextureManager::GetInstance()->GetTexture(eType::TEX_BRICK_TRANSPARENT);// loại trong suốt 
+		break;
+	case BRICK_MODEL_3_3_32:
+		texture = TextureManager::GetInstance()->GetTexture(eType::TEX_BRICK_MODEL_3_3_32);// loại 3 ô nhỏ - 32px 
+		break;
+	case BRICK_MODEL_3_4_32:
+		texture = TextureManager::GetInstance()->GetTexture(eType::TEX_BRICK_MODEL_3_4_32);// loại đủ 4 ô nhỏ - 32px
+		break;
+	default:
+		DebugOut(L"[BRICK] Get Texture that bai! Ko nhan dang duoc Model!\n");
+		break;
+	}
+
 	type = eType::BRICK;
+	sprite = new GSprite(texture, 1000);
 	this->x = X;
 	this->y = Y;
 	this->width = W;
 	this->height = H;
 }
 
-void Brick::Render(Camera * camera)
+void Brick::Render(Camera* camera)
 {
-	D3DXVECTOR2 pos = camera->Transform(x, y);
-	 
-	for (int i = 0; i < (int)ceil(width / BRICK_FRAME_WIDTH); i++)
-		for (int j = 0; j < (int)ceil(height / BRICK_FRAME_HEIGHT); j++)
-			_sprite->Draw(pos.x + i * BRICK_FRAME_WIDTH, pos.y + j * BRICK_FRAME_HEIGHT);
-
 	if (IS_DEBUG_RENDER_BBOX)
 		RenderBoundingBox(camera);
+
+	if (model == BRICK_MODEL_TRANSPARENT)
+		return;
+
+	D3DXVECTOR2 pos = camera->Transform(x, y);
+
+	for (int i = 0; i < (int)ceil(width / texture->GetFrameWidth()); i++)
+		for (int j = 0; j < (int)ceil(height / texture->GetFrameHeight()); j++)
+			sprite->Draw(pos.x + i * texture->GetFrameWidth(), pos.y + j * texture->GetFrameHeight());
+
 }
 
-void Brick::GetBoundingBox(float &l, float &t, float &r, float &b)
+void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + (float)ceil(width / BRICK_FRAME_WIDTH)*BRICK_FRAME_WIDTH;
-	b = y + (float)ceil(height / BRICK_FRAME_HEIGHT)*BRICK_FRAME_HEIGHT;
+	r = x + (float)ceil(width / texture->GetFrameWidth()) * texture->GetFrameWidth();
+	b = y + (float)ceil(height / texture->GetFrameHeight()) * texture->GetFrameHeight();
+}
+
+int Brick::GetModel()
+{
+	return model;
 }

@@ -138,11 +138,11 @@
     <ClInclude Include="LargeHeart.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MorningStar.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectHidden.h" />
     <ClInclude Include="Simon.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="UpgradeMorningStar.h" />
-    <ClInclude Include="VariableGlobal.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
@@ -162,11 +162,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MorningStar.cpp" />
-    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectHidden.cpp" />
     <ClCompile Include="Simon.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="UpgradeMorningStar.cpp" />
-    <ClCompile Include="VariableGlobal.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

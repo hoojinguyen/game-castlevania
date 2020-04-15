@@ -1,132 +1,71 @@
 #include "GTexture.h"
 
-GTexture::GTexture(char* _fileName, int cols, int rows, int count, int Showbox)
+GTexture::GTexture(char* filePath, int column, int row, int totalframes, int R, int G, int B)
 {
-	Cols = cols;
-	Rows = rows;
-	Count = count;
-	FileName = _fileName;
-	this->Load(Showbox);
-}
+	Column = column;
+	Row = row;
+	TotalFrames = totalframes;
 
-GTexture::GTexture(char* _fileName, int cols, int rows, int count, int R, int G, int B)
-{
-	Cols = cols;
-	Rows = rows;
-	Count = count;
-	FileName = _fileName;
-	this->Load(R, G, B);
+	D3DXIMAGE_INFO info;
+	HRESULT result = D3DXGetImageInfoFromFileA(filePath, &info);
+	if (result != D3D_OK)
+	{
+		DebugOut(L"[ERROR] GetImageInfoFromFile failed: %s\n", filePath);
+		return;
+	}
+
+	this->FrameWidth = info.Width / Column;
+	this->FrameHeight = info.Height / Row;
+
+	LPDIRECT3DDEVICE9 d3ddv = Game::GetInstance()->GetDirect3DDevice();
+
+	result = D3DXCreateTextureFromFileExA(
+		d3ddv,								// Pointer to Direct3D device object
+		filePath,							// Path to the image to load
+		info.Width,							// Texture width
+		info.Height,						// Texture height
+		1,
+		D3DUSAGE_DYNAMIC,
+		D3DFMT_UNKNOWN,
+		D3DPOOL_DEFAULT,
+		D3DX_DEFAULT,
+		D3DX_DEFAULT,
+		D3DCOLOR_XRGB(R, G, B),
+		&info,
+		NULL,
+		&Texture);								// Created texture pointer
+
+	if (result != D3D_OK)
+	{
+		OutputDebugString(L"[ERROR] CreateTextureFromFile failed\n");
+		return;
+	}
 }
 
 GTexture::~GTexture()
 {
-	if(this->Texture != NULL)
+	if (this->Texture != NULL)
 		this->Texture->Release();
 }
 
-void GTexture::Draw(int x, int y) 
+int GTexture::GetFrameWidth()
 {
-	LPD3DXSPRITE spriteHandler = Game::GetInstance()->GetSpriteHandler();
-
-	D3DXVECTOR3 position((float)x, (float)y, 0);
-	spriteHandler->Draw( Texture, &Size, NULL, &position, 0xFFFFFFFF );
+	return FrameWidth;
 }
 
-void GTexture::Load(int ShowBox)
+int GTexture::GetFrameHeight()
 {
-	D3DXIMAGE_INFO info;
-	HRESULT result;
-
-	LPDIRECT3DDEVICE9 G_Device = Game::GetInstance()->GetDirect3DDevice();
-
-
-	result = D3DXGetImageInfoFromFileA(FileName, &info);
-
-	RECT s = { 0, 0, info.Width, info.Height };
-	this->Size = s;
-
-	FrameWidth = info.Width / Cols;
-	FrameHeight = info.Height / Rows;
-
-	if (result != D3D_OK)
-	{
-	//	GLMessage("Can not load texture");
-	//	GLTrace("[texture.h] Failed to get information from image file [%s]", FileName);
-		OutputDebugStringA(FileName);
-		return;
-	}
-
-	result = D3DXCreateTextureFromFileExA(
-		G_Device,
-		FileName,
-		info.Width,
-		info.Height,
-		1,
-		D3DUSAGE_DYNAMIC,
-		D3DFMT_UNKNOWN,
-		D3DPOOL_DEFAULT,
-		D3DX_DEFAULT,
-		D3DX_DEFAULT,
-		D3DCOLOR_XRGB(255, ShowBox, 255), //color
-		&info,
-		0,
-		&Texture
-	);
-	
-	if (result != D3D_OK)
-	{
-		//GLMessage("Can not load texture");
-	//	GLTrace("[texture.h] Failed to create texture from file '%s'", FileName);
-		return;
-	}
+	return FrameHeight;
 }
 
-void GTexture::Load(int R, int G, int B)
+int GTexture::GetColumn()
 {
-	D3DXIMAGE_INFO info;
-	HRESULT result;
-
-	LPDIRECT3DDEVICE9 G_Device = Game::GetInstance()->GetDirect3DDevice();
-
-
-
-	result = D3DXGetImageInfoFromFileA(FileName, &info);
-
-	RECT s = { 0, 0, info.Width, info.Height };
-	this->Size = s;
-
-	FrameWidth = info.Width / Cols;
-	FrameHeight = info.Height / Rows;
-
-	if (result != D3D_OK)
-	{
-		//GLMessage("Can not load texture");
-		//GLTrace("[texture.h] Failed to get information from image file [%s]", FileName);
-		OutputDebugStringA(FileName);
-		return;
-	}
-
-	result = D3DXCreateTextureFromFileExA(
-		G_Device,
-		FileName,
-		info.Width,
-		info.Height,
-		1,
-		D3DUSAGE_DYNAMIC,
-		D3DFMT_UNKNOWN,
-		D3DPOOL_DEFAULT,
-		D3DX_DEFAULT,
-		D3DX_DEFAULT,
-		D3DCOLOR_XRGB(R, G, B), //color
-		&info,
-		0,
-		&Texture
-	);
-
-	if (result != D3D_OK)
-	{
-		//GLMessage("Can not load texture");
-		//GLTrace("[texture.h] Failed to create texture from file '%s'", FileName);
-		return;
-	}
+	return Column;
 }
+
+int GTexture::GetRow()
+{
+	return Row;
+}
+
+
