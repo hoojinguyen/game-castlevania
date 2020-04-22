@@ -18,7 +18,7 @@ public:
 	int TotalFrames;
 	LPDIRECT3DTEXTURE9 Texture;
 
-	GTexture(char* filePath, int column = 1, int row = 1, int totalframes = 1, int R = 255, int G = 0, int B = 255);
+	GTexture(LPCWSTR filePath, int column = 1, int row = 1, int totalframes = 1, int R = 255, int G = 0, int B = 255);
 	~GTexture();
 
 	int GetFrameWidth();

@@ -1,0 +1,18 @@
+# id	file_path				row	column	totalFrames transparent_color_r	g	b
+[TEXTURES]
+01	Resources\simon.png	8	3	24	255	255	255
+61	Resources\weapon\morning_star.png	4	3	12	255	255	255	
+41	Resources\ground\torch.png	2	1	2	255	255	255
+22	Resources\ground\brick1.png	1	1	1	255	255	255
+81	Resources\item\large_heart.png	1	1	1	255	255	255
+82	Resources\item\up_morningstar.png	1	1	1	255	255	255
+104	Resources\map\tileset_map1.png	8	4	32	255	255	255
+105	Resources\bbox.png	1	1	1	255	255	255
+#id	file_path
+[MAP]
+104	Resources\map\readfile_map1.txt
+#file_path
+[GRID]
+Resources\map\file_gameobject_map1.txt
+
+

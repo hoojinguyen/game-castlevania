@@ -12,7 +12,7 @@ DebugRenderBBOX * DebugRenderBBOX::GetInstance()
 
 DebugRenderBBOX::DebugRenderBBOX()
 {
-	_gTextureBBOX= new GTexture("textures\\bbox.png");
+	_gTextureBBOX= new GTexture(L"textures\\bbox.png");
 }
 
 

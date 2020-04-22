@@ -1,0 +1,6 @@
+[SETTINGS]
+start	1
+#scene list
+[SCENES]
+1	SceneManager\scene1.txt
+2	SceneManager\scene2.txt

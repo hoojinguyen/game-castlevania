@@ -2,7 +2,7 @@
 
 Board::Board(int X, int Y)
 {
-	_texture = new GTexture("Resources\\blackboard.png");
+	_texture = new GTexture(L"Resources\\blackboard.png");
 	_sprite = new GSprite(_texture, 0);
 	x = X;
 	y = Y;

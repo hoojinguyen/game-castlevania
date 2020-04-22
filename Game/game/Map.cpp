@@ -2,7 +2,7 @@
 
 Map::Map()
 {
-	LoadMap(eType::MAP1);
+	//LoadMap(eType::MAP1);
 }
 
 
@@ -20,16 +20,17 @@ int Map::GetMapHeight()
 	return RowMap * _texture->GetFrameHeight();
 }
 
-void Map::LoadMap(eType type)
+void Map::LoadMap(eType type, char* filename)
 {
-	if (type == eType::MAP1) {
+	/*if (type == eType::MAP1) {
 		ReadMapTXT("Resources/map/readfile_map_1.txt");
 	} 
 	else {
 		DebugOut(L"[MAP] Load map that bai!");
 		return;
-	}
-
+	}*/
+	//ReadMapTXT(filePath);
+	ReadMapTXT(filename);
 	_texture = TextureManager::GetInstance()->GetTexture(type);
 	_sprite = new GSprite(_texture, 100);
 

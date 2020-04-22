@@ -65,6 +65,21 @@
     <ClCompile Include="ObjectHidden.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Framework\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Framework\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Framework\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -84,9 +99,6 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Grid.h">
-      <Filter>Framework\Grid</Filter>
     </ClInclude>
     <ClInclude Include="GTexture.h">
       <Filter>Framework\Animation</Filter>
@@ -128,6 +140,27 @@
     <ClInclude Include="ObjectHidden.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Framework\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Framework\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Framework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>Framework\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Framework\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Framework\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Framework\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">
@@ -165,6 +198,15 @@
     </Filter>
     <Filter Include="Object\Item">
       <UniqueIdentifier>{5c6daaa9-a099-4a7c-ab4d-2ff70a828313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Scene">
+      <UniqueIdentifier>{d520f41d-ba63-47a6-9a37-05c672886d19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Utils">
+      <UniqueIdentifier>{93ea65d1-95fe-4f20-b6a2-c8bc21e9a2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Keyboard">
+      <UniqueIdentifier>{c1017810-030b-4baf-9de4-9d7b5d8face3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,13 +1,13 @@
 #include "GTexture.h"
 
-GTexture::GTexture(char* filePath, int column, int row, int totalframes, int R, int G, int B)
+GTexture::GTexture(LPCWSTR filePath, int column, int row, int totalframes, int R, int G, int B)
 {
 	Column = column;
 	Row = row;
 	TotalFrames = totalframes;
 
 	D3DXIMAGE_INFO info;
-	HRESULT result = D3DXGetImageInfoFromFileA(filePath, &info);
+	HRESULT result = D3DXGetImageInfoFromFile(filePath, &info);
 	if (result != D3D_OK)
 	{
 		DebugOut(L"[ERROR] GetImageInfoFromFile failed: %s\n", filePath);
@@ -19,7 +19,7 @@ GTexture::GTexture(char* filePath, int column, int row, int totalframes, int R, 
 
 	LPDIRECT3DDEVICE9 d3ddv = Game::GetInstance()->GetDirect3DDevice();
 
-	result = D3DXCreateTextureFromFileExA(
+	result = D3DXCreateTextureFromFileEx(
 		d3ddv,								// Pointer to Direct3D device object
 		filePath,							// Path to the image to load
 		info.Width,							// Texture width

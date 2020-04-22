@@ -35,7 +35,7 @@ private:
 public:
 	Map();
 	~Map();
-	void LoadMap(eType type);
+	void LoadMap(eType type, char* filename);
 	void ReadMapTXT(char* filename);
 	void DrawMap(Camera* camera);
 

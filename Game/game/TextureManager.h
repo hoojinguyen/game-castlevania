@@ -16,6 +16,7 @@ public:
 	GTexture* GetTexture(eType type);
 
 	void LoadResource();
+	void Clear();
 
 	TextureManager();
 	~TextureManager();

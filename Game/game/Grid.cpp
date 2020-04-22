@@ -41,6 +41,25 @@ void Grid::ReloadGrid()
 	inp.close();
 }
 
+void Grid::Insert(int id, int type, int direction, float x, float y, int w, int h, int Model)
+{
+	int top = (int)(y / GRID_CELL_HEIGHT);
+	int bottom = (int)((y + h) / GRID_CELL_HEIGHT);
+	int left = (int)(x / GRID_CELL_WIDTH);
+	int right = (int)((x + w) / GRID_CELL_WIDTH);
+
+	GameObject* obj = GetNewObject(type, x, y, w, h, Model);
+	if (obj == NULL)
+		return;
+
+	obj->SetId(id);
+	obj->SetDirection(direction);
+
+	for (int i = top; i <= bottom; i++)
+		for (int j = left; j <= right; j++)
+			cells[i][j].push_back(obj);
+}
+
 GameObject* Grid::GetNewObject(int type, float x, float y, int w, int h, int Model)
 {
 	switch (type)
@@ -89,23 +108,4 @@ void Grid::GetListObject(vector<GameObject*>& ListObj, Camera* camera)
 	{
 		ListObj.push_back(x.second);
 	}
-}
-
-void Grid::Insert(int id, int type, int direction, float x, float y, int w, int h, int Model)
-{
-	int top = (int)(y / GRID_CELL_HEIGHT);
-	int bottom = (int)((y + h) / GRID_CELL_HEIGHT);
-	int left = (int)(x / GRID_CELL_WIDTH);
-	int right = (int)((x + w) / GRID_CELL_WIDTH);
-
-	GameObject* obj = GetNewObject(type, x, y, w, h, Model);
-	if (obj == NULL)
-		return;
-
-	obj->SetId(id);
-	obj->SetDirection(direction);
-
-	for (int i = top; i <= bottom; i++)
-		for (int j = left; j <= right; j++)
-			cells[i][j].push_back(obj);
 }

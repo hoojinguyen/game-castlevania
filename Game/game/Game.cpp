@@ -1,5 +1,11 @@
+#include <iostream>
+#include <fstream>
+
 #include "Game.h"
+#include "Utils.h"
 #include "debug.h"
+
+#include "PlayScene.h"
 
 Game * Game::__instance = NULL;
 
@@ -13,7 +19,6 @@ HWND Game::GetWindowHandle()
 {
 	return hWnd;
 }
-
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for 
@@ -317,7 +322,12 @@ void Game::SweptAABB(
 	else 
 	{
 		nx = 0.0f;
-		dy > 0?ny = -1.0f:ny = 1.0f;
+		if (dy > 0) {
+			ny = -1.0f;
+		}
+		else {
+			ny = 1.0f;
+		}
 	}
 
 }
@@ -334,5 +344,83 @@ bool Game::CheckAABB(RECT b1, RECT b2)
 
 bool Game::CheckAABB(float b1left, float b1top, float b1right, float b1bottom, float b2left, float b2top, float b2right, float b2bottom )
 {
-	return !(b1right < b2left || b1left > b2right || b1top > b2bottom + 15 || b1bottom < b2top);
+	return !(b1right < b2left || b1left > b2right || b1top > b2bottom || b1bottom < b2top);
+}
+
+#define MAX_GAME_LINE 1024
+#define GAME_FILE_SECTION_UNKNOWN -1
+#define GAME_FILE_SECTION_SETTINGS 1
+#define GAME_FILE_SECTION_SCENES 2
+
+void Game::_ParseSection_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+	if (tokens[0] == "start")
+		current_scene = atoi(tokens[1].c_str());
+	else
+		DebugOut(L"[ERROR] Unknown game setting %s\n", ToWSTR(tokens[0]).c_str());
+}
+
+void Game::_ParseSection_SCENES(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+	int id = atoi(tokens[0].c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[1]);
+
+	LPSCENE scene = new CPlayScene(id, path);
+	scenes[id] = scene;
+}
+
+void Game::Load(LPCWSTR gameFile)
+{
+	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
+
+	ifstream f;
+	f.open(gameFile);
+	char str[MAX_GAME_LINE];
+
+	// current resource section flag
+	int section = GAME_FILE_SECTION_UNKNOWN;
+
+	while (f.getline(str, MAX_GAME_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+
+		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
+		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
+
+		//
+		// data section
+		//
+		switch (section)
+		{
+		case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
+		case GAME_FILE_SECTION_SCENES: _ParseSection_SCENES(line); break;
+		}
+	}
+	f.close();
+
+	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
+
+	SwitchScene(current_scene);
+}
+
+void Game::SwitchScene(int scene_id)
+{
+	DebugOut(L"[INFO] Switching to scene %d\n", scene_id);
+
+	scenes[current_scene]->Unload();;
+
+	TextureManager::GetInstance()->Clear();
+
+	current_scene = scene_id;
+	LPSCENE s = scenes[scene_id];
+	//Game::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+	s->Load();
 }

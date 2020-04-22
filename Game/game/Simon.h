@@ -29,6 +29,7 @@
 #define SIMON_STATE_IDLE 0
 #define SIMON_STATE_WALKING 1
 
+/* Ani đang đi*/
 #define SIMON_ANI_WALKING_BEGIN 1
 #define SIMON_ANI_WALKING_END 3
 
@@ -89,8 +90,6 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render(Camera * camera);
-
-
 	 
 	void Left();  // set lại hướng của simon
 	void Right(); // set lại hướng của simon
@@ -101,26 +100,27 @@ public:
 
 	void Attack(eType typeWeapon);
 
-	/* void SetHeartCollect(int h);
+	void SetHeartCollect(int h);
 	int GetHeartCollect();
 	int GetLives();
 	void SetLives(int l);
 	int GetScore();
-	void SetScore(int s); */
+	void SetScore(int s);
+
 	void SetPositionBackup(float X, float Y);  // lưu vị trí cần backup để simon die thì bắt đầu lại từ đây 
 
 	bool isCollisionWithItem(Item* objItem);
 
 	void CollisionWithBrick(const vector<LPGAMEOBJECT>* coObjects = NULL);
 
-	void CollisionSimonWithObjectHidden(const vector<LPGAMEOBJECT>* coObjects = NULL);
-
 	void CollisionSimonWithItem();
+
+	void CollisionSimonWithObjectHidden(const vector<LPGAMEOBJECT>* coObjects = NULL);
 
 	static Item* GetNewItem(int Id, eType Type, float X, float Y);
 
 
-	void Init(); // khởi tạo lại các trạng thái, HeartCollect, Heath, Lives, Score
+	void Init(); // khởi tạo các trạng thái, HeartCollect, Heath, Lives, Score
 	void Reset(); // khởi tạo lại các trạng thái.
 };
 

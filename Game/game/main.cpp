@@ -14,6 +14,8 @@
 #include "Grid.h"
 #include "define.h"
 
+//#include "TileMap.h"
+
 #define WINDOW_CLASS_NAME L"Game"
 #define MAIN_WINDOW_TITLE L"Game"
 
@@ -32,6 +34,8 @@ Grid * gridGame;
 Map* TileMap;
 
 Board * board;
+
+//TileMap* tileMapTest;
 
 vector<LPGAMEOBJECT> ListObj; // list chua cac object
 vector<Item*> ListItem; // list chứa các item
@@ -152,6 +156,7 @@ void LoadResources()
 	TextureManager* _textureManager = TextureManager::GetInstance(); // Đã gọi load resource
 
 	TileMap = new Map();
+
 	gridGame = new Grid();
 
 	camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -161,7 +166,10 @@ void LoadResources()
 
 	gridGame->SetFile("Resources\\map\\file_gameobject_map1.txt"); // đọc các object từ file vào Grid
 	gridGame->ReloadGrid();
-	TileMap->LoadMap(eType::MAP1);
+	TileMap->LoadMap(eType::MAP1, "Resources/map/readfile_map_1.txt");
+
+	//string pathFile = "resources\maps\castle_entrance\matrix.txt";
+	//tileMapTest = new TileMap(768.0f, 192.0f, eType::MAP1, pathFile);
 
 	camera->SetAllowFollowSimon(true);
 	camera->SetBoundary(0.0f, (float)(TileMap->GetMapWidth() - camera->GetWidth())); // set biên camera dựa vào kích thước map
@@ -209,6 +217,9 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		TileMap->DrawMap(camera);
+
+		//tileMapTest->Render(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
+
 
 		board->Render(camera);
 
@@ -324,6 +335,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	keyHandler = new CSampleKeyHander();
 	game->InitKeyboard(keyHandler);
+
+	//game->Load(L"SceneManager\main.txt");
 
 	LoadResources();
 

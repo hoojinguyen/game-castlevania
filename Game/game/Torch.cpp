@@ -22,7 +22,7 @@ void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Torch::Render(Camera* camera)
 {
-	if (IS_DEBUG_RENDER_BBOX)
+	//if (IS_DEBUG_RENDER_BBOX)
 		RenderBoundingBox(camera);
 
 	D3DXVECTOR2 pos = camera->Transform(x, y);
@@ -33,7 +33,7 @@ void Torch::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x;
-	b = y;
+	r = x + 32;
+	b = y + 64;
 }
 

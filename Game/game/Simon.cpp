@@ -1,6 +1,5 @@
 ﻿#include "Simon.h"
 
-
 Simon::Simon(Camera* camera, vector<Item*>* listItem)
 {
 	texture = TextureManager::GetInstance()->GetTexture(eType::SIMON);
@@ -35,7 +34,6 @@ Item* Simon::GetNewItem(int Id, eType Type, float X, float Y)
 
 	}
 }
-
 
 void Simon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
@@ -117,7 +115,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					sprite->SelectFrame(index + 1);
 				}
 				/* Update ani bình thường */
-				if (sprite->GetCurrentFrame() > SIMON_ANI_STANDING_ATTACKING_END) // đã đi vượt qua frame cuối
+				if (index > SIMON_ANI_STANDING_ATTACKING_END) // đã đi vượt qua frame cuối
 				{
 					isAttacking = 0;
 					sprite->SelectFrame(SIMON_ANI_IDLE);
@@ -292,7 +290,6 @@ void Simon::CollisionWithBrick(const vector<LPGAMEOBJECT>* coObjects)
 		delete coEvents[i];
 }
 
-
 void Simon::CollisionSimonWithItem()
 {
 	for (UINT i = 0; i < listItem->size(); i++)
@@ -439,7 +436,6 @@ void Simon::Stop()
 	
 }
 
-
 void Simon::SetPositionBackup(float X, float Y)
 {
 	PositionBackup = D3DXVECTOR2(X, Y);
@@ -471,6 +467,36 @@ void Simon::Attack(eType typeWeapon)
 
 	mapWeapon[typeWeapon]->Attack(this->x, this->y, this->direction); // set vị trí weapon theo simon
 
+}
+
+void Simon::SetHeartCollect(int h)
+{
+	HeartCollect = h;
+}
+
+int Simon::GetHeartCollect()
+{
+	return HeartCollect;
+}
+
+int Simon::GetLives()
+{
+	return Lives;
+}
+
+void Simon::SetLives(int l)
+{
+	Lives = l;
+}
+
+int Simon::GetScore()
+{
+	return score;
+}
+
+void Simon::SetScore(int s)
+{
+	score = s;
 }
 
 
