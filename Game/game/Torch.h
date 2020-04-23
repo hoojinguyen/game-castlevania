@@ -1,19 +1,20 @@
-#ifndef __TORCH_H__
-#define __TORCH_H__
-
+#pragma once
 #include "GameObject.h"
-#include "TextureManager.h"
+#include "CollisionEffect.h"
+#include "DeadEffect.h"
 
-class Torch : public GameObject
+class Torch : public CGameObject
 {
-
+	CollisionEffect* collisionEffect;
+	DeadEffect* deadEffect;
 public:
-	Torch(float X = 0, float Y = 0);
-	~Torch();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	virtual void Render(Camera* camera);
-	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	Torch();
 
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
+
+	CollisionEffect* GetCollisionEffect() { return collisionEffect; }
+	DeadEffect* GetDeadEffect() { return deadEffect; }
 };
 
-#endif

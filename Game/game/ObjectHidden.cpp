@@ -1,36 +1,24 @@
 #include "ObjectHidden.h"
 
 
-ObjectHidden::ObjectHidden(float X, float Y, int W, int H)
+CObjectHidden::CObjectHidden(float _x, float _y, int _with, int _height, int scene_id)
 {
-	x = X;
-	y = Y;
-	width = W;
-	height = H;
-	type = eType::OBJECT_HIDDEN;
-	id = 0; // set sau
-	Health = 1;
+	scene_id = scene_id;
+	x = _x;
+	y = _y;
+	width = _with;
+	height = _height;
 }
 
-ObjectHidden::~ObjectHidden()
+void CObjectHidden::Render()
 {
+	RenderBoundingBox();
 }
 
-void ObjectHidden::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CObjectHidden::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	left = x;
-	top = y;
-	right = x + width;
-	bottom = y + height;
-}
-
-void ObjectHidden::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-}
-
-void ObjectHidden::Render(Camera* camera)
-{
-
-	if (IS_DEBUG_RENDER_BBOX)
-		RenderBoundingBox(camera);
+	l = x;
+	t = y;
+	r = x + width;
+	b = y + height;
 }

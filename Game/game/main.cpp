@@ -1,142 +1,36 @@
-﻿#include "debug.h"
+﻿/* =============================================================
+	INTRODUCTION TO GAME PROGRAMMING SE102
+
+	SAMPLE 05 - SCENCE MANAGER
+
+	This sample illustrates how to:
+
+		1/ Implement a scence manager
+		2/ Load scene from "database", add/edit/remove scene without changing code
+		3/ Dynamically move between scenes without hardcode logic
+
+================================================================ */
+
+#include <windows.h>
+#include <d3d9.h>
+#include <d3dx9.h>
+
+#include "Utils.h"
 #include "Game.h"
 #include "GameObject.h"
-#include "TextureManager.h"
-#include "GSprite.h"
+#include "Textures.h"
+#include "PlayScene.h"
 
-#include "Simon.h"
-#include "Brick.h"
-
-#include "Board.h"
-#include "Item.h" 
-#include "Camera.h"
-#include "Map.h"
-#include "Grid.h"
-#include "define.h"
-
-//#include "TileMap.h"
-
-#define WINDOW_CLASS_NAME L"Game"
-#define MAIN_WINDOW_TITLE L"Game"
+#define WINDOW_CLASS_NAME L"SCENE"
+#define MAIN_WINDOW_TITLE L"SCENE"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 260
 
-#define MAX_FRAME_RATE 60
+#define MAX_FRAME_RATE 120
 
-HWND hWnd; 
-
-Game *game;
-
-Simon * simon;
-
-Camera *camera;
-Grid * gridGame;
-Map* TileMap;
-
-Board * board;
-
-//TileMap* tileMapTest;
-
-vector<LPGAMEOBJECT> ListObj; // list chua cac object
-vector<Item*> ListItem; // list chứa các item
-
-class CSampleKeyHander: public KeyEventHandler
-{
-	virtual void KeyState(BYTE *states);
-	virtual void OnKeyDown(int KeyCode);
-	virtual void OnKeyUp(int KeyCode);
-};
-
-CSampleKeyHander * keyHandler; 
-
-void CSampleKeyHander::OnKeyDown(int KeyCode) // khi đè phím
-{
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
-	if (KeyCode == DIK_ESCAPE)
-	{
-		DestroyWindow(hWnd); // thoát
-	}
-
-	if (KeyCode == DIK_Q)
-	{
-		simon->SetPosition(SIMON_POSITION_DEFAULT);
-	}
-	
-	if (KeyCode == DIK_SPACE)
-	{ 
-			simon->Jump();
-	}
-
-	if (KeyCode == DIK_1)
-	{
-		DebugOut(L"[SIMON] X = %f , Y = %f \n", simon->GetX() + 10, simon->GetY());
-	}
-
-	if (KeyCode == DIK_X)
-	{
-		//DebugOut(L"[SIMON] X = %f , Y = %f \n", simon->x + 10, simon->y);
-		simon->Attack(eType::MORNINGSTAR);
-	}
- 
-}
-
-void CSampleKeyHander::OnKeyUp(int KeyCode) // khi buông phím
-{
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-
-	switch (KeyCode)
-	{
-	case DIK_SPACE:
-		//simon->Sit();
-		break; 
-	}
-}
-
-void CSampleKeyHander::KeyState(BYTE *states)
-{
-
-	if (game->IsKeyDown(DIK_DOWN))
-	{ 
-		simon->Sit();
-
-		if (game->IsKeyDown(DIK_RIGHT))
-		{
-			simon->Right();
-			simon->Go();
-		}
-
-		if (game->IsKeyDown(DIK_LEFT))
-		{
-			simon->Left();
-			simon->Go();
-		}
-
-		return;
-	}
-	else
-	{
-		simon->Stop();
-	}
-
-	if (game->IsKeyDown(DIK_RIGHT))
-	{
-		simon->Right();
-		simon->Go();
-	}
-	else
-	{
-		if (game->IsKeyDown(DIK_LEFT))
-		{
-			simon->Left();
-			simon->Go();
-		}
-		else
-		{
-			simon->Stop();
-		}
-	}
-}
+CGame* game;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -150,60 +44,21 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
- 
-void LoadResources()
-{
-	TextureManager* _textureManager = TextureManager::GetInstance(); // Đã gọi load resource
 
-	TileMap = new Map();
 
-	gridGame = new Grid();
 
-	camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
-	simon = new Simon(camera, &ListItem);
-
-	board = new Board(0, 0);
-
-	gridGame->SetFile("Resources\\map\\file_gameobject_map1.txt"); // đọc các object từ file vào Grid
-	gridGame->ReloadGrid();
-	TileMap->LoadMap(eType::MAP1, "Resources/map/readfile_map_1.txt");
-
-	//string pathFile = "resources\maps\castle_entrance\matrix.txt";
-	//tileMapTest = new TileMap(768.0f, 192.0f, eType::MAP1, pathFile);
-
-	camera->SetAllowFollowSimon(true);
-	camera->SetBoundary(0.0f, (float)(TileMap->GetMapWidth() - camera->GetWidth())); // set biên camera dựa vào kích thước map
-	camera->SetBoundaryBackup(camera->GetBoundaryLeft(), camera->GetBoundaryRight()); // backup lại biên
-	camera->SetPosition(0, 0);
-
-	simon->SetPosition(SIMON_POSITION_DEFAULT);
-	simon->SetPositionBackup(SIMON_POSITION_DEFAULT);
-
-	ListItem.clear();
-}
- 
+/*
+	Update world status for this frame
+	dt: time period between beginning of last frame and beginning of this frame
+*/
 void Update(DWORD dt)
 {
-	//	DebugOut(L"[DT] DT: %d\n", dt);
- 
-	gridGame->GetListObject(ListObj, camera); // lấy hết các object trong vùng camera;
-
-	simon->Update(dt, &ListObj);
-	camera->SetPosition(simon->GetX() - Window_Width/2 + 30, camera->GetYCam() ); // cho camera chạy theo simon
-	camera->Update(dt);
-
-	for (int i = 0; i < ListObj.size(); i++)
-	{
-		ListObj[i]->Update(dt,&ListObj);
-	}
-
-	for (int i = 0; i < ListItem.size(); i++) // update các Item
-	{
-		ListItem[i]->Update(dt, &ListObj);
-	}
-
+	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
- 
+
+/*
+	Render a frame
+*/
 void Render()
 {
 	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
@@ -214,22 +69,10 @@ void Render()
 	{
 		// Clear back buffer with a color
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
+
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		TileMap->DrawMap(camera);
-
-		//tileMapTest->Render(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
-
-
-		board->Render(camera);
-
-		for (UINT i = 0; i < ListObj.size(); i++)
-			ListObj[i]->Render(camera);
-
-		for (UINT i = 0; i < ListItem.size(); i++)
-			ListItem[i]->Render(camera);
-
-		simon->Render(camera);
+		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -273,7 +116,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			hInstance,
 			NULL);
 
-	if (!hWnd) 
+	if (!hWnd)
 	{
 		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
@@ -314,12 +157,12 @@ int Run()
 			frameStart = now;
 
 			game->ProcessKeyboard();
-			
+
 			Update(dt);
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
 
 	return 1;
@@ -327,20 +170,15 @@ int Run()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	//HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
-	hWnd = CreateGameWindow(hInstance, nCmdShow, Window_Width, Window_Height);
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	game = Game::GetInstance();
+	game = CGame::GetInstance();
 	game->Init(hWnd);
+	game->InitKeyboard();
 
-	keyHandler = new CSampleKeyHander();
-	game->InitKeyboard(keyHandler);
+	game->Load(L"SceneManager\\main.txt");
 
-	//game->Load(L"SceneManager\main.txt");
-
-	LoadResources();
-
-	SetWindowPos(hWnd, 0, 0, 0, Window_Width, Window_Height, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

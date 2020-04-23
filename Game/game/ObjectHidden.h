@@ -1,18 +1,19 @@
 #pragma once
+
 #include "GameObject.h"
-class ObjectHidden : public GameObject
+
+/*
+	Object that triggers scene switching
+*/
+class CObjectHidden : public CGameObject
 {
-private:
+	int scene_id;	// target scene to switch to 
+
 	int width;
 	int height;
-
 public:
-	ObjectHidden(float X, float Y, int W, int H);
-	~ObjectHidden();
-
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	virtual void Render(Camera* camera);
-
+	CObjectHidden(float _x, float _y, int _with, int _height, int scene_id);
+	virtual void Render();
+	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	int GetSceneId() { return scene_id; }
 };
-

@@ -1,20 +1,287 @@
-# id	file_path				row	column	totalFrames transparent_color_r	g	b
+[SETTINGS]
+map_width 512.0f
+map_height 384.0f
+
 [TEXTURES]
-01	Resources\simon.png			8	3	24	255	255	255
-61	Resources\weapon\morning_star.png	4	3	12	255	255	255	
-41	Resources\ground\torch.png		2	1	2	255	255	255
-22	Resources\ground\brick1.png		1	1	1	255	255	255
-81	Resources\item\large_heart.png		1	1	1	255	255	255
-82	Resources\item\up_morningstar.png	1	1	1	255	255	255
-104	Resources\map\tileset_map1.png		8	4	32	255	255	255
-105	Resources\bbox.png			1	1	1	255	255	255
+# id	file_path				                    r	    g	    b
+0 resources\textures\Simon_Belmont.png 116 116 116
+200 resources\textures\Items_Objects.png 116 116 116
+300 resources\textures\hp.png 255 0 255
+1000 resources\maps\tower_entrance\tilesheet.png 255 255 255
 
-#id	file_path
-[MAP]
-104	Resources\\map\\readfile_map1.txt
+[SPRITES]
+# id	left    top     right   bottom  texture_id  dx      dy
 
-#file_path
+# simon
+// idle
+10000 1 21 16 31 0 0 0
+11000 1581 21 16 31 0 0 0
+// walk
+10001 29 21 16 31 0 0 0
+10002 46 21 12 31 0 0 0
+10003 63 21 15 31 0 0 0
+11001 1553 21 16 31 0 0 0
+11002 1540 21 12 31 0 0 0
+11003 1520 21 15 31 0 0 0
+// Jump and sit
+10004 84 22 16 23 0 0 0
+11004 1498 22 16 23 0 0 0
+// Climb Stair Ascend
+10005 154 22 15 31 0 0 0
+10006 171 21 12 31 0 0 0
+11005 1429 22 15 31 0 0 0
+11006 1415 21 12 31 0 0 0
+// Climb Stair Descend
+10007 211 22 16 31 0 0 0
+10008 228 21 12 31 0 0 0
+11007 1371 22 16 31 0 0 0
+11008 1358 21 12 31 0 0 0
+// Hurt
+10009 275 24 16 29 0 0 0
+11009 1307 24 16 29 0 0 0
+// Death
+10010 308 24 16 21 0 0 0
+10011 325 22 32 15 0 0 0
+11010 1274 24 16 21 0 0 0
+11011 1241 22 32 15 0 0 0
+// Intro
+10012 362 21 16 32 0 0 0
+// Color
+10013 406 21 16 31 0 0 0
+10014 423 21 16 31 0 0 0
+10015 440 21 16 31 0 0 0
+10016 457 21 16 31 0 0 0
+10017 474 21 16 31 0 0 0
+11013 1176 21 16 31 0 0 0
+11014 1159 21 16 31 0 0 0
+11015 1142 21 16 31 0 0 0
+11016 457 21 16 31 0 0 0
+11017 474 21 16 31 0 0 0
+//Use Weapons Stading
+10018 1 78 24 31 0 0 0
+10019 26 78 16 31 0 0 0
+10020 45 78 22 31 0 -6 0
+11018 1573 78 24 31 0 -8 0
+11019 1556 78 16 31 0 0 0
+11020 1531 78 22 31 0 0 0
+//Use Weapons Sitting
+10021 147 79 24 23 0 0 0
+10022 172 79 16 23 0 0 0
+10023 191 79 22 23 0 0 0
+11021 1427 79 24 23 0 0 0
+11022 1410 79 16 23 0 0 0
+11023 1385 79 22 23 0 0 0
+//Use Weapons Ascending Stair
+10024 293 79 24 31 0 0 0
+10025 318 79 16 31 0 0 0
+10026 337 79 22 31 0 0 0
+11024 1281 79 24 31 0 0 0
+11025 1264 79 16 31 0 0 0
+11026 1239 79 22 31 0 0 0
+//Use Weapons Descending Stair
+10027 439 79 24 31 0 0 0
+10028 464 79 16 31 0 0 0
+10029 483 79 22 31 0 0 0
+11027 1135 79 24 31 0 0 0
+11028 1118 79 16 31 0 0 0
+11029 1093 79 22 31 0 0 0
+# whip
+//Level 1
+20000 1 485 8 24 0 8 8
+20001 10 482 16 19 0 0 5
+20002 27 485 24 8 0 0 0
+21000 1589 485 8 24 0 0 8
+21001 1572 482 16 19 0 0 5
+21002 1547 485 24 8 0 0 0
+//Level 2
+20010 61 485 8 24 0 8 8
+20011 105 482 16 19 0 0 5
+20012 156 487 24 6 0 0 0
+21010 1529 485 8 24 0 0 8
+21011 1477 482 16 19 0 0 5
+21012 1418 487 24 6 0 0 0
+//Level 3
+20022 222 487 40 6 0 0 0
+21022 1336 487 40 6 0 0 0
+
+# object map
+// torch
+30000 175 1 16 32 200 0 0
+30001 192 1 16 32 200 0 0
+// candle
+30010 157 1 8 16 200 0 0
+30011 166 1 8 16 200 0 0
+// gate
+30020 209 1 16 48 200 0 0
+30020 226 1 24 48 200 0 0
+
+# item
+40000 1 1 16 16 200 0 0
+40001 18 1 8 8 200 0 0
+40002 29 6 12 10 200 0 0
+40003 45 1 15 15 200 0 0
+40004 62 1 15 15 200 0 0
+40005 79 1 15 15 200 0 0
+40006 97 2 12 14 200 0 0
+40007 113 1 16 16 200 0 0
+40008 1 22 16 9 200 0 0
+40009 18 18 15 14 200 0 0
+40010 35 18 16 16 200 0 0
+40011 53 20 14 13 200 0 0
+40012 69 19 15 14 200 0 0
+40013 87 19 15 14 200 0 0
+40014 104 18 15 16 200 0 0
+40015 121 19 14 14 200 0 0
+40016 138 19 14 14 200 0 0
+40017 1 37 16 13 200 0 0
+40018 20 35 13 15 200 0 0
+40019 35 35 16 16 200 0 0
+40020 52 38 16 11 200 0 0
+40021 69 35 15 16 200 0 0
+40022 86 35 15 16 200 0 0
+40023 103 35 15 16 200 0 0
+40025 120 35 15 16 200 0 0
+40026 137 39 16 12 200 0 0
+40027 154 39 16 12 200 0 0
+40028 171 39 16 12 200 0 0
+40029 188 39 16 12 200 0 0
+
+# effect
+//dead
+50000 599 479 3 13 0 0 0
+50001 606 480 6 12 0 0 0
+50002 614 477 8 15 0 0 0
+50003 623 479 16 14 0 0 0
+50004 641 477 14 16 0 0 0
+//collision
+50010 727 477 8 10 0 0 0
+
+# score board
+60000 0 0 6 9 300 0 0
+60001 5 0 7 9 300 0 0
+60002 6 0 6 9 300 0 0
+
+//sprite map
+1000 0 0 160 244 1000 0 0
+# ani_idd    sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+# ==== SIMON =========
+// idle left
+100 10000 100
+// idle right
+101 11000 100
+// walking left
+102 10002 100 10003 100 10001 100
+// walking right
+103 11002 100 11003 100 11001 100
+// jump/sitting left
+104 10004 100
+// jump/sitting right
+105 11004 100
+// climb stair ascend left
+106 10005 100 10006 100
+// climb stair ascend right
+107 11005 100 11006 100
+// climb stair descend left
+108 10007 100 10008 100
+// climb stair descend right
+109 11007 100 11008 100
+// hurt left
+110 10009 100
+// hurt right
+111 11009 100
+// death left
+112 10010 100 10011 100
+// death right
+113 11010 100 11011 100
+// fighting standing left
+114 10018 150 10019 150 10020 150
+// fighting standing right
+115 11018 150 11019 150 11020 150
+// fighting sitting left
+116 10021 150 10022 150 10023 150
+// fighting sitting right
+117 11021 150 11022 150 11023 150
+// fighting ascending stair left
+118 10024 150 10025 150 10026 150
+// fighting ascending stair right
+119 11024 150 11025 150 11026 150
+// fighting descending stair left
+120 10027 150 10028 150 10029 150
+// fighting descending stair right
+121 11027 150 11028 150 11029 150
+// intro
+122 10012 100
+# --- WEAPONS ---
+# --- whip ---
+//whip level 1 prepare left
+200 20000 150 20001 150
+//whip level 1 left
+201 20002 150
+//whip level 1 prepare right
+202 21000 150 21001 150
+//whip level 1 right
+203 21002 150
+//whip level 2 prepare left
+204 20010 150 20011 150
+//whip level 2 left
+205 20012 150
+//whip level 2 prepare right
+206 21010 150 21011 150
+//whip level 2 right
+207 21012 150
+//whip level 3 prepare left
+208 20010 150 20011 150
+//whip level 3 left
+209 20022 150
+//whip level 3 prepare right
+210 21010 150 21011 150
+//whip level 3 right
+211 21022 150
+
+# --- OBJECTS MAP ---
+//torch
+301 30000 100 30001 100
+//candle
+302 30010 100 30011 100
+
+# --- ITEMS ---
+//Item Whip
+400 40000 100
+//Item Small Heart
+401 40001 100
+//Item Heart
+402 40002 100
+
+# --- EFFECTS ---
+//dead effect
+501 50000 100 50001 100 50002 100 50003 100 50004 100
+//collision effect
+500 50010 100
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# SIMON
+1 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122
+# WHIP 
+2 200 201 202 203 204 205 206 207 208 209 210 211
+# TORCH
+30 301
+# CANDLE
+31 302
+# ITEM
+40 400 401 402
+
+[OBJECTS]
+resources\maps\tower_entrance\object.txt
+
+[TILEMAP]
+# fileMap	sprite_id	
+resources\maps\tower_entrance\matrix.txt 1000
+
 [GRID]
-Resources\\map\\file_gameobject_map1.txt
-
-
+#file_grid	cell_size
+resources\maps\tower_entrance\grid.txt 260

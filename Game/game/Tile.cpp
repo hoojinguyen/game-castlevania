@@ -2,6 +2,7 @@
 
 Tile::Tile()
 {
+	camera = CCamera::GetInstance();
 }
 
 Tile::~Tile()
@@ -30,23 +31,24 @@ void Tile::SetBound(RECT _bound)
 	bound = _bound;
 }
 
-void Tile::SetSprite(GSprite* _sprite)
+void Tile::SetSprite(LPSPRITE _sprite)
 {
 	sprite = _sprite;
 }
 
 void Tile::Render()
 {
-	sprite->Draw(position.x, position.y);
+	sprite->Draw(position.x, position.y, bound.left, bound.top, bound.right, bound.bottom);
 }
 
 bool Tile::CheckInBoundCamera(int screenWidth, int screenHeight)
 {
+	D3DXVECTOR3 cameraPosition = camera->GetCameraPosition();
 
 	/*return (left >= cameraPosition.x && top >= cameraPosition.y
 		&& right <= cameraPosition.x + screenWidth && bottom <= cameraPosition.y + screenHeight);*/
-	float boundLeft = camera->GetXCam();
-	float boundTop = camera->GetYCam();
+	float boundLeft = cameraPosition.x;
+	float boundTop = cameraPosition.y;
 	float boundRight = boundLeft + screenWidth;
 	float boundBottom = boundTop + screenHeight;
 

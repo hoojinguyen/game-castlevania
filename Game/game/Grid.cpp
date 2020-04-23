@@ -1,111 +1,161 @@
 ﻿#include "Grid.h"
- 
-Grid::Grid()
-{
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include "Utils.h"
 
+using namespace std;
+
+#define GRID_SECTION_UNKNOWN -1
+#define GRID_SECTION_SETTINGS 0
+#define GRID_SECTION_OBJECTS 2
+
+void Grid::_Load_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 2)
+	{
+		return;
+	}
+
+	cellSize = atof(tokens[0].c_str());
+	numXCells = atof(tokens[1].c_str());
+	numYCells = atof(tokens[2].c_str());
+
+	cells = new LPCELL[numXCells];
+
+	for (int i = 0; i < numXCells; i++)
+		cells[i] = new Cell[numYCells];
 }
- 
+
+void Grid::_Load_OBJECTS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2)
+	{
+		return;
+	}
+
+	int indexX = atoi(tokens[0].c_str());
+	int indexY = atoi(tokens[1].c_str());
+	int idObject;
+
+	for (int j = 2; j < tokens.size(); j++)
+	{
+		idObject = atoi(tokens[j].c_str());
+		cells[indexX][indexY].Insert(listObject->at(idObject));
+	}
+}
+
+Grid::Grid(string pathFile, vector <LPGAMEOBJECT>* listObject)
+{
+	this->listObject = listObject;
+
+	fstream pFile;
+	pFile.open(pathFile, fstream::in);
+	string line;
+	int i = 0;
+	int idObject;
+
+	int section = GRID_SECTION_UNKNOWN;
+	while (pFile.good())
+	{
+		getline(pFile, line);
+		if (line.find("END") != string::npos)
+			break;
+
+		if (line[0] == '#') continue;	// skip comment lines
+
+		if (line == "[SETTINGS]") {
+			section = GRID_SECTION_SETTINGS; continue;
+		}
+		if (line == "[OBJECTS]") {
+			section = GRID_SECTION_OBJECTS; continue;
+		}
+
+		switch (section)
+		{
+		case GRID_SECTION_SETTINGS: _Load_SETTINGS(line); break;
+		case GRID_SECTION_OBJECTS: _Load_OBJECTS(line); break;
+		}
+	}
+
+	pFile.close();
+}
+
 Grid::~Grid()
 {
-	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
-		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
-		{
-			cells[i][j].clear();
-		}
+
 }
 
-void Grid::SetFile(char* str)
+
+bool checkContainId(vector<LPGAMEOBJECT>* list_object, LPGAMEOBJECT e)
 {
-	filepath = str;
-}
-
-void Grid::ReloadGrid()
-{
-	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
-		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
-		{
-			cells[i][j].clear();
-		}
-
-
-	int id, type, direction, w, h, model, n;
-	float x, y;
-
-	ifstream inp(filepath, ios::in);
-	inp >> n;
-	for (int i = 0; i < n; i++)
+	LPGAMEOBJECT obj;
+	for (int i = 0; i < list_object->size(); i++)
 	{
-		inp >> id >> type >> direction >> x >> y >> w >> h >> model;
-		Insert(id, type, direction, x, y, w, h, model);
+		obj = list_object->at(i);
+		if (obj->GetID() == e->GetID()) {
+			return true;
+		}
 	}
-	inp.close();
+	return false;
 }
 
-void Grid::Insert(int id, int type, int direction, float x, float y, int w, int h, int Model)
+void Grid::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, int screenWidth, int screenHeight)
 {
-	int top = (int)(y / GRID_CELL_HEIGHT);
-	int bottom = (int)((y + h) / GRID_CELL_HEIGHT);
-	int left = (int)(x / GRID_CELL_WIDTH);
-	int right = (int)((x + w) / GRID_CELL_WIDTH);
+	CCamera* camera = CCamera::GetInstance();
+	list_object->clear();
+	int left, top, right, bottom;
+	int i, j, k;
 
-	GameObject* obj = GetNewObject(type, x, y, w, h, Model);
-	if (obj == NULL)
-		return;
+	left = (int)camera->GetCameraPosition().x / cellSize;
+	top = (int)camera->GetCameraPosition().y / cellSize;
 
-	obj->SetId(id);
-	obj->SetDirection(direction);
+	right = (int)(camera->GetCameraPosition().x + screenWidth) / cellSize
+		+ ((int)(camera->GetCameraPosition().x + screenWidth) % cellSize ? 1 : 0);
 
-	for (int i = top; i <= bottom; i++)
-		for (int j = left; j <= right; j++)
-			cells[i][j].push_back(obj);
-}
+	bottom = (int)(camera->GetCameraPosition().y + screenHeight) / cellSize
+		+ ((int)(camera->GetCameraPosition().y + screenHeight) % cellSize ? 1 : 0);
 
-GameObject* Grid::GetNewObject(int type, float x, float y, int w, int h, int Model)
-{
-	switch (type)
+	LPGAMEOBJECT e;
+
+	for (i = left; i < right; i++)
 	{
-	case eType::BRICK:
-		return new Brick(x, y, w, h, Model);
-
-	case eType::TORCH:
-		return new Torch(x, y);
-
-	case eType::OBJECT_HIDDEN:
-		return new ObjectHidden(x, y, w, h);
-
-	}
-	return NULL;
-}
-
-void Grid::GetListObject(vector<GameObject*>& ListObj, Camera* camera)
-{
-	ListObj.clear();
-
-	unordered_map<int, GameObject*> mapObject;
-
-	int bottom = (int)((camera->GetYCam() + camera->GetHeight() - 1) / GRID_CELL_HEIGHT);
-	int top = (int)((camera->GetYCam() + 1) / GRID_CELL_HEIGHT);
-
-	int left = (int)((camera->GetXCam() + 1) / GRID_CELL_WIDTH);
-	int right = (int)((camera->GetXCam() + camera->GetWidth() - 1) / GRID_CELL_WIDTH);
-
-	for (int i = top; i <= bottom; i++)
-		for (int j = left; j <= right; j++)
-			for (UINT k = 0; k < cells[i][j].size(); k++)
+		for (j = top; j < bottom; j++)
+		{
+			if (cells[i][j].GetListObjects().size() != 0)
 			{
-				if (cells[i][j].at(k)->GetHealth() > 0) // còn tồn tại
+				for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
 				{
-					if (mapObject.find(cells[i][j].at(k)->GetId()) == mapObject.end()) // ko tìm thấy
-						mapObject[cells[i][j].at(k)->GetId()] = cells[i][j].at(k);
-				}
-				else
-				{
-					//	cells[i][j].erase(cells[i][j].begin() + k); // xóa luôn
+					e = cells[i][j].GetListObjects().at(k);
+					if (!checkContainId(list_object, e)) {
+						list_object->push_back(e);
+					}
+
+					//list_object->push_back(e);
 				}
 			}
+		}
+	}
 
-	for (auto& x : mapObject)
+}
+
+void Grid::Unload()
+{
+	if (cells)
 	{
-		ListObj.push_back(x.second);
+		for (int i = 0; i < numXCells; i++)
+		{
+			for (int j = 0; j < numYCells; j++)
+			{
+				cells[i][j].Unload();
+			}
+		}
+		delete cells;
+		cells = NULL;
 	}
 }
+

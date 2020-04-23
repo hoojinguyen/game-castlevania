@@ -5,21 +5,12 @@
 #include <sstream>
 #include <string>
 #include "Tile.h"
-#include "TextureManager.h"
-#include "GTexture.h"
-#include "GSprite.h"
-#include "define.h"
-
-#include "Camera.h"
 using namespace std;
 
 class TileMap
 {
 private:
 	Tile** matrix;
-	GTexture* _texture;
-	GSprite* sprite;
-
 	int rows;
 	int cols;
 	float width;
@@ -27,12 +18,12 @@ private:
 	float tileWidth;
 	float tileHeight;
 	int spritePerRow;
-	
+	LPSPRITE sprite;
 	void LoadListTile(string file);
 public:
-	TileMap(float _width, float _height, eType type, string pathFile);
+	TileMap(float _width, float _height, LPSPRITE _sprite, string pathFile);
 	~TileMap();
-	void Render(int screenWidth, int screenHeight, Camera* camera);
+	void Render(int screenWidth, int screenHeight);
 	void Unload();
 };
 

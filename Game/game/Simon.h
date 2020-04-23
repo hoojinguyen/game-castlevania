@@ -1,127 +1,63 @@
-﻿#ifndef __SIMON_H__
-#define __SIMON_H__
-
-#include "GameObject.h"
-#include "Weapon.h"
+﻿#pragma once
 #include "MorningStar.h"
-#include "Item.h" 
+#include "GameObject.h"
 
-#include "LargeHeart.h"
-#include "UpgradeMorningStar.h"
-
-#define SIMON_POSITION_DEFAULT  50.0f, 0
-
-#define SIMON_BBOX_WIDTH 60
-#define SIMON_BBOX_HEIGHT 63
-#define SIMON_BBOX_SITTING_HEIGHT 45
-#define SIMON_BBOX_JUMPING_HEIGHT 45
-
-#define SIMON_GRAVITY 0.005f
-#define SIMON_GRAVITY_JUMPING 0.001f 
-
-#define SIMON_VJUMP 0.8f
-
-#define PULL_UP_SIMON_AFTER_JUMPING 18.0f // Kéo simon lên 18px sau khi nhảy, tránh overlaping do BBOX bottom thu lại khi nhảy
-#define PULL_UP_SIMON_AFTER_SITTING 18.0f // Kéo simon lên 18px sau khi ngồi rồi đứng dậy, tránh overlaping do BBOX bottom thu lại khi ngồi
-
-#define SIMON_WALKING_SPEED 0.12f 
-
-#define SIMON_STATE_IDLE 0
-#define SIMON_STATE_WALKING 1
-
-/* Ani đang đi*/
-#define SIMON_ANI_WALKING_BEGIN 1
-#define SIMON_ANI_WALKING_END 3
-
-#define SIMON_ANI_IDLE 0
-
-#define SIMON_ANI_JUMPING 4
-
-#define SIMON_ANI_SITTING 4
-
-/*Ani đang ngồi đánh*/
-#define SIMON_ANI_SITTING_ATTACKING_BEGIN 15
-#define SIMON_ANI_SITTING_ATTACKING_END 17
-
-/*Ani đang đứng đánh*/
-#define SIMON_ANI_STANDING_ATTACKING_BEGIN 5
-#define SIMON_ANI_STANDING_ATTACKING_END 7
-
-#define SIMON_DEFAULT_HEALTH 16
-
-/* Time Ani attack */
-#define SIMON_TIME_WAIT_ANI_ATTACKING 120// thời gian  của mỗi frame khi tấn công
-
-class Simon : public GameObject
+class Simon : public CGameObject
 {
-private:
-	int HeartCollect; // số lượng item heart người chơi nhặt được
-	int Lives; // số mạng của simon
-	int score; // điểm
+	static Simon* __instance;
+	int level;
+	int hp;
+	int score;
+	int life;
+	int energy;
+	DWORD untouchable_start;
+	DWORD timeAttackStart;
 
-	bool isWalking_Backup;
-	bool isJumping_Backup;
-	bool isSitting_Backup;
-	bool isAttacking_Backup;
-	int directionY_Backup;
-	int directionAfterGo;
-
-	D3DXVECTOR2 PositionBackup;
-
-	Camera* camera;
-
-	vector<Item*>* listItem;
+	float checkPointX, checkPointY;
+	MorningStar* morningStar;
 
 public:
-	
-	bool isWalking;
-	bool isJumping;
-	bool isSitting;
+	Simon(float x, float y);
+	static Simon* GetInstance();
+
 	bool isAttacking;
+	bool isSitting;
+	bool isJumping;
+	bool isUpStair;
+	bool isDownStair;
 
-	bool isCollisionAxisYWithBrick = false; // Đang va chạm với đất theo trục y
+	bool isRunning;
+	bool isGround;
 
-public:
-	Simon(Camera* camera, vector<Item*>* listItem);
-	~Simon();
+	int untouchable;
 
-	unordered_map<eType, Weapon*> mapWeapon;
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	virtual void Render();
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	virtual void Render(Camera * camera);
-	 
-	void Left();  // set lại hướng của simon
-	void Right(); // set lại hướng của simon
-	void Go();
-	void Sit();
-	void Jump();
-	void Stop();
+	int GetHP() { return this->hp; }
+	void SetHP(int hp) { this->hp = hp; }
 
-	void Attack(eType typeWeapon);
+	void SetState(int state);
+	void SetLevel(int l) { level = l; }
 
-	void SetHeartCollect(int h);
-	int GetHeartCollect();
-	int GetLives();
-	void SetLives(int l);
-	int GetScore();
-	void SetScore(int s);
+	int GetEnergy() { return energy; }
+	void SetEnergy(int e) { energy = e; }
 
-	void SetPositionBackup(float X, float Y);  // lưu vị trí cần backup để simon die thì bắt đầu lại từ đây 
+	int GetLevelMorningStar();
+	void SetAnimationSetMorningStar(LPANIMATION_SET ani_set);
 
-	bool isCollisionWithItem(Item* objItem);
+	int GetLife() { return life; }
+	void SetLife(int l) { life = l;  }
 
-	void CollisionWithBrick(const vector<LPGAMEOBJECT>* coObjects = NULL);
+	int GetScore() { return score; }
+	void SetScore(int sco) { score += sco;  }
 
-	void CollisionSimonWithItem();
+	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 
-	void CollisionSimonWithObjectHidden(const vector<LPGAMEOBJECT>* coObjects = NULL);
+	void ResetCheckpoint();
+	void ResetAnimationAttacking();
+	void Reset();
 
-	static Item* GetNewItem(int Id, eType Type, float X, float Y);
-
-
-	void Init(); // khởi tạo các trạng thái, HeartCollect, Heath, Lives, Score
-	void Reset(); // khởi tạo lại các trạng thái.
 };
 
-#endif

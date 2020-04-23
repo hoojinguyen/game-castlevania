@@ -1,50 +1,23 @@
-﻿#ifndef __MORNINGSTAR_H__
-#define __MORNINGSTAR_H__
+﻿#include "GameObject.h"
 
-#define MORNINGSTAR_TIME_WAIT_ANI 120 // thời gian chờ chuyển frame của MorningStar
-
-#define MORNINGSTAR_ANI_LEVEL0_START 0
-#define MORNINGSTAR_ANI_LEVEL0_END 3
-
-#define MORNINGSTAR_ANI_LEVEL1_START 4
-#define MORNINGSTAR_ANI_LEVEL1_END 7
-
-#define MORNINGSTAR_ANI_LEVEL2_START 8
-#define MORNINGSTAR_ANI_LEVEL2_END 11
-
-#include "Item.h"
-#include "Weapon.h"
-#include "GameObject.h" 
-#include "LargeHeart.h"
-#include "TextureManager.h"
-
-
-class MorningStar : public Weapon
+class MorningStar : public CGameObject
 {
-protected:
+private:
+	int indexAni;
+	CAnimation* ani;
+	int damage;
 	int level;
-
 public:
 	MorningStar();
 	~MorningStar();
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	void Render(Camera* camera);
-
-	void Attack(float X, float Y, int Direction);
-
-	void UpdatePositionFitSimon();
+	void Render();
+	void Render(bool IsRight);
+	void SetPosition(float x, float y, bool isSitting);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void ResetAnimation();
+	int GetCurrentFrame();
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	void RenderIcon(float X, float Y);
-
-	void UpgradeLevel();
-
-	int GetLevel();
-
-	bool isCollision(GameObject* obj);
-
+	void SetLevel(int level) { this->level = level; }
+	int GetLevel() { return this->level; }
 };
-
-
-
-#endif  

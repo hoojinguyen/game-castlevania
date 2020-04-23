@@ -1,29 +1,36 @@
 ﻿#pragma once
-#include "define.h"
-#include "GSprite.h"
-#include "GTexture.h"
-#include "Camera.h"
-#include "DebugRenderBBOX.h"
-#include "define.h"
-#include "TextureManager.h"
+
+#include <Windows.h>
+#include <d3dx9.h>
+#include <vector>
+
+#include "Sprites.h"
+#include "Animations.h"
+
 
 using namespace std;
 
-class GameObject; 
-typedef GameObject * LPGAMEOBJECT;
+#define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
-struct CollisionEvent;
-typedef CollisionEvent * LPCOLLISIONEVENT;
+class CGameObject;
+typedef CGameObject* LPGAMEOBJECT;
 
-struct CollisionEvent
+struct CCollisionEvent;
+typedef CCollisionEvent* LPCOLLISIONEVENT;
+struct CCollisionEvent
 {
 	LPGAMEOBJECT obj;
 	float t, nx, ny;
-	CollisionEvent(float t, float nx, float ny, LPGAMEOBJECT obj = NULL)
+
+	float dx, dy;		// *RELATIVE* movement distance between this object and obj
+
+	CCollisionEvent(float t, float nx, float ny, float dx = 0, float dy = 0, LPGAMEOBJECT obj = NULL)
 	{
 		this->t = t;
 		this->nx = nx;
 		this->ny = ny;
+		this->dx = dx;
+		this->dy = dy;
 		this->obj = obj;
 	}
 
@@ -33,83 +40,85 @@ struct CollisionEvent
 	}
 };
 
-class GameObject
+
+class CGameObject
 {
-protected:
-	DWORD LastTimeAttacked; // thời điểm bị tấn công cuối cùng
-
-	int Health;
-	int id; // ID của object
-
-	int direction;	// hướng -1 : trái, 1: phải
-	eType type; // Loại Object
+public:
 
 	float x;
 	float y;
 
-	float dx;
-	float dy;
+	float dx;	// dx = vx*dt
+	float dy;	// dy = vy*dt
 
 	float vx;
 	float vy;
 
+	int nx;
+
+	int state;
+
 	DWORD dt;
 
-	GTexture* texture;
-	GSprite* sprite;
+	LPANIMATION_SET animation_set;
 
+	int id;
+	bool isEnable;
+	bool isDead;
+	int width;
+	int height;
+
+	int type;
 public:
- 
-	GameObject();
-	virtual ~GameObject();
+	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
+	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
+	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	virtual void Render(Camera * camera) = 0;
+	int GetState() { return this->state; }
 
-	void RenderBoundingBox(Camera* camera);
-	LPCOLLISIONEVENT SweptAABBEx(GameObject* coO);
-	void CalcPotentialCollisions(vector<GameObject*>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
+	void RenderBoundingBox();
+
+	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+
+	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
+	void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
 	void FilterCollision(
 		vector<LPCOLLISIONEVENT>& coEvents,
 		vector<LPCOLLISIONEVENT>& coEventsResult,
 		float& min_tx,
 		float& min_ty,
 		float& nx,
-		float& ny);
+		float& ny,
+		float& rdx,
+		float& rdy);
 
-	bool isCollitionObjectWithObject(GameObject* obj); 	// kiểm tra bằng AABB và Sweept AABB
-	bool CheckAABB(GameObject* obj);
+	CGameObject();
 
-	void SubHealth(int th);
-	int GetHealth();
-	void SetHealth(int h);
-	void SetDirection(int d);
-	int GetDirection();
-	void SetId(int ID);
-	int GetId();
-	  
-	void GetPosition(float& x, float& y);
-	void SetPosition(float x, float y);
-	void GetSpeed(float& vx, float& vy);
-	void SetSpeed(float vx, float vy);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Render() = 0;
+	virtual void SetState(int state) { this->state = state; }
 
-	float GetX();
-	void SetX(float X);
-	float GetY();
-	void SetY(float Y);
-	float GetVx();
-	void SetVx(float VX);
-	float GetVy();
-	void SetVy(float VY);
-	int GetHeight();
-	int GetWidth();
-	eType GetType();
+	void SetID(int ID) { id = ID; }
+	int GetID() { return id; }
 
-	DWORD GetLastTimeAttacked();
-	void SetLastTimeAttacked(DWORD t);
+	void SetWidth(int w) { width = w; }
+	void SetHeight(int h) { height = h; }
+	int GetWidth() { return width; }
+	int GetHeight() { return height; }
 
-	void SetTexture(GTexture* tex);
-	GSprite* GetSprite();
+	void SetEnable(bool e) { if (e) { isDead = false; } isEnable = e; }
+	bool GetEnable() { return isEnable; }
 
+	void SetDead(bool dead) { isDead = dead; }
+	bool GetDead() { return isDead; }
+
+	void ResetAni(int aniID) { animation_set->at(aniID)->Reset(); }
+
+	void SetType(int t) { type = t; }
+	int GetType() { return type; }
+
+	~CGameObject();
 };
+

@@ -1,39 +1,43 @@
 #include "Torch.h"
 
-Torch::Torch(float X, float Y)
+Torch::Torch()
 {
-	texture = TextureManager::GetInstance()->GetTexture(eType::TORCH);
-	sprite = new GSprite(texture, 100);
-	this->x = X;
-	this->y = Y;
-	type = eType::TORCH;
-	Health = 1;
-}
+	collisionEffect = new CollisionEffect();
+	deadEffect = new DeadEffect();
 
-Torch::~Torch()
-{
-
-}
-
-void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	sprite->Update(dt); // update animation
-}
-
-void Torch::Render(Camera* camera)
-{
-	//if (IS_DEBUG_RENDER_BBOX)
-		RenderBoundingBox(camera);
-
-	D3DXVECTOR2 pos = camera->Transform(x, y);
-	sprite->Draw(pos.x, pos.y);
+	isEnable = true;
 }
 
 void Torch::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + 32;
-	b = y + 64;
+	r = x + 16;
+	b = y + 32;
 }
 
+void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt, coObjects);
+	if (isEnable)
+	{
+		collisionEffect->SetPosition(x, y + 10);
+		deadEffect->SetPosition(x + 3, y - 3);
+	}
+
+	collisionEffect->Update(dt);
+	deadEffect->Update(dt);
+}
+
+void Torch::Render()
+{
+	if (isEnable)
+	{
+		animation_set->at(0)->Render(x, y);
+		RenderBoundingBox();
+	}
+
+
+	collisionEffect->Render();
+	deadEffect->Render();
+}

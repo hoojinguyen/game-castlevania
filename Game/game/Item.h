@@ -1,38 +1,23 @@
-﻿#ifndef __ITEM_H__
-#define __ITEM_H__
+﻿#pragma once
+#include "GameObject.h"
 
-#include "GSprite.h"
-#include "Camera.h"
-#include "GTexture.h"
-#include "GameObject.h" 
-#include "define.h" 
-
-class Item : public GameObject
+class Item;
+typedef Item* LPITEM;
+class Item : public CGameObject
 {
-protected:
+	int typeItem;
+	void Init();
+	void RandomType();
+	void RandomItem();
+	void RandomWeapon();
 
-	DWORD TimeDisplayMax; // thời gian tối đa cho phép hiển thị.
-	DWORD TimeDisplayed; // Thời gian đã hiển thị.
-
-	DWORD TimeWaited; // Thời gian đã chờ trước khi hiển thị
-	DWORD TimeWaitMax; // Thời gian tối đa phải chờ trước khi hiển thị
-
-	bool isFinish; // đã kết thúc chưa?
 public:
 	Item();
-	virtual ~Item();
-
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
-
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* listObject = NULL);
-	virtual void Render(Camera* camera);
-	virtual bool isWaitingDisplay(); // đang chờ object hiển thi? - simon chưa được ăn
-
-	bool GetFinish();
-	void SetFinish(bool b);
+	Item(int typeItem);
+	~Item();
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
+	int GetTypeItem() { return typeItem; }
 };
-
-#endif // !__ITEM_H__
-
-
 

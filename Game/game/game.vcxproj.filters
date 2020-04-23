@@ -4,9 +4,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Framework\Map</Filter>
-    </ClCompile>
     <ClCompile Include="define.cpp">
       <Filter>Framework\Define</Filter>
     </ClCompile>
@@ -25,17 +22,8 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Framework\Grid</Filter>
     </ClCompile>
-    <ClCompile Include="GTexture.cpp">
-      <Filter>Framework\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="GSprite.cpp">
-      <Filter>Framework\Animation</Filter>
-    </ClCompile>
     <ClCompile Include="Simon.cpp">
       <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Object\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Torch.cpp">
       <Filter>Object\Ground</Filter>
@@ -46,21 +34,8 @@
     <ClCompile Include="debug.cpp">
       <Filter>Framework\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="DebugRenderBBOX.cpp">
-      <Filter>Framework\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Object\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="LargeHeart.cpp">
-      <Filter>Object\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="UpgradeMorningStar.cpp">
-      <Filter>Object\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Framework\Animation</Filter>
     </ClCompile>
     <ClCompile Include="ObjectHidden.cpp">
       <Filter>Object</Filter>
@@ -80,13 +55,46 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Framework\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Framework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Framework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>Framework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Framework\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingMap.cpp">
+      <Filter>Object\BoundingMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionEffect.cpp">
+      <Filter>Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadEffect.cpp">
+      <Filter>Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Candle.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBoard.cpp">
+      <Filter>Framework\Board</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreBoard.cpp">
+      <Filter>ScoreBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="HP.cpp">
+      <Filter>Framework\Board</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
       <Filter>Framework\Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Framework\Map</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Object</Filter>
@@ -100,17 +108,8 @@
     <ClInclude Include="Game.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="GTexture.h">
-      <Filter>Framework\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="GSprite.h">
-      <Filter>Framework\Animation</Filter>
-    </ClInclude>
     <ClInclude Include="Simon.h">
       <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Object\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Torch.h">
       <Filter>Object\Ground</Filter>
@@ -121,21 +120,8 @@
     <ClInclude Include="debug.h">
       <Filter>Framework\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="DebugRenderBBOX.h">
-      <Filter>Framework\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Object\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="LargeHeart.h">
-      <Filter>Object\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="UpgradeMorningStar.h">
-      <Filter>Object\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Framework\Animation</Filter>
     </ClInclude>
     <ClInclude Include="ObjectHidden.h">
       <Filter>Object</Filter>
@@ -160,6 +146,42 @@
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Framework\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Framework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Framework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>Framework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Framework\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingMap.h">
+      <Filter>Object\BoundingMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionEffect.h">
+      <Filter>Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadEffect.h">
+      <Filter>Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Candle.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBoard.h">
+      <Filter>Framework\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreBoard.h">
+      <Filter>ScoreBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="HP.h">
+      <Filter>Framework\Board</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,9 +209,6 @@
     <Filter Include="Framework\Grid">
       <UniqueIdentifier>{04c0e51c-83d1-4f59-8c3a-73884ce3fddf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Animation">
-      <UniqueIdentifier>{860a8b8a-e5f8-409f-ba75-74bfa582b643}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Weapon">
       <UniqueIdentifier>{444901f6-5fb3-4466-b1ab-576f361cdd1b}</UniqueIdentifier>
     </Filter>
@@ -207,6 +226,21 @@
     </Filter>
     <Filter Include="Framework\Keyboard">
       <UniqueIdentifier>{c1017810-030b-4baf-9de4-9d7b5d8face3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\BoundingMap">
+      <UniqueIdentifier>{a38588d4-28db-4321-b757-700416e42ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Effect">
+      <UniqueIdentifier>{822bb622-1cc2-4a02-9494-03199d53842c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Board">
+      <UniqueIdentifier>{1488bf1b-81d3-4d85-a6c8-8ed9457f716a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ScoreBoard">
+      <UniqueIdentifier>{7a0aca95-420e-4e9d-a479-ffaa45421ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\UI">
+      <UniqueIdentifier>{860a8b8a-e5f8-409f-ba75-74bfa582b643}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

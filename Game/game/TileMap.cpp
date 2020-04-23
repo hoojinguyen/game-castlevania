@@ -4,14 +4,11 @@
 
 using namespace std;
 
-TileMap::TileMap(float _width, float _height, eType type,  string pathFile)
+TileMap::TileMap(float _width, float _height, LPSPRITE _sprite, string pathFile)
 {
 	width = _width;
 	height = _height;
-	//sprite = _sprite;
-
-	_texture = TextureManager::GetInstance()->GetTexture(type);
-	sprite = new GSprite(_texture, 100);
+	sprite = _sprite;
 
 	this->LoadListTile(pathFile);
 }
@@ -74,7 +71,7 @@ void TileMap::LoadListTile(string pathFile)
 			matrix[i][j].SetPosition(position);
 			matrix[i][j].SetSprite(sprite);
 
-			//DebugOut(L"[INFO] tile add: %d, %d, %d, %d, %d, %f, %f \n", id, bound.left, bound.top, bound.right, position.x, position.y);
+			DebugOut(L"[INFO] tile add: %d, %d, %d, %d, %d, %f, %f \n", id, bound.left, bound.top, bound.right, position.x, position.y);
 		}
 	}
 
@@ -82,32 +79,33 @@ void TileMap::LoadListTile(string pathFile)
 }
 
 
-void TileMap::Render(int screenWidth, int screenHeight, Camera* camera)
+void TileMap::Render(int screenWidth, int screenHeight)
 {
+	D3DXVECTOR3 cameraPosition = CCamera::GetInstance()->GetCameraPosition();
 	int rowStart;
 	int rowEnd;
 	int colStart;
 	int colEnd;
 
-	if ((camera->GetYCam() / tileHeight) < 0)
+	if ((cameraPosition.y / tileHeight) < 0)
 		rowStart = 0;
 	else
-		rowStart = (camera->GetYCam() / tileHeight);
+		rowStart = (cameraPosition.y / tileHeight);
 
-	if (((camera->GetYCam() / tileHeight + screenHeight / tileHeight) + 1) > rows)
+	if (((cameraPosition.y / tileHeight + screenHeight / tileHeight) + 1) > rows)
 		rowEnd = rows;
 	else
-		rowEnd = ((camera->GetYCam() / tileHeight + screenHeight / tileHeight) + 1);
+		rowEnd = ((cameraPosition.y / tileHeight + screenHeight / tileHeight) + 1);
 
-	if ((camera->GetXCam() / tileWidth) < 0)
+	if ((cameraPosition.x / tileWidth) < 0)
 		colStart = 0;
 	else
-		colStart = (camera->GetXCam() / tileWidth);
+		colStart = (cameraPosition.x / tileWidth);
 
-	if (((camera->GetXCam() / tileWidth + screenWidth / tileWidth) + 1) > cols)
+	if (((cameraPosition.x / tileWidth + screenWidth / tileWidth) + 1) > cols)
 		colEnd = cols;
 	else
-		colEnd = ((camera->GetXCam() / tileWidth + screenWidth / tileWidth) + 1);
+		colEnd = ((cameraPosition.x / tileWidth + screenWidth / tileWidth) + 1);
 
 	for (int i = rowStart; i < rowEnd; i++)
 	{
