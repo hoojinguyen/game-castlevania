@@ -32,10 +32,9 @@ Simon::Simon()
 
 	timeAttackStart = 0;
 
-	morningStar = new MorningStar();
-
 	state = SIMON_STATE_IDLE;
 
+	morningStar = new MorningStar();
 }
 
 Simon* Simon::GetInstance()
@@ -47,7 +46,7 @@ Simon* Simon::GetInstance()
 void Simon::Reset()
 {
 	SetState(SIMON_STATE_IDLE);
-	SetPosition(checkPointX, checkPointY);
+	SetPosition(xBackup, yBackup);
 	SetSpeed(0, 0);
 }
 
@@ -86,7 +85,7 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_CLIMB_STAIR_UP:
 		if (!isOnStair) {
-			x = posXStair - 6;
+			x = xStair - 6;
 		}
 		if (canClimbDownStair) {
 			isOnStair = false;
@@ -104,7 +103,7 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_CLIMB_STAIR_DOWN:
 		if (!isOnStair) {
-			x = posXStair;
+			x = xStair;
 			y += 8;
 		}
 		/*if (canClimbUpStair) {
@@ -188,7 +187,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			nx = directionStair;
 		}
 		else {
-			nx = directionStair;
+			nx = -directionStair;
 		}
 	}
 
@@ -231,8 +230,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
 			{
-				if (!item->GetDead() && item->GetEnable()) {
-					item->SetDead(true);
+				if (!item->GetDeadth() && item->GetEnable()) {
+					item->SetDeadth(true);
 					item->SetEnable(false);
 				}
 			}
@@ -247,8 +246,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
 			{
 				canClimbDownStair = true;
-				posXStair = item->x;
-				posYStair = item->y;
+				xStair = item->x;
+				yStair = item->y;
 				directionStair = item->nx;
 			}
 		}
@@ -262,8 +261,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
 			{
 				canClimbUpStair = true;
-				posXStair = item->x;
-				posYStair = item->y;
+				xStair = item->x;
+				yStair = item->y;
 				directionStair = item->nx;
 			}
 		}
@@ -317,7 +316,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<Item*>(e->obj))
 			{
 				Item* item = dynamic_cast<Item*>(e->obj);
-				if (!item->GetDead() && item->GetEnable())
+				if (!item->GetDeadth() && item->GetEnable())
 				{
 					switch (item->GetTypeItem())
 					{
@@ -334,7 +333,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						energy += 5;
 						break;
 					}
-					item->SetDead(true);
+					item->SetDeadth(true);
 					item->SetEnable(false);
 				}
 			}
@@ -516,22 +515,23 @@ void Simon::Render()
 
 	if (isAttacking)
 	{
+		bool isRight = nx > 0;
 		morningStar->SetPosition(this->x, this->y, isSitting);
-		morningStar->Render(nx > 0);
+		morningStar->Render(isRight);
 	}
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 	animation_set->at(ani)->Render(posX, posY, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
-void Simon::ResetCheckpoint()
+void Simon::ResetBackupSimon()
 {
-	x = checkPointX;
-	y = checkPointY;
-	hp = SIMON_MAX_HP;
+	this->x = xBackup;
+	this->y = yBackup;
+	this->hp = SIMON_MAX_HP;
 }
 
 void Simon::ResetAnimationAttacking()
@@ -555,9 +555,16 @@ void Simon::SetAnimationSetMorningStar(LPANIMATION_SET ani_set)
 	morningStar->SetAnimationSet(ani_set);
 }
 
+void Simon::SetPosition(float x, float y)
+{
+	xBackup = x;
+	yBackup = y;
+	this->x = x;
+	this->y = y;
+}
+
 
 // Load Simon 
-
 #include <iostream>
 #include <fstream>
 
@@ -612,14 +619,6 @@ void Simon::Load(LPCWSTR simonFile)
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\BBox\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading simon resources %s\n", simonFile);
-}
-
-void Simon::SetPosition(float x, float y)
-{
-	checkPointX = x;
-	checkPointY = y;
-	this->x = x;
-	this->y = y;
 }
 
 void Simon::_ParseSection_TEXTURES(string line)
@@ -712,19 +711,18 @@ void Simon::_ParseSection_SETTINGS(string line)
 
 	if (tokens.size() < 2) return;
 
-	if (tokens[0] == "animation_set")
+	int id = atoi(tokens[0].c_str());
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(id);
+
+	if (tokens[1] == "SIMON")
 	{
-		int ani_set_id = atoi(tokens[1].c_str());
-		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		SetAnimationSet(ani_set);
 	}
-	else if (tokens[0] == "animation_set_whip")
+	else if (tokens[1] == "MORNINGSTAR")
 	{
-		int ani_set_whip_id = atoi(tokens[1].c_str());
-		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-		LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
-		SetAnimationSetMorningStar(ani_set_whip);
+		
+		SetAnimationSetMorningStar(ani_set);
 	}
 	else
 		DebugOut(L"[ERROR] Unknown scene setting %s\n", ToWSTR(tokens[0]).c_str());

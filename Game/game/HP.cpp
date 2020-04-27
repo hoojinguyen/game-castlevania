@@ -1,18 +1,5 @@
 #include "HP.h"
 
-void HP::Render()
-{
-	if (type == 2)
-	{
-		sprite->DrawWithoutCamera(x, y);
-		sprite->DrawWithoutCamera(x, y + 10);
-	}
-	else {
-		sprite->DrawWithoutCamera(x, y);
-	}
-
-}
-
 HP::HP(int type)
 {
 	this->type = type;
@@ -29,6 +16,19 @@ HP::HP(int type)
 		sprite = sprites->Get(60002);
 		break;
 	}
+}
+
+void HP::Render()
+{
+	if (type == 2)
+	{
+		sprite->DrawWithoutCamera(x, y);
+		sprite->DrawWithoutCamera(x, y + 10);
+	}
+	else {
+		sprite->DrawWithoutCamera(x, y);
+	}
+
 }
 
 HP::~HP()

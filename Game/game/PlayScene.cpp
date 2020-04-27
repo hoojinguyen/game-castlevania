@@ -60,7 +60,6 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
 	arrTexturesID.push_back(texID);
-
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -231,7 +230,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->SetAnimationSet(ani_set);
 	}
 
-
 	objects.push_back(obj);
 }
 
@@ -388,9 +386,6 @@ void CPlayScene::Unload()
 	arrSpritesID.clear();
 	arrAnimationsID.clear();
 	arrAnimationSetsID.clear();
-
-
-
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -420,7 +415,6 @@ void CPlayScene::Update(DWORD dt)
 	simon->GetPosition(cx, cy);
 
 	boundHeight = mapHeight;
-
 
 	if (mapWidth > SCREEN_WIDTH) {
 		if (cx + simon->GetWidth() + 5 < SCREEN_WIDTH / 2) {

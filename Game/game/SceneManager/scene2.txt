@@ -104,12 +104,12 @@ map_height 192.0f
 # ITEM
 40 400 401 402
 
-[OBJECTS]
-Resources\Map\Map2\object.txt
-
 [TILEMAP]
 # fileMap	sprite_id	
-Resources\Map\Map2\matrix.txt 1000
+Resources\Map\Map2\tilesheet.txt 1000
+
+[OBJECTS]
+Resources\Map\Map2\object.txt
 
 [GRID]
 #file_grid	cell_size

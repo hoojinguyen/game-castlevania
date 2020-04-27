@@ -111,8 +111,8 @@ public:
 	void SetEnable(bool e) { if (e) { isDeadth = false; } isEnable = e; }
 	bool GetEnable() { return isEnable; }
 
-	void SetDead(bool dead) { isDeadth = dead; }
-	bool GetDead() { return isDeadth; }
+	void SetDeadth(bool dead) { isDeadth = dead; }
+	bool GetDeadth() { return isDeadth; }
 
 	void ResetAni(int aniID) { animation_set->at(aniID)->Reset(); }
 

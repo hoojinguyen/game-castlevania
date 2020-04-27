@@ -15,10 +15,10 @@ class Simon : public CGameObject
 
 	//float oldVy;
 
-	float checkPointX, checkPointY;
+	float xBackup, yBackup;
 	MorningStar* morningStar;
 
-	float posXStair, posYStair;
+	float xStair, yStair;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -52,6 +52,8 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 
+	void SetPosition(float x, float y);
+
 	int GetHP() { return this->hp; }
 	void SetHP(int hp) { this->hp = hp; }
 
@@ -72,12 +74,11 @@ public:
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 
-	void ResetCheckpoint();
+	void ResetBackupSimon();
 	void ResetAnimationAttacking();
 	void Reset();
 
 	void Load(LPCWSTR simonFile);
-	void SetPosition(float x, float y);
 
 };
 
