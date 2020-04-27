@@ -1,14 +1,11 @@
 #pragma once
 #include "GameObject.h"
-
-class BoundingMap : public CGameObject
+class StairBottom : public CGameObject
 {
-	CSprite* sprite;
 public:
-	BoundingMap();
+	StairBottom(int _nx);
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	BoundingMap(int width, int height);
-	~BoundingMap();
+	~StairBottom();
 };
 

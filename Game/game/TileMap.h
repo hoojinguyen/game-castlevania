@@ -19,7 +19,7 @@ private:
 	float tileHeight;
 	int spritePerRow;
 	LPSPRITE sprite;
-	void LoadListTile(string file);
+	void Load(string file);
 public:
 	TileMap(float _width, float _height, LPSPRITE _sprite, string pathFile);
 	~TileMap();

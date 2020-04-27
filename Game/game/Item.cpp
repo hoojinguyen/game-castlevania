@@ -1,22 +1,24 @@
-﻿#include "Item.h"
+﻿#include <time.h>
+#include "Item.h"
 #include "Define.h"
-#include <time.h>
 #include "Brick.h"
 #include "BoundingMap.h"
 
 Item::Item()
 {
-	isDead = false;
+	isDeadth = false;
 	isEnable = false;
+	TimeDisplayMax = ITEM_TIMEDISPLAYMAX;
 	RandomType();
 	Init();
 }
 
 Item::Item(int type)
 {
-	isDead = false;
+	isDeadth = false;
 	isEnable = false;
 	typeItem = type;
+	TimeDisplayMax = ITEM_TIMEDISPLAYMAX;
 	Init();
 }
 
@@ -92,7 +94,7 @@ void Item::Init()
 
 void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (!isDead)
+	if (!isDeadth)
 	{
 		if (!isEnable)
 		{
@@ -124,8 +126,17 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (!isDead && isEnable)
+	if (!isDeadth && isEnable)
 	{
+		TimeDisplayed += dt;
+		if (TimeDisplayed >= TimeDisplayMax)
+		{
+			this->isDeadth = true;
+			this->isEnable = false;
+			TimeDisplayed = 0;
+			return;
+		}
+
 		CGameObject::Update(dt, coObjects);
 		vy += SIMON_GRAVITY * dt;
 		vector<LPCOLLISIONEVENT> coEvents;

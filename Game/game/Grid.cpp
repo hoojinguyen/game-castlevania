@@ -11,7 +11,7 @@ using namespace std;
 #define GRID_SECTION_SETTINGS 0
 #define GRID_SECTION_OBJECTS 2
 
-void Grid::_Load_SETTINGS(string line)
+void Grid::LoadSetting(string line)
 {
 	vector<string> tokens = split(line);
 	if (tokens.size() < 2)
@@ -29,7 +29,7 @@ void Grid::_Load_SETTINGS(string line)
 		cells[i] = new Cell[numYCells];
 }
 
-void Grid::_Load_OBJECTS(string line)
+void Grid::LoadObject(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -77,8 +77,8 @@ Grid::Grid(string pathFile, vector <LPGAMEOBJECT>* listObject)
 
 		switch (section)
 		{
-		case GRID_SECTION_SETTINGS: _Load_SETTINGS(line); break;
-		case GRID_SECTION_OBJECTS: _Load_OBJECTS(line); break;
+		case GRID_SECTION_SETTINGS: LoadSetting(line); break;
+		case GRID_SECTION_OBJECTS: LoadObject(line); break;
 		}
 	}
 
@@ -122,22 +122,51 @@ void Grid::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, int screenWidth, 
 
 	LPGAMEOBJECT e;
 
+	if (right < 0 || left > numXCells || bottom < 0 && top > numYCells)
+	{
+		return;
+	}
+
+	if (right > numXCells)
+	{
+		right = numXCells;
+	}
+	if (bottom > numYCells)
+	{
+		bottom = numYCells;
+	}
+
+	if (left < 0)
+	{
+		left = 0;
+	}
+	if (top > 0)
+	{
+		top = 0;
+	}
+
+	LPCELL cell;
 	for (i = left; i < right; i++)
 	{
 		for (j = top; j < bottom; j++)
 		{
-			if (cells[i][j].GetListObjects().size() != 0)
+			LPCELL cell = &cells[i][j];
+			if (cell)
 			{
-				for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
+				if (cells[i][j].GetListObjects().size() != 0)
 				{
-					e = cells[i][j].GetListObjects().at(k);
-					if (!checkContainId(list_object, e)) {
-						list_object->push_back(e);
-					}
+					for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
+					{
+						e = cells[i][j].GetListObjects().at(k);
+						if (!checkContainId(list_object, e)) {
+							list_object->push_back(e);
+						}
 
-					//list_object->push_back(e);
+						//list_object->push_back(e);
+					}
 				}
 			}
+
 		}
 	}
 

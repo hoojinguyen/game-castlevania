@@ -13,23 +13,40 @@ class Simon : public CGameObject
 	DWORD untouchable_start;
 	DWORD timeAttackStart;
 
+	//float oldVy;
+
 	float checkPointX, checkPointY;
 	MorningStar* morningStar;
 
+	float posXStair, posYStair;
+
+	void _ParseSection_TEXTURES(string line);
+	void _ParseSection_SPRITES(string line);
+	void _ParseSection_ANIMATIONS(string line);
+	void _ParseSection_ANIMATION_SETS(string line);
+	void _ParseSection_SETTINGS(string line);
+
+	Simon();
+
 public:
-	Simon(float x, float y);
+
 	static Simon* GetInstance();
 
 	bool isAttacking;
 	bool isSitting;
 	bool isJumping;
-	bool isUpStair;
-	bool isDownStair;
 
 	bool isRunning;
 	bool isGround;
 
 	int untouchable;
+
+	bool isOnStair;
+	bool isUpStair;
+	bool isDownStair;
+	bool canClimbUpStair;
+	bool canClimbDownStair;
+	int directionStair;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
@@ -58,6 +75,9 @@ public:
 	void ResetCheckpoint();
 	void ResetAnimationAttacking();
 	void Reset();
+
+	void Load(LPCWSTR simonFile);
+	void SetPosition(float x, float y);
 
 };
 

@@ -140,6 +140,8 @@
     <ClInclude Include="ItemBoard.h" />
     <ClInclude Include="ScoreBoard.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="StairBottom.h" />
+    <ClInclude Include="StairTop.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="KeyEventHandler.h" />
@@ -172,6 +174,8 @@
     <ClCompile Include="ItemBoard.cpp" />
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="StairBottom.cpp" />
+    <ClCompile Include="StairTop.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />

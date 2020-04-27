@@ -1,5 +1,5 @@
 #id	type	name	x	y	width	height	ani_set_id
-0 1 Simon 10 100 32 32 1 2
+0 1 Simon 40 120 16 30 1
 1 10 Torch 89 127 32 32 30
 2 10 Torch 224 127 32 32 30
 3 10 Torch 321 127 32 32 30
@@ -7,8 +7,9 @@
 5 10 Torch 600 127 32 32 30
 6 14 ObjectHidden 689 71 19 88 2
 7 13 BoundingMap 0 159 768 15 -1
-8 102 Heart 89 127 32 32 40
-9 102 Heart 480 127 32 32 40
-10 100 MorningStar 224 127 32 32 40
-11 100 MorningStar 321 127 32 32 40
-12 102 Heart 600 127 32 32 40
+8 102 Heart 89 127 16 32 40
+9 102 Heart 480 127 16 32 40
+10 100 Whip 224 127 16 32 40
+11 100 Whip 321 127 16 32 40
+12 102 Heart 600 127 16 32 40
+13 13 BoundingMap -16 0 16 192 -1

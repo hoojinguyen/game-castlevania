@@ -8,17 +8,24 @@
 class CPlayScene : public CScene
 {
 protected:
-	Simon* player;					// A play scene has to have player, right? 
+	Simon* simon;					// A play scene has to have player, right? 
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> coObjects;
+
+	vector<int> arrTexturesID;
+	vector<int> arrSpritesID;
+	vector<int> arrAnimationsID;
+	vector<int> arrAnimationSetsID;
+
 	TileMap* tileMap = NULL;
 	Grid* grid = NULL;
+	ScoreBoard* scoreBoard;
+	CCamera* camera;
+
+	DWORD time;
 
 	float mapWidth, mapHeight;
-
-	ScoreBoard* scoreBoard;
-	DWORD time;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);
@@ -29,17 +36,17 @@ protected:
 	void _ParseSection_TILEMAP(string line);
 	void _ParseSection_GRID(string line);
 	void _Load_OBJECTS(string line);
-	CCamera* camera;
+
 public:
 
-	Simon* GetPlayer() { return player; }
+	Simon* GetSimon() { return simon; }
 
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
+	virtual void Unload();
 	virtual void Update(DWORD dt);
 	virtual void Render();
-	virtual void Unload();
 
 	friend class CPlayScenceKeyHandler;
 

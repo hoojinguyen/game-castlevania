@@ -5,16 +5,17 @@ Tile::Tile()
 	camera = CCamera::GetInstance();
 }
 
-Tile::~Tile()
-{
-}
-
 Tile::Tile(int _id, RECT _bound, D3DXVECTOR2 _position)
 {
 	id = _id;
 	bound = _bound;
 	position = _position;
 }
+
+Tile::~Tile()
+{
+}
+
 
 void Tile::setID(int _id)
 {
@@ -44,9 +45,6 @@ void Tile::Render()
 bool Tile::CheckInBoundCamera(int screenWidth, int screenHeight)
 {
 	D3DXVECTOR3 cameraPosition = camera->GetCameraPosition();
-
-	/*return (left >= cameraPosition.x && top >= cameraPosition.y
-		&& right <= cameraPosition.x + screenWidth && bottom <= cameraPosition.y + screenHeight);*/
 	float boundLeft = cameraPosition.x;
 	float boundTop = cameraPosition.y;
 	float boundRight = boundLeft + screenWidth;

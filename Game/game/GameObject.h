@@ -64,7 +64,7 @@ public:
 
 	int id;
 	bool isEnable;
-	bool isDead;
+	bool isDeadth;
 	int width;
 	int height;
 
@@ -108,11 +108,11 @@ public:
 	int GetWidth() { return width; }
 	int GetHeight() { return height; }
 
-	void SetEnable(bool e) { if (e) { isDead = false; } isEnable = e; }
+	void SetEnable(bool e) { if (e) { isDeadth = false; } isEnable = e; }
 	bool GetEnable() { return isEnable; }
 
-	void SetDead(bool dead) { isDead = dead; }
-	bool GetDead() { return isDead; }
+	void SetDead(bool dead) { isDeadth = dead; }
+	bool GetDead() { return isDeadth; }
 
 	void ResetAni(int aniID) { animation_set->at(aniID)->Reset(); }
 

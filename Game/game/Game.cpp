@@ -3,27 +3,15 @@
 
 #include "Game.h"
 #include "Utils.h"
+
 #include "Scene.h"
 #include "Textures.h"
 #include "Sprites.h"
 #include "Animations.h"
-#include "PlayScene.h"
+#include "PlayScene.h";
+
 
 CGame* CGame::__instance = NULL;
-
-CGame* CGame::GetInstance()
-{
-	if (__instance == NULL) __instance = new CGame();
-	return __instance;
-}
-
-CGame::~CGame()
-{
-	if (spriteHandler != NULL) spriteHandler->Release();
-	if (backBuffer != NULL) backBuffer->Release();
-	if (d3ddv != NULL) d3ddv->Release();
-	if (d3d != NULL) d3d->Release();
-}
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
@@ -76,6 +64,8 @@ void CGame::Init(HWND hWnd)
 
 	camera = CCamera::GetInstance();
 
+	deviation_y = 0;
+
 	OutputDebugString(L"[INFO] InitGame done;\n");
 }
 
@@ -91,7 +81,10 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 	r.right = right;
 	r.bottom = bottom;
 
-	spriteHandler->Draw(texture, &r, NULL, &camera->GetPositionInCamera(p), D3DCOLOR_ARGB(alpha, 255, 255, 255));
+	D3DXVECTOR3 position = camera->GetPositionInCamera(p);
+	position.y += deviation_y;
+
+	spriteHandler->Draw(texture, &r, NULL, &position, D3DCOLOR_ARGB(alpha, 255, 255, 255));
 }
 
 void CGame::DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
@@ -228,9 +221,17 @@ void CGame::ProcessKeyboard()
 	}
 }
 
+CGame::~CGame()
+{
+	if (spriteHandler != NULL) spriteHandler->Release();
+	if (backBuffer != NULL) backBuffer->Release();
+	if (d3ddv != NULL) d3ddv->Release();
+	if (d3d != NULL) d3d->Release();
+}
 
 /*
 	Standard sweptAABB implementation
+	Source: GameDev.net
 */
 void CGame::SweptAABB(
 	float ml, float mt, float mr, float mb,
@@ -339,10 +340,16 @@ bool CGame::AABBCheck(float ml, float mt, float mr, float mb, float sl, float st
 	return false;
 }
 
-/*
-	Load Scene Game
-*/
+CGame* CGame::GetInstance()
+{
+	if (__instance == NULL)
+		__instance = new CGame();
+	return __instance;
+}
+
+// Load Scene
 #define MAX_GAME_LINE 1024
+
 #define GAME_FILE_SECTION_UNKNOWN -1
 #define GAME_FILE_SECTION_SETTINGS 1
 #define GAME_FILE_SECTION_SCENES 2
@@ -370,9 +377,6 @@ void CGame::_ParseSection_SCENES(string line)
 	scenes[id] = scene;
 }
 
-/*
-	Load game campaign file and load/initiate first scene
-*/
 void CGame::Load(LPCWSTR gameFile)
 {
 	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
@@ -401,9 +405,17 @@ void CGame::Load(LPCWSTR gameFile)
 	}
 	f.close();
 
+
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
 	SwitchScene(current_scene);
+}
+
+LPSCENE CGame::GetCurrentScene()
+{
+	DebugOut(L"[INFO] scenes.size game %d\n", scenes.size());
+	DebugOut(L"[INFO] current_scene game %d\n", current_scene);
+	return scenes[current_scene];
 }
 
 void CGame::SwitchScene(int scene_id)
@@ -412,12 +424,8 @@ void CGame::SwitchScene(int scene_id)
 
 	scenes[current_scene]->Unload();
 
-	CTextures::GetInstance()->Clear();
-	CSprites::GetInstance()->Clear();
-	CAnimations::GetInstance()->Clear();
-
 	current_scene = scene_id;
 	LPSCENE s = scenes[scene_id];
-	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }

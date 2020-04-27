@@ -20,13 +20,14 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "PlayScene.h"
+#include "Simon.h"
 
-#define WINDOW_CLASS_NAME L"SCENE"
-#define MAIN_WINDOW_TITLE L"SCENE"
+#define WINDOW_CLASS_NAME L"SampleWindow"
+#define MAIN_WINDOW_TITLE L"SAMPLE 05 - SCENCE MANAGER"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 260
+#define SCREEN_WIDTH 272
+#define SCREEN_HEIGHT 280
 
 #define MAX_FRAME_RATE 120
 
@@ -175,8 +176,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->InitKeyboard();
+	game->SetDeviationY(45);
 
-	game->Load(L"SceneManager\\main.txt");
+	Simon::GetInstance()->Load(L"SceneManager\\simon.txt");
+
+	CGame::GetInstance()->Load(L"SceneManager\\main.txt");
+
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 

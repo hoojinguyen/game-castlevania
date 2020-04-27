@@ -91,6 +91,12 @@
     <ClCompile Include="HP.cpp">
       <Filter>Framework\Board</Filter>
     </ClCompile>
+    <ClCompile Include="StairBottom.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="StairTop.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -182,6 +188,12 @@
     </ClInclude>
     <ClInclude Include="HP.h">
       <Filter>Framework\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="StairBottom.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="StairTop.h">
+      <Filter>Object\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

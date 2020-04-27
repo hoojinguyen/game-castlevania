@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 #include <d3d9.h>
 #include "Sprites.h"
+
 class Tile
 {
 	int id;
@@ -10,19 +11,26 @@ class Tile
 	D3DXVECTOR2 position;
 	LPSPRITE sprite;
 	CCamera* camera;
+
 public:
 	Tile();
 	~Tile();
 	Tile(int _id, RECT _bound, D3DXVECTOR2 _position);
-	void setID(int _id);
-	void SetPosition(D3DXVECTOR2 _position);
-	void SetBound(RECT _bound);
-	void SetSprite(LPSPRITE _sprite);
-	int GetID() { return id; }
-	D3DXVECTOR2 GetPosision() { return this->position; }
-	RECT GetBound() { this->bound; }
+
 	void Render();
+
 	bool CheckInBoundCamera(int screenWidth, int screenHeight);
+
+	int GetID() { return id; }
+	void setID(int _id);
+
+	RECT GetBound() { this->bound; }
+	void SetBound(RECT _bound);
+
+	D3DXVECTOR2 GetPosision() { return this->position; }
+	void SetPosition(D3DXVECTOR2 _position);
+
+	void SetSprite(LPSPRITE _sprite);
 };
 
 class Tile;

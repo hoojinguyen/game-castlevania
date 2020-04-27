@@ -186,7 +186,7 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						torch->GetCollisionEffect()->SetEnable(true);
 						torch->GetDeadEffect()->SetEnable(true);
 						torch->isEnable = false;
-						torch->isDead = true;
+						torch->isDeadth = true;
 					}
 				}
 			}
@@ -196,18 +196,10 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void MorningStar::ResetAnimation()
 {
-	ResetAni(0);
-	ResetAni(1);
-	ResetAni(2);
-	ResetAni(3);
-	ResetAni(4);
-	ResetAni(5);
-	ResetAni(6);
-	ResetAni(7);
-	ResetAni(8);
-	ResetAni(9);
-	ResetAni(10);
-	ResetAni(11);
+	for (int i = 0; i < 12; i++)
+	{
+		ResetAni(i);
+	}
 }
 
 int MorningStar::GetCurrentFrame()

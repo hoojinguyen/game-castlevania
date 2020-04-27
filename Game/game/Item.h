@@ -6,6 +6,10 @@ typedef Item* LPITEM;
 class Item : public CGameObject
 {
 	int typeItem;
+
+	DWORD TimeDisplayMax; // thời gian tối đa cho phép hiển thị.
+	DWORD TimeDisplayed; // Thời gian đã hiển thị.
+
 	void Init();
 	void RandomType();
 	void RandomItem();

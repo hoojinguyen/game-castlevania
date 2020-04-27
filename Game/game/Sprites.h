@@ -48,6 +48,7 @@ public:
 	void AddByWidthHeight(int id, int left, int top, int width, int height, LPDIRECT3DTEXTURE9 tex, int dx = 0, int dy = 0);
 	LPSPRITE Get(int id);
 	void Clear();
+	void Clear(vector<int> listId);
 
 	static CSprites* GetInstance();
 };

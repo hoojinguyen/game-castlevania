@@ -18,7 +18,5 @@ void Cell::Insert(LPGAMEOBJECT object)
 
 void Cell::Unload()
 {
-	//for (int i = 0; i < listObj.size(); i++)
-	//	delete listObj[i];
 	listObj.clear();
 }

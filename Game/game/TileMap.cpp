@@ -10,16 +10,15 @@ TileMap::TileMap(float _width, float _height, LPSPRITE _sprite, string pathFile)
 	height = _height;
 	sprite = _sprite;
 
-	this->LoadListTile(pathFile);
+	this->Load(pathFile);
 }
 
 
 TileMap::~TileMap()
 {
-
 }
 
-void TileMap::LoadListTile(string pathFile)
+void TileMap::Load(string pathFile)
 {
 	fstream pFile;
 	pFile.open(pathFile, fstream::in);
@@ -78,6 +77,15 @@ void TileMap::LoadListTile(string pathFile)
 	pFile.close();
 }
 
+void TileMap::Unload()
+{
+	if (sprite)
+	{
+		sprite = nullptr;
+	}
+}
+
+
 
 void TileMap::Render(int screenWidth, int screenHeight)
 {
@@ -114,35 +122,7 @@ void TileMap::Render(int screenWidth, int screenHeight)
 			matrix[i][j].Render();
 		}
 	}
-
-	/*for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			if (matrix[i][j].CheckInBoundCamera(screenWidth, screenHeight))
-			{
-				matrix[i][j].Render();
-			}
-		}
-	}*/
 }
 
 
 
-void TileMap::Unload()
-{
-	if (matrix)
-	{
-		/*for (int i = 0; i < rows; i++)
-		{
-			delete matrix[i];
-		}*/
-		//delete matrix;
-		//matrix = nullptr;
-	}
-
-	if (sprite)
-	{
-		sprite = nullptr;
-	}
-}

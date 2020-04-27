@@ -1,8 +1,13 @@
 #pragma once
+
 #include <unordered_map>
+
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+
+
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
 #include "Scene.h"
@@ -10,7 +15,6 @@
 
 using namespace std;
 
-#define DIRECTINPUT_VERSION 0x0800
 #define KEYBOARD_BUFFER_SIZE 1024
 
 class CGame
@@ -35,27 +39,40 @@ class CGame
 	int screen_width;
 	int screen_height;
 
+	CCamera* camera;
+
+	int deviation_y;
+
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
-	CCamera* camera;
-
-
 public:
 	static CGame* GetInstance();
 
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
+	int IsKeyDown(int KeyCode);
+	void ProcessKeyboard();
+
+	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
+	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
+	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
+
+
+	HWND GetHWND() { return hWnd; }
 
 	void Init(HWND hWnd);
 	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
 	void DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
 
-	int IsKeyDown(int KeyCode);
-	void ProcessKeyboard();
+
+	int GetScreenWidth() { return screen_width; }
+	int GetScreenHeight() { return screen_height; }
+
+	void SetDeviationY(int _deviation_y) { deviation_y = _deviation_y; }
 
 	static void SweptAABB(
 		float ml,			// move left 
@@ -72,21 +89,12 @@ public:
 		float& nx,
 		float& ny);
 
-	// Check collision
 	static bool AABBCheck(float ml, float mt, float mr, float mb, float sl, float st, float sr, float sb);
 
-	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
-	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
-	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 
-	HWND GetHWND() { return hWnd; }
 
-	int GetScreenWidth() { return screen_width; }
-	int GetScreenHeight() { return screen_height; }
-
-	// Load Scene 
 	void Load(LPCWSTR gameFile);
-	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	LPSCENE GetCurrentScene();
 	void SwitchScene(int scene_id);
 
 	~CGame();
