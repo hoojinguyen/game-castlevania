@@ -112,13 +112,13 @@
 104 10004 100
 // jump/sitting right
 105 11004 100
-// climb stair ascend left
+// climb stair up left
 106 10005 100 10006 100
-// climb stair ascend right
+// climb stair up right
 107 11005 100 11006 100
-// climb stair descend left
+// climb stair down left
 108 10007 100 10008 100
-// climb stair descend right
+// climb stair down right
 109 11007 100 11008 100
 // hurt left
 110 10009 100

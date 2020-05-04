@@ -97,6 +97,9 @@
     <ClCompile Include="StairTop.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="Armors.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -195,6 +198,9 @@
     <ClInclude Include="StairTop.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
+    <ClInclude Include="Armors.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">
@@ -253,6 +259,9 @@
     </Filter>
     <Filter Include="Framework\UI">
       <UniqueIdentifier>{860a8b8a-e5f8-409f-ba75-74bfa582b643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Enemy">
+      <UniqueIdentifier>{6288a8b4-2a50-4c8d-93e0-46b834d254bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

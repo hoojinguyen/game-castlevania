@@ -6,5 +6,9 @@
 4 13 BoundingMap 32 80 128 16 -1
 5 13 BoundingMap 0 64 32 64 -1
 6 13 BoundingMap 0 0 16 64 -1
-7 15 BottomStair 112 168 8 8 1
-8 16 TopStair 160 76 32 8 1
+7 15 BottomStair 112 168 8 8 -1
+8 16 TopStair 160 76 32 8 -1
+9 11 Candle 168 130 8 16 31
+10 11 Candle 141 22 8 16 31
+11 15 BottomStair 81 72 8 8 -1
+12 14 Portal 141 2 16 16 3

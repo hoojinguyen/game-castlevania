@@ -1,0 +1,17 @@
+#id	type	name	x	y	width	height	ani_set_id
+0 1 Simon 379 155 16 32 1
+1 11 Candle 398 23 8 16 31
+2 11 Candle 456 40 8 16 31
+3 11 Candle 231 29 8 16 31
+4 11 Candle 146 32 8 16 31
+5 11 Candle 79 42 8 16 31
+6 13 BoundingMap 442 112 40 16 -1
+7 13 BoundingMap 353 79 96 16 -1
+8 16 TopStair 446 86 32 8 -1
+9 13 BoundingMap 318 143 32 16 -1
+10 13 BoundingMap 289 113 32 16 -1
+11 13 BoundingMap 193 80 96 16 -1
+12 13 BoundingMap 99 81 64 16 -1
+13 13 BoundingMap 65 112 32 16 -1
+14 13 BoundingMap 1 79 32 16 -1
+15 14 Portal 1 46 16 16 4

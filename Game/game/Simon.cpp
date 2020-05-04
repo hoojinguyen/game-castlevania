@@ -69,9 +69,11 @@ void Simon::SetState(int state)
 	}
 	break;
 	case SIMON_STATE_JUMP:
-		isJumping = true;
-		isGround = false;
-		vy = -SIMON_JUMP_SPEED_Y;
+		if (!isOnStair) {
+			isJumping = true;
+			isGround = false;
+			vy = -SIMON_JUMP_SPEED_Y;
+		}
 	case SIMON_STATE_IDLE:
 		isSitting = false;
 		vx = 0;
@@ -91,7 +93,7 @@ void Simon::SetState(int state)
 			isOnStair = false;
 			isUpStair = false;
 			isDownStair = false;
-			y -= 2;
+			y -= 15;
 		}
 		else {
 			vx = SIMON_WALKING_SPEED / 2;
@@ -184,7 +186,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else {
 		if (isUpStair) {
-			nx = directionStair;
+			nx = -directionStair;
 		}
 		else {
 			nx = -directionStair;
@@ -453,8 +455,10 @@ void Simon::Render()
 		else if (isUpStair) {
 			if (isAttacking)
 			{
-				if (nx > 0) ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT;
-				else ani = SIMON_ANI_ATTACKING_UP_STAIR_LEFT;
+				//if (nx > 0) ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT; // SIMON_ANI_ATTACKING_UP_STAIR_RIGHT
+				// else ani = SIMON_ANI_ATTACKING_UP_STAIR_LEFT;
+				ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT;
+				nx = 1;
 			}
 			else {
 				if (vx == 0)
@@ -473,8 +477,10 @@ void Simon::Render()
 		else if (isDownStair) {
 			if (isAttacking)
 			{
-				if (nx > 0) ani = SIMON_ANI_ATTACKING_DOWN_STAIR_RIGHT;
-				else ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
+				//if (nx > 0) ani = SIMON_ANI_ATTACKING_DOWN_STAIR_RIGHT;
+				//else ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
+				ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
+				nx = -1;
 			}
 			else {
 				if (vx == 0)

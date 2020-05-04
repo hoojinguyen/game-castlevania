@@ -17,6 +17,8 @@
 #include "StairBottom.h"
 #include "StairTop.h"
 
+#include "Armors.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
@@ -180,6 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
 	case OBJECT_TYPE_ITEM_HEART: obj = new Item(ITEM_HEART); break;
 	case OBJECT_TYPE_ITEM_MORNINGSTAR: obj = new Item(ITEM_MORNINGSTAR); break;
+	case OBJECT_TYPE_ENEMY_ARMORS: obj = new CArmors(); break;
 	case OBJECT_TYPE_OBJECTHIDDEN:
 	{
 		int scene_id = atoi(tokens[7].c_str());
@@ -349,7 +352,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"resources\\textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\BBox\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	scoreBoard = new ScoreBoard(simon, 16);
 
@@ -449,8 +452,8 @@ void CPlayScene::Update(DWORD dt)
 	// Không cho simon lọt khỏi map 
 	if (simon->x < 0)
 		simon->x = 0;
-	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
-		simon->x = mapWidth - SIMON_BBOX_WIDTH;
+	if (simon->x + SIMON_BBOX_WIDTH + 16 > mapWidth)
+		simon->x = mapWidth - SIMON_BBOX_WIDTH - 16;
 	
 }
 

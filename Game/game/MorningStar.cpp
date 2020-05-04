@@ -1,6 +1,7 @@
 ﻿#include "MorningStar.h"
 #include "Define.h"
 #include "Torch.h"
+#include "Candle.h"
 #include "Item.h"
 #include "Game.h"
 #include "Utils.h"
@@ -92,19 +93,26 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (dynamic_cast<Item*>(coObjects->at(i))) {
 					Item* item = dynamic_cast<Item*>(coObjects->at(i));
-
 					if (!item->GetDeadth() && !item->GetEnable()) {
 						item->SetEnable(true);
 					}
 				}
 				else if (dynamic_cast<Torch*>(coObjects->at(i))) {
 					Torch* torch = dynamic_cast<Torch*>(coObjects->at(i));
-
 					if (torch->isEnable) {
 						torch->GetCollisionEffect()->SetEnable(true);
 						torch->GetDeadEffect()->SetEnable(true);
 						torch->isEnable = false;
 						torch->isDeadth = true;
+					}
+				}
+				else if (dynamic_cast<Candle*>(coObjects->at(i))) {
+					Candle* candle = dynamic_cast<Candle*>(coObjects->at(i));
+					if (candle->isEnable) {
+						candle->GetCollisionEffect()->SetEnable(true);
+						candle->GetDeadEffect()->SetEnable(true);
+						candle->isEnable = false;
+						candle->isDeadth = true;
 					}
 				}
 			}
@@ -244,7 +252,6 @@ void MorningStar::Render()
 {
 
 }
-
 
 void MorningStar::ResetAnimation()
 {
