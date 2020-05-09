@@ -9,6 +9,8 @@
 #include "BoundingMap.h"
 #include "StairBottom.h"
 #include "StairTop.h"
+#include "Enemy.h"
+#include "VampireBat.h"
 
 using namespace std;
 
@@ -30,6 +32,9 @@ Simon::Simon()
 	isSitting = false;
 	isRunning = false;
 
+	isFreeze = false;
+
+	timeFreezeStart = 0;
 	timeAttackStart = 0;
 
 	state = SIMON_STATE_IDLE;
@@ -79,7 +84,8 @@ void Simon::SetState(int state)
 		vx = 0;
 		break;
 	case SIMON_STATE_DIE:
-		vy = -SIMON_DIE_DEFLECT_SPEED;
+		vx = 0;
+		vy = SIMON_DIE_DEFLECT_SPEED;
 		break;
 	case SIMON_STATE_SIT_DOWN:
 		vx = 0;
@@ -94,6 +100,8 @@ void Simon::SetState(int state)
 			isUpStair = false;
 			isDownStair = false;
 			y -= 15;
+			//y -= 5;
+			vx = 0;
 		}
 		else {
 			vx = SIMON_WALKING_SPEED / 2;
@@ -138,6 +146,25 @@ void Simon::SetState(int state)
 		morningStar->SetEnable(true);
 		morningStar->SetState(MORNINGSTAR_STATE_PREPARE);
 		break;
+	case SIMON_STATE_HURT:
+		isGround = false;
+		if (isOnStair) {
+			vy = 0;
+			vx = 0;
+		}
+		else
+		{
+			if (nx > 0)
+			{
+				vx = -0.03;
+			}
+			if (nx < 0)
+			{
+				vx = 0.03;
+			}
+			vy = -0.2;
+		}
+		break;
 	}
 }
 
@@ -180,13 +207,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	DWORD now = GetTickCount();
 	CGameObject::Update(dt);
 
+	//if (hp <= 0) SetState(SIMON_STATE_DIE);
+
+
 	// Simple fall down
 	if (!isOnStair) {
 		vy += SIMON_GRAVITY * dt;
 	}
 	else {
 		if (isUpStair) {
-			nx = -directionStair;
+			nx = directionStair;
 		}
 		else {
 			nx = -directionStair;
@@ -198,7 +228,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		morningStar->SetPosition(x, y, isSitting);
 		morningStar->Update(dt, coObjects);
-		if (now - timeAttackStart > (SIMON_ATTACK_TIME - 100))
+		if (now - timeAttackStart > (SIMON_ATTACK_TIME - 150))
 		{
 			morningStar->SetState(MORNINGSTAR_STATE_HIT);
 		}
@@ -209,6 +239,18 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			morningStar->ResetAnimation();
 			morningStar->SetEnable(false);
 			ResetAnimationAttacking();
+		}
+	}
+
+	if (isFreeze) {
+		if (now - timeFreezeStart > TIME_FREEZE_MAX)
+		{
+			timeFreezeStart = 0;
+			isFreeze = false;
+		}
+		else {
+			vx = 0;
+			vy = 0;
 		}
 	}
 
@@ -223,6 +265,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Kiem tra va cham voi item 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
+		/*
+		
 		if (dynamic_cast<Item*>(coObjects->at(i))) {
 			Item* item = dynamic_cast<Item*>(coObjects->at(i));
 
@@ -238,7 +282,49 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
-		else if (dynamic_cast<StairTop*>(coObjects->at(i))) {
+		
+		*/
+
+		if (dynamic_cast<Enemy*>(coObjects->at(i)))
+		{
+			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
+			float l1, t1, r1, b1, l2, t2, r2, b2;
+			GetBoundingBox(l1, t1, r1, b1);
+			enemy->GetBoundingBox(l2, t2, r2, b2);
+			if ((CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))) {
+				if ((coObjects->at(i))->vx != 0)
+				{
+					if (untouchable == 0)
+					{
+						if (enemy->isEnable != false)
+						{
+							if (hp > 0)
+							{
+								//isFreeze = true;
+								//timeFreezeStart = now; // thời gian đã đóng băng
+
+								hp -= enemy->GetDamage();
+								//hp -= 16;
+								StartUntouchable();
+								SetState(SIMON_STATE_HURT);
+								StartHurting();
+								if (dynamic_cast<VampireBat*>(coObjects->at(i)))
+								{
+									enemy->SetDeadth(true);
+									enemy->GetCollisionEffect()->SetEnable(true);
+								}
+						
+							}
+							else
+								SetState(SIMON_STATE_DIE);
+						}
+					}
+
+
+				}
+			}
+		}
+		if (dynamic_cast<StairTop*>(coObjects->at(i))) {
 			StairTop* item = dynamic_cast<StairTop*>(coObjects->at(i));
 
 			float l1, t1, r1, b1, l2, t2, r2, b2;
@@ -286,6 +372,19 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	if (isHurt) {
+		if (GetTickCount() - hurtable_start > 1000)
+		{
+			hurtable_start = 0;
+			hurtable = 0;
+			isHurt = false;
+			ResetAnimationHurt();
+		}
+	}
+
+	if (this->GetState() != SIMON_STATE_SIT_DOWN)
+		isSitting = false;
+
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
@@ -326,6 +425,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (morningStar->GetLevel() < MORNINGSTAR_LEVEL_3)
 						{
 							morningStar->SetLevel(morningStar->GetLevel() + 1);
+							isFreeze = true;
+							timeFreezeStart = now; // thời gian đã đóng băng
 						}
 						break;
 					case ITEM_SMALL_HEART:
@@ -364,6 +465,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							isUpStair = false;
 							isDownStair = false;
 						}
+					}
+					if (isHurt) {
+						hurtable_start = 0;
+						hurtable = 0;
+						isHurt = false;
+						vx = 0;
+						ResetAnimationHurt();
 					}
 				}
 				else {
@@ -427,6 +535,10 @@ void Simon::Render()
 	}
 	else
 	{
+		if (isHurt) {
+			if (nx > 0) ani = SIMON_ANI_HURT_RIGHT;
+			else ani = SIMON_ANI_HURT_LEFT;
+		}
 		if (isSitting) {
 			if (isAttacking)
 			{
@@ -455,10 +567,10 @@ void Simon::Render()
 		else if (isUpStair) {
 			if (isAttacking)
 			{
-				//if (nx > 0) ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT; // SIMON_ANI_ATTACKING_UP_STAIR_RIGHT
-				// else ani = SIMON_ANI_ATTACKING_UP_STAIR_LEFT;
-				ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT;
-				nx = 1;
+				if (nx > 0) ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT; // SIMON_ANI_ATTACKING_UP_STAIR_RIGHT
+				 else ani = SIMON_ANI_ATTACKING_UP_STAIR_LEFT;
+				//ani = SIMON_ANI_ATTACKING_UP_STAIR_RIGHT;
+				//nx = 1;
 			}
 			else {
 				if (vx == 0)
@@ -468,8 +580,7 @@ void Simon::Render()
 				}
 				else
 				{
-					if (vx > 0)
-						ani = SIMON_ANI_CIMB_STAIR_UP_RIGHT;
+					if (vx > 0)	ani = SIMON_ANI_CIMB_STAIR_UP_RIGHT;
 					else ani = SIMON_ANI_CIMB_STAIR_UP_LEFT;
 				}
 			}
@@ -477,21 +588,20 @@ void Simon::Render()
 		else if (isDownStair) {
 			if (isAttacking)
 			{
-				//if (nx > 0) ani = SIMON_ANI_ATTACKING_DOWN_STAIR_RIGHT;
-				//else ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
-				ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
-				nx = -1;
+				if (nx > 0) ani = SIMON_ANI_ATTACKING_DOWN_STAIR_RIGHT;
+				else ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
+				//ani = SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT;
+				//nx = -1;
 			}
 			else {
 				if (vx == 0)
 				{
-					if (nx > 0) ani = SIMON_ANI_IDLE_STAIR_DOWN_LEFT;
-					else ani = SIMON_ANI_IDLE_STAIR_DOWN_RIGHT;
+					if (nx > 0) ani = SIMON_ANI_IDLE_STAIR_DOWN_RIGHT;
+					else ani = SIMON_ANI_IDLE_STAIR_DOWN_LEFT;
 				}
 				else
 				{
-					if (vx > 0)
-						ani = SIMON_ANI_CIMB_STAIR_DOWN_RIGHT;
+					if (vx > 0) ani = SIMON_ANI_CIMB_STAIR_DOWN_RIGHT;
 					else ani = SIMON_ANI_CIMB_STAIR_DOWN_LEFT;
 				}
 			}
@@ -510,8 +620,7 @@ void Simon::Render()
 				}
 				else
 				{
-					if (vx > 0)
-						ani = SIMON_ANI_WALKING_RIGHT;
+					if (vx > 0) ani = SIMON_ANI_WALKING_RIGHT;
 					else ani = SIMON_ANI_WALKING_LEFT;
 				}
 			}
@@ -528,7 +637,14 @@ void Simon::Render()
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	animation_set->at(ani)->Render(posX, posY, alpha);
+	if (isFreeze)
+	{
+		animation_set->at(ani)->Render(posX, posY, alpha, rand() % 256, rand() % 256, rand() % 256);
+	}
+	else {
+		animation_set->at(ani)->Render(posX, posY, alpha);
+	}
+	
 
 	//RenderBoundingBox();
 }
@@ -551,10 +667,16 @@ void Simon::ResetAnimationAttacking()
 	ResetAni(SIMON_ANI_ATTACKING_UP_STAIR_RIGHT);
 	ResetAni(SIMON_ANI_ATTACKING_UP_STAIR_LEFT);
 
-
 	ResetAni(SIMON_ANI_ATTACKING_DOWN_STAIR_RIGHT);
 	ResetAni(SIMON_ANI_ATTACKING_DOWN_STAIR_LEFT);
 }
+
+void Simon::ResetAnimationHurt()
+{
+	ResetAni(SIMON_ANI_HURT_LEFT);
+	ResetAni(SIMON_ANI_HURT_RIGHT);
+}
+
 
 void Simon::SetAnimationSetMorningStar(LPANIMATION_SET ani_set)
 {
@@ -622,7 +744,7 @@ void Simon::Load(LPCWSTR simonFile)
 
 	f.close();
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\BBox\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading simon resources %s\n", simonFile);
 }
@@ -675,10 +797,12 @@ void Simon::_ParseSection_ANIMATIONS(string line)
 
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
-	LPANIMATION ani = new CAnimation();
-
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	int isLoop = atoi(tokens[1].c_str());
+
+	LPANIMATION ani = new CAnimation(100, isLoop);
+
+	for (int i = 2; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());

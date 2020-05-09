@@ -32,7 +32,7 @@ namespace MapEditor
 
         private int objectIndexInfo;
 
-        private const int CELL_SIZE = 160;
+        private const int CELL_SIZE = 136;
 
         private const int START_INDEX = 0;
 
@@ -110,47 +110,99 @@ namespace MapEditor
             resetObjInfo();
 
             // Lay image khi click + doi cursor          
-            foreach (ListViewItem itm in listViewOB.SelectedItems)
+            //foreach (ListViewItem itm in listViewOB.SelectedItems)
+            //{
+            //    int imgIndex = itm.ImageIndex;
+            //    if (imgIndex >= 0 && imgIndex < this.imageListOB.Images.Count)
+            //    {
+            //        imageCursor = this.imageListOB.Images[imgIndex];
+            //        switch (imgIndex)
+            //        {
+            //            case 0:
+            //            case 1:
+            //                imageCursor = Utilities.ResizeImage(imageCursor, 16, 32);
+            //                break;
+            //            case 2:
+            //                imageCursor = Utilities.ResizeImage(imageCursor, 8, 16);
+            //                break;
+            //            case 3:
+            //                imageCursor = Utilities.ResizeImage(imageCursor, 24, 48);
+            //                break;
+            //            case 4:
+            //            case 5:
+            //            case 8:
+            //            case 9:
+            //            case 10:
+            //            case 11:
+            //            case 12:
+            //                imageCursor = Utilities.ResizeImage(imageCursor, 16, 16);
+            //                break;
+            //            case 6:
+            //            case 7:
+            //            case 13:
+            //                imageCursor = Utilities.ResizeImage(imageCursor, 8, 8);
+            //                break;
+            //            case 14:
+            //                imageCursor = Utilities.ResizeImage(imageCursor, 15, 14);
+            //                break;
+
+            //        }
+            //    }
+            //}
+            int imgIndex = listViewOB.SelectedItems[0].ImageIndex;
+            string name = listViewOB.SelectedItems[0].Text;
+            imageCursor = this.imageListOB.Images[imgIndex];
+
+            switch (name)
             {
-                int imgIndex = itm.ImageIndex;
-                if (imgIndex >= 0 && imgIndex < this.imageListOB.Images.Count)
-                {
-                    imageCursor = this.imageListOB.Images[imgIndex];
-                    switch (imgIndex)
-                    {
-                        case 0:
-                        case 1:
-                            imageCursor = Utilities.ResizeImage(imageCursor, 16, 32);
-                            break;
-                        case 2:
-                            imageCursor = Utilities.ResizeImage(imageCursor, 8, 16);
-                            break;
-                        case 3:
-                            imageCursor = Utilities.ResizeImage(imageCursor, 24, 48);
-                            break;
-                        case 4:
-                        case 5:
-                        case 8:
-                        case 9:
-                        case 10:
-                        case 11:
-                            imageCursor = Utilities.ResizeImage(imageCursor, 16, 16);
-                            break;
-                        case 6:
-                        case 7:
-                        case 12:
-                            imageCursor = Utilities.ResizeImage(imageCursor, 8, 8);
-                            break;
+                case "Simon":
+                case "Torch":
+                case "Zombie":
+                case "FishMan":
+                case "BlackKnight":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 16, 32);
+                    break;
+                case "Candle":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 8, 16);
+                    break;
+                case "Gate":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 24, 48);
+                    break;
+                case "BoundingMap":
+                case "Portal":
+                case "Ground":
+                case "Whip":
+                case "Money":
+                case "Ball":
+                case "SmallHeart":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 16, 16);
+                    break;
+                case "BottomStair":
+                case "TopStair":
+                case "Heart":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 8, 8);
+                    break;
+                case "Knife":
+                case "Axe":
+                case "Boomerang":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 15, 14);
+                    break;
+                case "Crown":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 15, 16);
+                    break;
+                case "BlackLeopard":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 24, 15);
+                    break;
+                case "VampireBat":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 12, 14);
+                    break;
 
-                    }
-                }
             }
-
             this.Cursor = new Cursor(((Bitmap)imageCursor).GetHicon());
             textBoxHeightOB.Text = imageCursor.Height.ToString();
             textBoxWidthOB.Text = imageCursor.Width.ToString();
-            textBoxNameOB.Text = listViewOB.SelectedItems[0].Text;
-            objectId = listViewOB.SelectedItems[0].ImageIndex + 1;
+            textBoxNameOB.Text = name;
+            objectId = imgIndex + 1;
         }
 
         private void pictureBoxBG_MouseMove(object sender, MouseEventArgs e)

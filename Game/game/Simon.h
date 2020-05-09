@@ -39,6 +39,11 @@ public:
 	bool isRunning;
 	bool isGround;
 
+	bool isHurt;
+
+	int hurtable;
+	DWORD hurtable_start;
+
 	int untouchable;
 
 	bool isOnStair;
@@ -47,6 +52,9 @@ public:
 	bool canClimbUpStair;
 	bool canClimbDownStair;
 	int directionStair;
+
+	bool isFreeze; // Trạng thái đóng băng thay đổi màu liên tục
+	DWORD timeFreezeStart; // thời gian đã đóng băng
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
@@ -73,9 +81,11 @@ public:
 	void SetScore(int sco) { score += sco;  }
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartHurting() { isHurt = true; hurtable = 1; hurtable_start = GetTickCount(); }
 
 	void ResetBackupSimon();
 	void ResetAnimationAttacking();
+	void ResetAnimationHurt();
 	void Reset();
 
 	void Load(LPCWSTR simonFile);

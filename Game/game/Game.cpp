@@ -72,31 +72,47 @@ void CGame::Init(HWND hWnd)
 /*
 	Utility function to wrap LPD3DXSPRITE::Draw
 */
-void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
+void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha, int r, int g, int b)
 {
 	D3DXVECTOR3 p(floor(x), floor(y), 0);
-	RECT r;
-	r.left = left;
-	r.top = top;
-	r.right = right;
-	r.bottom = bottom;
+	RECT rect;
+	rect.left = left;
+	rect.top = top;
+	rect.right = right;
+	rect.bottom = bottom;
 
 	D3DXVECTOR3 position = camera->GetPositionInCamera(p);
 	position.y += deviation_y;
 
-	spriteHandler->Draw(texture, &r, NULL, &position, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+	spriteHandler->Draw(texture, &rect, NULL, &position, D3DCOLOR_ARGB(alpha, r, g, b));
 }
 
-void CGame::DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
+void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT rect, int alpha, int r, int g, int b)
 {
 	D3DXVECTOR3 p(floor(x), floor(y), 0);
-	RECT r;
-	r.left = left;
-	r.top = top;
-	r.right = right;
-	r.bottom = bottom;
+	D3DXVECTOR3 position = camera->GetPositionInCamera(p);
+	position.y += deviation_y;
 
-	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+	spriteHandler->Draw(texture, &rect, NULL, &position, D3DCOLOR_ARGB(alpha, r, g, b));
+}
+
+void CGame::DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha, int r, int g, int b)
+{
+	D3DXVECTOR3 p(floor(x), floor(y), 0);
+	RECT rect;
+	rect.left = left;
+	rect.top = top;
+	rect.right = right;
+	rect.bottom = bottom;
+
+	spriteHandler->Draw(texture, &rect, NULL, &p, D3DCOLOR_ARGB(alpha, r, g, b));
+}
+
+void CGame::DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT rect, int alpha, int r, int g, int b)
+{
+	D3DXVECTOR3 p(floor(x), floor(y), 0);
+
+	spriteHandler->Draw(texture, &rect, NULL, &p, D3DCOLOR_ARGB(alpha, r, g, b));
 }
 
 int CGame::IsKeyDown(int KeyCode)

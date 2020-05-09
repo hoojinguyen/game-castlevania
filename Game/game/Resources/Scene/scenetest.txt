@@ -4,10 +4,10 @@ map_height 192.0f
 
 [TEXTURES]
 # id	file_path				                    r	    g	    b
-200 Resources\Textures\Item\Items_Objects.png 116 116 116
-300 Resources\Textures\HP\hp.png 255 0 255
-400 Resources\Textures\Enemy\Enimes.png 96 68 106
-401 Resources\Textures\Enemy\Enimes_right.png 96 68 106
+200 Resources\Textures\Items_Objects.png 116 116 116
+300 Resources\Textures\hp.png 255 0 255
+400 Resources\Textures\Enimes.png 96 68 106
+401 Resources\Textures\Enimes_right.png 96 68 106
 1000 Resources\Map\Map2A\tilesheet.png 255 255 255
 
 [SPRITES]

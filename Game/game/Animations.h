@@ -35,7 +35,7 @@ public:
 	}
 	void Add(int spriteId, DWORD time = 0);
 	int GetCurrentFrame() { return currentFrame; }
-	void Render(float x, float y, int alpha = 255, bool isFollowCamera = true);
+	void Render(float x, float y, int alpha = 255, int r = 255, int g = 255, int b = 255, bool isFollowCamera = true);
 	vector<LPANIMATION_FRAME> getFrames() { return frames; }
 	void SetFrames(vector<LPANIMATION_FRAME> frames) { this->frames = frames; }
 	int GetDefaultTime() { return defaultTime; }

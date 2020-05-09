@@ -4,8 +4,8 @@ map_height 192.0f
 
 [TEXTURES]
 # id	file_path				                    r	    g	    b
-200 Resources\Textures\Item\Items_Objects.png 116 116 116
-300 Resources\Textures\HP\hp.png 255 0 255
+200 Resources\Textures\Items_Objects.png 116 116 116
+300 Resources\Textures\hp.png 255 0 255
 1000 Resources\Map\Map2B\tilesheet.png 255 255 255
 
 [SPRITES]
@@ -75,23 +75,23 @@ map_height 192.0f
 
 # --- OBJECTS MAP ---
 //torch
-301 30000 100 30001 100
+301 1 30000 100 30001 100
 //candle
-302 30010 100 30011 100
+302 1 30010 100 30011 100
 
 # --- ITEMS ---
 //Item Whip
-400 40000 100
+400 1 40000 100
 //Item Small Heart
-401 40001 100
+401 1 40001 100
 //Item Heart
-402 40002 100
+402 1 40002 100
 
 # --- EFFECTS ---
 //dead effect
-501 50000 100 50001 100 50002 100 50003 100 50004 100
+501 1 50000 100 50001 100 50002 100 50003 100 50004 100
 //collision effect
-500 50010 100
+500 1 50010 100
 
 #
 # id	ani1	ani2	ani3

@@ -1,10 +1,12 @@
 ﻿#include "MorningStar.h"
+#include "Game.h"
+#include "Utils.h"
 #include "Define.h"
+
 #include "Torch.h"
 #include "Candle.h"
 #include "Item.h"
-#include "Game.h"
-#include "Utils.h"
+#include "Enemy.h"
 
 MorningStar::MorningStar()
 {
@@ -79,7 +81,7 @@ void MorningStar::GetBoundingBox(float& left, float& top, float& right, float& b
 
 void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state == MORNINGSTAR_STATE_HIT)
+	if (state == MORNINGSTAR_STATE_HIT && isEnable)
 	{
 		CGameObject::Update(dt);
 
@@ -91,7 +93,22 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
 			{
-				if (dynamic_cast<Item*>(coObjects->at(i))) {
+				if (dynamic_cast<Enemy*>(coObjects->at(i))) {
+
+					Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
+
+					if ((coObjects->at(i))->nx != 0)
+					{
+						enemy->GetCollisionEffect()->SetEnable(true);
+						if (enemy->isEnable != false) {
+							enemy->SetHP(enemy->GetHP() - this->damage);
+							this->isEnable = false;
+							ResetAnimation();
+						}
+					}
+
+				}
+				else if (dynamic_cast<Item*>(coObjects->at(i))) {
 					Item* item = dynamic_cast<Item*>(coObjects->at(i));
 					if (!item->GetDeadth() && !item->GetEnable()) {
 						item->SetEnable(true);

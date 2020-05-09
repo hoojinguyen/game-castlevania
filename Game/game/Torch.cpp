@@ -35,9 +35,7 @@ void Torch::Render()
 	{
 		animation_set->at(0)->Render(x, y);
 		RenderBoundingBox();
-	}
-
-
+	} 
 	collisionEffect->Render();
 	deadEffect->Render();
 }

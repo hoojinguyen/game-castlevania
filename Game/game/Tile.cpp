@@ -39,7 +39,7 @@ void Tile::SetSprite(LPSPRITE _sprite)
 
 void Tile::Render()
 {
-	sprite->Draw(position.x, position.y, bound.left, bound.top, bound.right, bound.bottom);
+	sprite->Draw(position.x, position.y, bound);
 }
 
 bool Tile::CheckInBoundCamera(int screenWidth, int screenHeight)

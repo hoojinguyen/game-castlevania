@@ -65,9 +65,11 @@ public:
 	HWND GetHWND() { return hWnd; }
 
 	void Init(HWND hWnd);
-	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
-	void DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
 
+	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255, int r = 255, int g = 255, int b = 255);
+	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT rect, int alpha = 255, int r = 255, int g = 255, int b = 255);
+	void DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255, int r = 255, int g = 255, int b = 255);
+	void DrawWithoutCamera(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT rect, int alpha = 255, int r = 255, int g = 255, int b = 255);
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }

@@ -79,6 +79,9 @@ void Item::RandomWeapon()
 
 void Item::Init()
 {
+	isGround = false;
+	vy = 0;
+
 	switch (typeItem)
 	{
 	case ITEM_MORNINGSTAR:
@@ -117,6 +120,24 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 				top = y;
 				right = x + 12;
 				bottom = y + 10;
+			case ITEM_SMALL_HEART:
+				left = x;
+				top = y;
+				right = x + 8;
+				bottom = y + 8;
+				break;
+			case ITEM_KNIFE:
+				left = x;
+				top = y;
+				right = x + 16;
+				bottom = y + 9;
+				break;
+			case ITEM_BOOMERANG:
+				left = x;
+				top = y;
+				right = x + 15;
+				bottom = y + 14;
+				break;
 			default:
 				break;
 			}
@@ -138,7 +159,49 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		CGameObject::Update(dt, coObjects);
-		vy += SIMON_GRAVITY * dt;
+
+		if (typeItem != ITEM_SMALL_HEART) {
+			vy += SIMON_GRAVITY * dt;
+		}
+		else {
+			vy = SIMON_GRAVITY * dt * 2;
+			if (!isGround) {
+				DWORD now = GetTickCount();
+				int temp = 300;
+				if (isFirstTime) {
+					//temp = temp / 2;
+				}
+
+				if (now - timeStartEnable >= temp) {
+					if (isFirstTime) {
+						isFirstTime = false;
+					}
+					if (nx == 1) {
+						vx = -SIMON_WALKING_SPEED;
+						nx = -1;
+					}
+					else {
+						vx = SIMON_WALKING_SPEED;
+						nx = 1;
+					}
+
+					timeStartEnable = now;
+				}
+				else {
+					if (nx == 1) {
+						vx = SIMON_WALKING_SPEED;
+					}
+					else {
+						vx = -SIMON_WALKING_SPEED;
+					}
+				}
+			}
+			else {
+				vx = 0;
+			}
+		}
+
+	
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -179,6 +242,8 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 						if (nx != 0) vx = 0;
 						if (ny != 0) vy = 0;
+						isGround = true;
+
 					}
 				}
 
@@ -192,5 +257,15 @@ void Item::Render()
 {
 	if (isEnable) {
 		animation_set->at(typeItem)->Render(x, y);
+		//RenderBoundingBox();
 	}
+}
+
+void Item::TurnOnTimeStartEnable()
+{
+	timeStartEnable = GetTickCount();
+	nx = 1;
+	vx = SIMON_WALKING_SPEED;
+	vy = SIMON_GRAVITY * dt * 2;
+	isFirstTime = true;
 }

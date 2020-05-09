@@ -22,10 +22,10 @@ class CSprite
 public:
 	CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, int dx = 0, int dy = 0);
 
-	void Draw(float x, float y, int alpha = 255);
-	void Draw(float x, float y, int left, int top, int right, int bottom, int alpha = 255);
-	void DrawWithoutCamera(float x, float y, int alpha = 255);
-	void DrawWithoutCamera(float x, float y, int left, int top, int right, int bottom, int alpha = 255);
+	void Draw(float x, float y, int alpha = 255, int r = 255, int g = 255, int b = 255);
+	void Draw(float x, float y, RECT rect, int alpha = 255, int r = 255, int g = 255, int b = 255);
+	void DrawWithoutCamera(float x, float y, int alpha = 255, int r = 255, int g = 255, int b = 255);
+	void DrawWithoutCamera(float x, float y, RECT rect, int alpha = 255, int r = 255, int g = 255, int b = 255);
 	int getLeft() { return left; }
 	int getTop() { return top; }
 	int getRight() { return right; }

@@ -4,8 +4,9 @@ map_height 192.0f
 
 [TEXTURES]
 # id	file_path				                    r	    g	    b
-200 Resources\Textures\Item\Items_Objects.png 116 116 116
-300 Resources\Textures\HP\hp.png 255 0 255
+200 Resources\Textures\Items_Objects.png 116 116 116
+300 Resources\Textures\hp.png 255 0 255
+900 Resources\Textures\blackboard.png 116 116 116
 1000 Resources\Map\Map1\tilesheet.png 255 255 255
 
 [SPRITES]
@@ -66,7 +67,8 @@ map_height 192.0f
 # score board
 60000 0 0 6 9 300 0 0
 60001 5 0 7 9 300 0 0
-60002 6 0 6 9 300 0 0
+60002 11 0 6 9 300 0 0
+90000 0 0 256 39 900 0 0
 
 //sprite map
 1000 0 0 160 244 1000 0 0
@@ -75,23 +77,31 @@ map_height 192.0f
 
 # --- OBJECTS MAP ---
 //torch
-301 30000 100 30001 100
+301 1 30000 100 30001 100
 //candle
-302 30010 100 30011 100
+302 1 30010 100 30011 100
 
 # --- ITEMS ---
-//Item MorningStar
-400 40000 100
+//Item Whip
+400 1 40000 100
 //Item Small Heart
-401 40001 100
+401 1 40001 100
 //Item Heart
-402 40002 100
+402 1 40002 100
+//Item Knife
+403 1 40008 100
+//Item Axe
+404 1 40009 100
+//Item Boomerang
+405 1 40012 100
+//Item Crown
+406 1 40021 100
 
 # --- EFFECTS ---
 //dead effect
-501 50000 100 50001 100 50002 100 50003 100 50004 100
+501 1 50000 100 50001 100 50002 100 50003 100 50004 100
 //collision effect
-500 50010 100
+500 1 50010 100
 
 #
 # id	ani1	ani2	ani3
@@ -102,7 +112,7 @@ map_height 192.0f
 # CANDLE
 31 302
 # ITEM
-40 400 401 402
+40 400 401 402 403 404 405 406
 
 [TILEMAP]
 # fileMap	sprite_id	

@@ -97,8 +97,17 @@
     <ClCompile Include="StairTop.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
-    <ClCompile Include="Armors.cpp">
+    <ClCompile Include="Enemy.cpp">
       <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackKnight.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="VampireBat.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>Object\Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -198,8 +207,17 @@
     <ClInclude Include="StairTop.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
-    <ClInclude Include="Armors.h">
+    <ClInclude Include="Enemy.h">
       <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackKnight.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="VampireBat.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>Object\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -67,11 +67,16 @@ namespace MapEditor
             else if (this.Name == "BottomStair")
             {
                 Id = 15;
-                AniSetId = -1;
+                AniSetId = sceneId;
             }
             else if (this.Name == "TopStair")
             {
                 Id = 16;
+                AniSetId = sceneId;
+            }
+            else if (this.Name == "Ground")
+            {
+                Id = 17;
                 AniSetId = -1;
             }
             //item
@@ -90,9 +95,52 @@ namespace MapEditor
                 Id = 102;
                 AniSetId = 40;
             }
-
-
-
+            else if (this.Name == "Knife")
+            {
+                Id = 103;
+                AniSetId = 40;
+            }
+            else if (this.Name == "Axe")
+            {
+                Id = 104;
+                AniSetId = 40;
+            }
+            else if (this.Name == "Boomerang")
+            {
+                Id = 105;
+                AniSetId = 40;
+            }
+            else if (this.Name == "Crown")
+            {
+                Id = 106;
+                AniSetId = 40;
+            }
+            //Enemy
+            else if (this.Name == "Zombie")
+            {
+                Id = 200;
+                AniSetId = 70;
+            }
+            else if (this.Name == "BlackLeopard")
+            {
+                Id = 201;
+                AniSetId = 71;
+            }
+            else if (this.Name == "VampireBat")
+            {
+                Id = 202;
+                AniSetId = 72;
+            }
+            else if (this.Name == "FishMan")
+            {
+                Id = 203;
+                AniSetId = 73;
+            }
+            else if (this.Name == "BlackKnight")
+            {
+                Id = 204;
+                AniSetId = 74;
+            }
             this.PosX = PosX;
             this.PosY = PosY;
             this.Width = Width;
