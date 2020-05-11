@@ -1,5 +1,9 @@
+[PLAYER]
+Resources\Scene\simon.txt
+
 [SETTINGS]
-start 2
+start 1
+
 #scene list
 [SCENES]
 1 Resources\Scene\scene1.txt

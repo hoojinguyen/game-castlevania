@@ -645,7 +645,6 @@ void Simon::Render()
 		animation_set->at(ani)->Render(posX, posY, alpha);
 	}
 	
-
 	//RenderBoundingBox();
 }
 
@@ -676,7 +675,6 @@ void Simon::ResetAnimationHurt()
 	ResetAni(SIMON_ANI_HURT_LEFT);
 	ResetAni(SIMON_ANI_HURT_RIGHT);
 }
-
 
 void Simon::SetAnimationSetMorningStar(LPANIMATION_SET ani_set)
 {

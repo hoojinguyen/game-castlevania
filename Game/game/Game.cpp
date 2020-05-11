@@ -9,7 +9,7 @@
 #include "Sprites.h"
 #include "Animations.h"
 #include "PlayScene.h";
-
+#include "Simon.h"
 
 CGame* CGame::__instance = NULL;
 
@@ -367,6 +367,7 @@ CGame* CGame::GetInstance()
 #define MAX_GAME_LINE 1024
 
 #define GAME_FILE_SECTION_UNKNOWN -1
+#define GAME_FILE_SECTION_PLAYER 0
 #define GAME_FILE_SECTION_SETTINGS 1
 #define GAME_FILE_SECTION_SCENES 2
 
@@ -393,6 +394,17 @@ void CGame::_ParseSection_SCENES(string line)
 	scenes[id] = scene;
 }
 
+void CGame::_ParseSection_PLAYER(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return;
+	LPCWSTR path = ToLPCWSTR(tokens[0]);
+
+	Simon::GetInstance()->Load(path);
+}
+
+
 void CGame::Load(LPCWSTR gameFile)
 {
 	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
@@ -410,11 +422,13 @@ void CGame::Load(LPCWSTR gameFile)
 
 		if (line[0] == '#') continue;	// skip comment lines	
 
+		if (line == "[PLAYER]") { section = GAME_FILE_SECTION_PLAYER; continue; }
 		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
 		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
 
 		switch (section)
 		{
+		case GAME_FILE_SECTION_PLAYER: _ParseSection_PLAYER(line); break;
 		case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 		case GAME_FILE_SECTION_SCENES: _ParseSection_SCENES(line); break;
 		}

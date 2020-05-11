@@ -20,7 +20,6 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "PlayScene.h"
-#include "Simon.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"SAMPLE 05 - SCENCE MANAGER"
@@ -178,10 +177,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 	game->SetDeviationY(45);
 
-	Simon::GetInstance()->Load(L"Resources\\Scene\\simon.txt");
-
 	CGame::GetInstance()->Load(L"Resources\\Scene\\main.txt");
-
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
