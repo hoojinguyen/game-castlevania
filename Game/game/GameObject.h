@@ -69,6 +69,8 @@ public:
 	int height;
 
 	int type;
+	int typeItem;
+
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -80,6 +82,8 @@ public:
 	void RenderBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+	void SetAnimationSet(int ani_set_id);
+
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
@@ -118,6 +122,9 @@ public:
 
 	void SetType(int t) { type = t; }
 	int GetType() { return type; }
+
+	void SetTypeItem(int typeItem) { this->typeItem = typeItem; }
+	int GetTypeItem() { return this->typeItem; }
 
 	~CGameObject();
 };

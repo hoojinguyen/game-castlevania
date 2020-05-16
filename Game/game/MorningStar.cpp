@@ -99,20 +99,23 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					if ((coObjects->at(i))->nx != 0)
 					{
-						enemy->GetCollisionEffect()->SetEnable(true);
 						if (enemy->isEnable != false) {
+							enemy->GetCollisionEffect()->SetEnable(true);
 							enemy->SetHP(enemy->GetHP() - this->damage);
 							this->isEnable = false;
 							ResetAnimation();
 						}
 					}
-
 				}
 				else if (dynamic_cast<Item*>(coObjects->at(i))) {
 					Item* item = dynamic_cast<Item*>(coObjects->at(i));
 					if (!item->GetDeadth() && !item->GetEnable()) {
 						item->SetEnable(true);
+						if (item->GetTypeItem() == ITEM_SMALL_HEART) {
+							item->TurnOnTimeStartEnable();
+						}
 					}
+					
 				}
 				else if (dynamic_cast<Torch*>(coObjects->at(i))) {
 					Torch* torch = dynamic_cast<Torch*>(coObjects->at(i));

@@ -3,8 +3,8 @@
 136 2 2
 [OBJECTS]
 #index_x	index_y	object_id_1	object_id_2... 	object_id_n
-0 0 4 5 6 10 11 13 14 15
+0 0 4 5 6 10 11 12 13
 0 1 1 7
-1 0 2 3 4 8 9 12 16
-1 1 1 2 9 12
+1 0 2 3 4 8 9 14
+1 1 1 2 9
 END

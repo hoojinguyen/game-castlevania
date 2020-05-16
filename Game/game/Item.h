@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "MoneyEffect.h"
 
 class Item;
 typedef Item* LPITEM;
@@ -13,6 +14,8 @@ class Item : public CGameObject
 
 	DWORD TimeDisplayMax; // thời gian tối đa cho phép hiển thị.
 	DWORD TimeDisplayed; // Thời gian đã hiển thị.
+
+	MoneyEffect* moneyEffect;
 
 	void Init();
 	void RandomType();
@@ -31,5 +34,7 @@ public:
 	int GetTypeItem() { return typeItem; }
 
 	void TurnOnTimeStartEnable();
+
+	MoneyEffect* GetMoneyEffect() { return moneyEffect; }
 };
 

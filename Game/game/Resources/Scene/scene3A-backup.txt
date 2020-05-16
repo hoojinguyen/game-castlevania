@@ -1,14 +1,12 @@
 [SETTINGS]
-map_width 256.0f
+map_width 768.0f
 map_height 192.0f
 
 [TEXTURES]
 # id	file_path				                    r	    g	    b
 200 Resources\Textures\Items_Objects.png 116 116 116
 300 Resources\Textures\hp.png 255 0 255
-400 Resources\Textures\Enimes.png 96 68 106
-401 Resources\Textures\Enimes_right.png 96 68 106
-1000 Resources\Map\Map2A\tilesheet.png 255 255 255
+1000 Resources\Map\Map3A\tilesheet.png 255 255 255
 
 [SPRITES]
 # id	left    top     right   bottom  texture_id  dx      dy
@@ -70,16 +68,6 @@ map_height 192.0f
 60001 5 0 7 9 300 0 0
 60002 6 0 6 9 300 0 0
 
-#Enemy
-#walk left
-90001 87 197 125 267 400 0 0
-90002 29 197 67 267 400 0 0
-90003 11 197 49 267 400 0 0
-#walk right
-90011 330 197 367 267 401 0 0
-90012 388 197 425 267 401 0 0
-90013 444 197 481 267 401 0 0
-
 //sprite map
 1000 0 0 160 244 1000 0 0
 # ani_idd    sprite1_id	time1	sprite2_id	time2	...
@@ -87,29 +75,23 @@ map_height 192.0f
 
 # --- OBJECTS MAP ---
 //torch
-301 30000 100 30001 100
+301 1 30000 100 30001 100
 //candle
-302 30010 100 30011 100
+302 1 30010 100 30011 100
 
 # --- ITEMS ---
 //Item Whip
-400 40000 100
+400 1 40000 100
 //Item Small Heart
-401 40001 100
+401 1 40001 100
 //Item Heart
-402 40002 100
-
-# --- ENEMY ---
-#walk left
-901 90001 100 90002 100 90003 100
-#walk right
-902 90011 100 90012 100 90013 100
+402 1 40002 100
 
 # --- EFFECTS ---
 //dead effect
-501 50000 100 50001 100 50002 100 50003 100 50004 100
+501 1 50000 100 50001 100 50002 100 50003 100 50004 100
 //collision effect
-500 50010 100
+500 1 50010 100
 
 #
 # id	ani1	ani2	ani3
@@ -121,16 +103,14 @@ map_height 192.0f
 31 302
 # ITEM
 40 400 401 402
-#ENEMY ARMORS
-50 901 902
 
 [TILEMAP]
 # fileMap	sprite_id	
-Resources\Map\Map2A\tilesheet.txt 1000
+Resources\Map\Map3A\tilesheet.txt 1000
 
 [OBJECTS]
-Resources\Map\Map2A\temp\object.txt
+Resources\Map\Map3A\object.txt
 
 [GRID]
 #file_grid	cell_size
-Resources\Map\Map2A\temp\grid.txt 260
+Resources\Map\Map3A\grid.txt 260

@@ -7,9 +7,11 @@
 #include "Sprites.h"
 #include "ObjectHidden.h"
 #include "BoundingMap.h"
+#include "Wall.h"
 #include "Ground.h"
 
 #include "Brick.h"
+#include "BrickAni.h"
 #include "Torch.h"
 #include "Candle.h"
 #include "Item.h"
@@ -29,6 +31,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	camera = CCamera::GetInstance();
 	mapHeight = 0.0f;
 	mapWidth = 0.0f;
+	simonX_backup = 0.0f;
+	simonY_backup = 0.0f;
 }
 
 /*
@@ -39,6 +43,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 void CPlayScene::_ParseSection_SETTINGS(string line)
 {
 	vector<string> tokens = split(line);
+	float simonX, simonY;
 
 	if (tokens.size() < 2) return;
 
@@ -46,8 +51,13 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 		mapWidth = atoi(tokens[1].c_str());
 	else if (tokens[0] == "map_height")
 		mapHeight = atoi(tokens[1].c_str());
+	else if (tokens[0] == "simonX_backup")
+		simonX_backup = atoi(tokens[1].c_str());
+	else if (tokens[0] == "simonY_backup")
+		simonY_backup = atoi(tokens[1].c_str());
 	else
 		DebugOut(L"[ERROR] Unknown scene setting %s\n", ToWSTR(tokens[0]).c_str());
+
 }
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
@@ -141,111 +151,6 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 }
 
-/*
-	Parse a line in section [OBJECTS]
-*/
-void CPlayScene::_ParseSection_OBJECTS(string line)
-{
-	vector<string> tokens = split(line);
-
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
-
-	if (tokens.size() < 4) return; // skip invalid lines - an object set must have at least id, x, y
-
-	int id = atoi(tokens[0].c_str());
-	int object_type = atoi(tokens[1].c_str());
-	//skip name object
-	float x = atof(tokens[3].c_str());
-	float y = atof(tokens[4].c_str());
-
-	//
-	int width = atoi(tokens[5].c_str());
-	int height = atoi(tokens[6].c_str());
-	int ani_set_id = atoi(tokens[7].c_str());
-
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-
-	CGameObject* obj = NULL;
-
-	switch (object_type)
-	{
-	case OBJECT_TYPE_SIMON:
-	{
-		if (simon != NULL)
-		{
-			DebugOut(L"[ERROR] MARIO object was created before! ");
-			return;
-		}
-		simon = Simon::GetInstance();
-		simon->SetPosition(x, y);
-		objects.push_back(obj);
-		return;
-	}
-	break;
-	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
-	case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
-	case OBJECT_TYPE_ITEM_HEART: obj = new Item(ITEM_HEART); break;
-	case OBJECT_TYPE_ITEM_MORNINGSTAR: obj = new Item(ITEM_MORNINGSTAR); break;
-	case OBJECT_TYPE_ITEM_KNIFE: obj = new Item(ITEM_KNIFE); break;
-	case OBJECT_TYPE_ITEM_AXE: obj = new Item(ITEM_AXE); break;
-	case OBJECT_TYPE_ITEM_BOOMERANG: obj = new Item(ITEM_BOOMERANG); break;
-	case OBJECT_TYPE_VAMPIRE_BAT: obj = new VampireBat(x, y); break;
-	case OBJECT_TYPE_BLACK_KNGHT: obj = new BlackKnight(x, y); break;
-	case OBJECT_TYPE_OBJECTHIDDEN:
-	{
-		int scene_id = atoi(tokens[7].c_str());
-		obj = new CObjectHidden(x, y, width, height, scene_id);
-		obj->SetID(id);
-		objects.push_back(obj);
-		return;
-	}
-	break;
-	case OBJECT_TYPE_BOUNGDING_MAP: obj = new BoundingMap(); break;
-		break;
-	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
-		break;
-	case OBJECT_TYPE_BOTTOM_STAIR: {
-		obj = new StairBottom(ani_set_id);
-		obj->SetID(id);
-		obj->SetPosition(x, y);
-		obj->SetWidth(width);
-		obj->SetHeight(height);
-		obj->SetType(object_type);
-		objects.push_back(obj);
-		return;
-	}
-	case OBJECT_TYPE_TOP_STAIR:
-	{
-		obj = new StairTop(ani_set_id);
-		obj->SetID(id);
-		obj->SetPosition(x, y);
-		obj->SetWidth(width);
-		obj->SetHeight(height);
-		obj->SetType(object_type);
-		objects.push_back(obj);
-		return;
-	}
-	default:
-		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
-		return;
-	}
-
-	// General object setup
-	obj->SetID(id);
-	obj->SetPosition(x, y);
-	obj->SetWidth(width);
-	obj->SetHeight(height);
-	obj->SetType(object_type);
-
-	if (ani_set_id > 0) {
-		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
-		obj->SetAnimationSet(ani_set);
-	}
-
-	objects.push_back(obj);
-}
-
 void CPlayScene::_ParseSection_TILEMAP(string line)
 {
 	vector<string> tokens = split(line);
@@ -274,6 +179,126 @@ void CPlayScene::_ParseSection_GRID(string line)
 	int cellSize = atoi(tokens[1].c_str());
 
 	grid = new Grid(pathFile, &objects);
+}
+
+/*
+	Parse a line in section [OBJECTS]
+*/
+void CPlayScene::_ParseSection_OBJECTS(string line)
+{
+	vector<string> tokens = split(line);
+
+	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+
+	if (tokens.size() < 4) return; // skip invalid lines - an object set must have at least id, x, y
+
+	int id = atoi(tokens[0].c_str());
+	int object_type = atoi(tokens[1].c_str());
+	//skip name object
+	float x = atof(tokens[3].c_str());
+	float y = atof(tokens[4].c_str());
+
+	//
+	int width = atoi(tokens[5].c_str());
+	int height = atoi(tokens[6].c_str());
+	int ani_set_id = atoi(tokens[7].c_str());
+	int itemType = atoi(tokens[8].c_str());
+
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+
+	CGameObject* obj = NULL;
+
+	switch (object_type)
+	{
+	//Player
+	case OBJECT_TYPE_SIMON:
+	{
+		if (simon != NULL)
+		{
+			DebugOut(L"[ERROR] MARIO object was created before! ");
+			return;
+		}
+		simon = Simon::GetInstance();
+		simon->SetPosition(x, y);
+		simon->SetPositionBackup(simonX_backup, simonY_backup);
+		objects.push_back(obj);
+		return;
+	}
+	break;
+	// Object Map
+	case OBJECT_TYPE_BRICKANI: obj = new BrickAni(); break;
+	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
+	case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
+	case OBJECT_TYPE_BOUNGDING_MAP: obj = new BoundingMap(); break;
+		break;
+	case OBJECT_TYPE_WALL: obj = new Wall(); break;
+		break;
+	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
+		break;
+	case OBJECT_TYPE_BOTTOM_STAIR: {
+		obj = new StairBottom(ani_set_id);
+		obj->SetID(id);
+		obj->SetPosition(x, y);
+		obj->SetWidth(width);
+		obj->SetHeight(height);
+		obj->SetType(object_type);
+		obj->SetTypeItem(-2);
+		objects.push_back(obj);
+		return;
+	}
+	case OBJECT_TYPE_TOP_STAIR:
+	{
+		obj = new StairTop(ani_set_id);
+		obj->SetID(id);
+		obj->SetPosition(x, y);
+		obj->SetWidth(width);
+		obj->SetHeight(height);
+		obj->SetType(object_type);
+		obj->SetTypeItem(-2);
+		objects.push_back(obj);
+		return;
+	}
+	case OBJECT_TYPE_OBJECTHIDDEN:
+	{
+		int scene_id = atoi(tokens[7].c_str());
+		obj = new CObjectHidden(x, y, width, height, scene_id);
+		obj->SetID(id);
+		obj->SetTypeItem(-2);
+		objects.push_back(obj);
+		return;
+	}
+	break;
+
+	// Object Items
+	case OBJECT_TYPE_ITEM_LARGE_HEART: obj = new Item(ITEM_LARGE_HEART); break;
+	case OBJECT_TYPE_ITEM_SMALL_HEART: obj = new Item(ITEM_SMALL_HEART); break;
+	case OBJECT_TYPE_ITEM_MORNINGSTAR: obj = new Item(ITEM_MORNINGSTAR); break;
+	case OBJECT_TYPE_ITEM_KNIFE: obj = new Item(ITEM_DAGGER); break;
+	case OBJECT_TYPE_ITEM_AXE: obj = new Item(ITEM_AXE); break;
+	case OBJECT_TYPE_ITEM_BOOMERANG: obj = new Item(ITEM_BOOMERANG); break;
+
+	// Object Enemy
+	case OBJECT_TYPE_VAMPIRE_BAT: obj = new VampireBat(x, y); break;
+	case OBJECT_TYPE_BLACK_KNGHT: obj = new BlackKnight(x, y); break;
+
+	default:
+		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+		return;
+	}
+
+	// General object setup
+	obj->SetID(id);
+	obj->SetPosition(x, y);
+	obj->SetWidth(width);
+	obj->SetHeight(height);
+	obj->SetType(object_type);
+	obj->SetTypeItem(itemType);
+
+	if (ani_set_id > 0) {
+		obj->SetAnimationSet(ani_set_id);
+	}
+
+	objects.push_back(obj);
 }
 
 void CPlayScene::_Load_OBJECTS(string line)
@@ -388,7 +413,6 @@ void CPlayScene::Unload()
 		grid = NULL;
 	}
 
-
 	CTextures::GetInstance()->Clear(arrTexturesID);
 	CSprites::GetInstance()->Clear(arrSpritesID);
 	CAnimations::GetInstance()->Clear(arrAnimationsID);
@@ -402,15 +426,38 @@ void CPlayScene::Unload()
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way
-
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	for (size_t i = 0; i < listItems.size(); i++)
+	{
+		coObjects.push_back(listItems.at(i));
+	}
+
 	simon->Update(dt, &coObjects);
+
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
 		coObjects[i]->Update(dt, &coObjects);
+
+		if (coObjects[i]->GetDeadth()
+			&& !dynamic_cast<Item*>(coObjects[i]))
+		{
+			coObjects[i]->SetDeadth(false);
+			int typeItem = coObjects[i]->GetTypeItem();
+			if (typeItem == -1) {
+				Item* item = new Item();
+				item->SetEnable(true);
+				item->SetPosition(coObjects[i]->x, coObjects[i]->y);
+				listItems.push_back(item);
+			}
+			else if (typeItem > -1) {
+				Item* item = new Item(typeItem);
+				item->SetEnable(true);
+				item->SetPosition(coObjects[i]->x, coObjects[i]->y);
+				listItems.push_back(item);
+			}
+			coObjects[i]->SetEnable(false);
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Simon::Update might trigger PlayScene::Unload)
@@ -461,8 +508,8 @@ void CPlayScene::Update(DWORD dt)
 	// Không cho simon lọt khỏi map 
 	if (simon->x < 0)
 		simon->x = 0;
-	if (simon->x + SIMON_BBOX_WIDTH + 16 > mapWidth)
-		simon->x = mapWidth - SIMON_BBOX_WIDTH - 16;
+	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
+		simon->x = mapWidth - SIMON_BBOX_WIDTH;
 	
 }
 
@@ -471,6 +518,11 @@ void CPlayScene::Render()
 	tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	for (size_t i = 0; i < listItems.size(); i++)
+	{
+		listItems.at(i)->Render();
+	}
 
 	for (int i = 0; i < coObjects.size(); i++)
 	{
@@ -492,6 +544,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	Simon* simon = ((CPlayScene*)scence)->GetSimon();
 	if (simon->isFreeze) return;
+	//if (simon->isWall && simon->isJumping) return;
+
 	switch (KeyCode)
 	{
 	case DIK_Z:
@@ -520,6 +574,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	Simon* simon = ((CPlayScene*)scence)->GetSimon();
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	if (simon->isFreeze) return;
+	//if (simon->isWall && simon->isJumping) return;
+
 	switch (KeyCode)
 	{
 	case DIK_LEFT:
@@ -564,6 +620,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 	// disable control key when Simon die 
 	if (simon->isFreeze) return;
+	//if (simon->isWall && simon->isJumping) return;
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_DOWN))
 	{
@@ -623,6 +680,4 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	{
 		simon->SetState(SIMON_STATE_IDLE);
 	}
-
-	
 }

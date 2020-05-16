@@ -4,13 +4,17 @@
 #include "Item.h"
 #include "Game.h"
 #include "Candle.h"
+#include "BrickAni.h"
 #include "Utils.h"
 #include "ObjectHidden.h"
 #include "BoundingMap.h"
+#include "Ground.h"
+#include "Wall.h"
 #include "StairBottom.h"
 #include "StairTop.h"
 #include "Enemy.h"
 #include "VampireBat.h"
+
 
 using namespace std;
 
@@ -31,6 +35,7 @@ Simon::Simon()
 	isJumping = false;
 	isSitting = false;
 	isRunning = false;
+	isWall = false;
 
 	isFreeze = false;
 
@@ -63,18 +68,20 @@ void Simon::SetState(int state)
 	{
 	case SIMON_STATE_WALK_RIGHT:
 	{
+		// isRunning = true;
 		vx = SIMON_WALKING_SPEED;
 		nx = 1;
 	}
 	break;
 	case SIMON_STATE_WALK_LEFT:
 	{
+		// isRunning = true;
 		vx = -SIMON_WALKING_SPEED;
 		nx = -1;
 	}
 	break;
 	case SIMON_STATE_JUMP:
-		if (!isOnStair) {
+		if (!isOnStair && !isUpStair && !isDownStair) {
 			isJumping = true;
 			isGround = false;
 			vy = -SIMON_JUMP_SPEED_Y;
@@ -92,7 +99,7 @@ void Simon::SetState(int state)
 		isSitting = true;
 		break;
 	case SIMON_STATE_CLIMB_STAIR_UP:
-		if (!isOnStair) {
+		if (!isOnStair && !isSitting) {
 			x = xStair - 6;
 		}
 		if (canClimbDownStair) {
@@ -202,10 +209,76 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	}
 }
 
+void Simon::HandleCollisionSimonWithItem(Item* item, DWORD now)
+{
+	switch (item->GetTypeItem())
+	{
+	case ITEM_MORNINGSTAR:
+		if (morningStar->GetLevel() < MORNINGSTAR_LEVEL_3)
+		{
+			morningStar->SetLevel(morningStar->GetLevel() + 1);
+			isFreeze = true;
+			timeFreezeStart = now; // thời gian đã đóng băng
+		}
+		break;
+	case ITEM_SMALL_HEART:
+		energy += 1;
+		break;
+	case ITEM_LARGE_HEART:
+		energy += 5;
+		break;
+	case ITEM_MONEY_BAG_RED:
+		score += 100;
+		item->GetMoneyEffect()->SetEnable(true);
+		break;
+	case ITEM_MONEY_BAG_PURPLE:
+		score += 400;
+		item->GetMoneyEffect()->SetEnable(true);
+		break;
+	case ITEM_MONEY_BAG_WHITE:
+		score += 700;
+		item->GetMoneyEffect()->SetEnable(true);
+		break;
+	case ITEM_DAGGER:
+		typeWeaponCollect = ITEM_DAGGER;
+		break;
+	case ITEM_AXE:
+		typeWeaponCollect = ITEM_AXE;
+		break;
+	case ITEM_HOLY_WATER:
+		typeWeaponCollect = ITEM_HOLY_WATER;
+		break;
+	case ITEM_BOOMERANG:
+		typeWeaponCollect = ITEM_BOOMERANG;
+		break;
+	case ITEM_STOP_WATCH:
+		typeWeaponCollect = ITEM_STOP_WATCH;
+		break;
+	case ITEM_BONUSES:
+		score += 1000;
+		item->GetMoneyEffect()->SetEnable(true);
+		break;
+	case ITEM_CROWN:
+	case ITEM_CHEST:
+		score += 2000;
+		item->GetMoneyEffect()->SetEnable(true);
+		break;
+	case ITEM_DOUBLE_SHOT:
+		typeShotCollect = ITEM_DOUBLE_SHOT;
+		break;
+	case ITEM_TRIPLE_SHOT:
+		typeShotCollect = ITEM_TRIPLE_SHOT;
+		break;
+	}
+}
+
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	DWORD now = GetTickCount();
 	CGameObject::Update(dt);
+
+	//isWall = false;
+
 
 	//if (hp <= 0) SetState(SIMON_STATE_DIE);
 
@@ -265,8 +338,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Kiem tra va cham voi item 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		/*
-		
+
+
 		if (dynamic_cast<Item*>(coObjects->at(i))) {
 			Item* item = dynamic_cast<Item*>(coObjects->at(i));
 
@@ -277,13 +350,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
 			{
 				if (!item->GetDeadth() && item->GetEnable()) {
+					this->HandleCollisionSimonWithItem(item, now);
 					item->SetDeadth(true);
 					item->SetEnable(false);
 				}
 			}
 		}
-		
-		*/
+
+
 
 		if (dynamic_cast<Enemy*>(coObjects->at(i)))
 		{
@@ -304,7 +378,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								//timeFreezeStart = now; // thời gian đã đóng băng
 
 								hp -= enemy->GetDamage();
-								//hp -= 16;
 								StartUntouchable();
 								SetState(SIMON_STATE_HURT);
 								StartHurting();
@@ -313,10 +386,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 									enemy->SetDeadth(true);
 									enemy->GetCollisionEffect()->SetEnable(true);
 								}
-						
+
 							}
 							else
-								SetState(SIMON_STATE_DIE);
+								SetPosition(xBackup, yBackup);
+								//SetState(SIMON_STATE_DIE);
 						}
 					}
 
@@ -419,44 +493,34 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Item* item = dynamic_cast<Item*>(e->obj);
 				if (!item->GetDeadth() && item->GetEnable())
 				{
-					switch (item->GetTypeItem())
-					{
-					case ITEM_MORNINGSTAR:
-						if (morningStar->GetLevel() < MORNINGSTAR_LEVEL_3)
-						{
-							morningStar->SetLevel(morningStar->GetLevel() + 1);
-							isFreeze = true;
-							timeFreezeStart = now; // thời gian đã đóng băng
-						}
-						break;
-					case ITEM_SMALL_HEART:
-						energy += 1;
-						break;
-					case ITEM_HEART:
-						energy += 5;
-						break;
-					}
+					this->HandleCollisionSimonWithItem(item, now);
 					item->SetDeadth(true);
 					item->SetEnable(false);
 				}
 			}
-			if (dynamic_cast<BoundingMap*>(e->obj))
+			else if (dynamic_cast<Ground*>(e->obj) || dynamic_cast<BrickAni*>(e->obj))
 			{
 				if (!isOnStair || isDownStair) {
-					BoundingMap* boundingMap = dynamic_cast<BoundingMap*>(e->obj);
+					Ground* ground = dynamic_cast<Ground*>(e->obj);
 					// block 
-					if (e->ny < 0)
+					if (e->ny < 0 || e->nx != 0)
 					{
 						x += min_tx * dx + nx * 0.4f;
 						y += min_ty * dy + ny * 0.4f;
 
 						if (nx != 0) vx = 0;
 						if (ny != 0) vy = 0;
+
+						if (isJumping)
+						{
+							y -= 8;
+							isJumping = false;
+						}
+
 					}
-					if (isJumping)
-					{
-						y -= 8;
-						isJumping = false;
+					else {
+						x += dx;
+						y += dy;
 					}
 
 					if (isOnStair) {
@@ -464,6 +528,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							isOnStair = false;
 							isUpStair = false;
 							isDownStair = false;
+							vx = 0;
 						}
 					}
 					if (isHurt) {
@@ -484,6 +549,55 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 
 			}
+			else if (dynamic_cast<Wall*>(e->obj))
+			{
+				Wall* wall = dynamic_cast<Wall*>(e->obj);
+				isWall = true;
+			}
+			else if (dynamic_cast<BoundingMap*>(e->obj))
+			{
+			if (!isOnStair || isDownStair) {
+				BoundingMap* wall = dynamic_cast<BoundingMap*>(e->obj);
+				// block 
+				if (e->ny < 0)
+				{
+					x += min_tx * dx + nx * 0.4f;
+					y += min_ty * dy + ny * 0.4f;
+
+					if (nx != 0) vx = 0;
+					if (ny != 0) vy = 0;
+				}
+				if (isJumping)
+				{
+					y -= 8;
+					isJumping = false;
+				}
+
+				if (isOnStair) {
+					if (canClimbUpStair) {
+						isOnStair = false;
+						isUpStair = false;
+						isDownStair = false;
+					}
+				}
+				if (isHurt) {
+					hurtable_start = 0;
+					hurtable = 0;
+					isHurt = false;
+					vx = 0;
+					ResetAnimationHurt();
+				}
+			}
+			else {
+				x += dx;
+				if (ny < 0)
+					y += dy + ny * 0.7f;
+				else if (ny > 0)
+					y += dy + ny * -0.7f;
+
+			}
+
+			}
 			else if (dynamic_cast<StairBottom*>(e->obj))
 			{
 				x += dx;
@@ -498,7 +612,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else if (ny > 0)
 						y += dy + ny * -0.7f;
 				}
-
 			}
 			else if (dynamic_cast<CObjectHidden*>(e->obj))
 			{
@@ -683,10 +796,14 @@ void Simon::SetAnimationSetMorningStar(LPANIMATION_SET ani_set)
 
 void Simon::SetPosition(float x, float y)
 {
-	xBackup = x;
-	yBackup = y;
+
 	this->x = x;
 	this->y = y;
+}
+
+void Simon::SetPositionBackup(float xBackup, float yBackup) {
+	this->xBackup = xBackup;
+	this->yBackup = yBackup;
 }
 
 

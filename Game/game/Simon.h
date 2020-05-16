@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "MorningStar.h"
 #include "GameObject.h"
+#include "Item.h"
 
 class Simon : public CGameObject
 {
@@ -20,6 +21,9 @@ class Simon : public CGameObject
 
 	float xStair, yStair;
 
+	int typeWeaponCollect;
+	int typeShotCollect;
+
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -38,6 +42,7 @@ public:
 
 	bool isRunning;
 	bool isGround;
+	bool isWall;
 
 	bool isHurt;
 
@@ -61,6 +66,8 @@ public:
 	virtual void Render();
 
 	void SetPosition(float x, float y);
+	void SetPositionBackup(float xBackup, float yBackup);
+
 
 	int GetHP() { return this->hp; }
 	void SetHP(int hp) { this->hp = hp; }
@@ -80,6 +87,9 @@ public:
 	int GetScore() { return score; }
 	void SetScore(int sco) { score += sco;  }
 
+	int GetTypeWeaponCollect() { return typeWeaponCollect; }
+	int GetTypeShotCollect() { return typeShotCollect; }
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartHurting() { isHurt = true; hurtable = 1; hurtable_start = GetTickCount(); }
 
@@ -89,6 +99,8 @@ public:
 	void Reset();
 
 	void Load(LPCWSTR simonFile);
+
+	void HandleCollisionSimonWithItem(Item* item, DWORD dt);
 
 };
 

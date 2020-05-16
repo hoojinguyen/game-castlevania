@@ -1,17 +1,28 @@
-#id	type	name	x	y	width	height	ani_set_id
-0 1 Simon 379 155 16 32 1
-1 11 Candle 398 23 8 16 31
-2 11 Candle 456 40 8 16 31
-3 11 Candle 231 29 8 16 31
-4 11 Candle 146 32 8 16 31
-5 11 Candle 79 42 8 16 31
-6 13 BoundingMap 442 112 40 16 -1
-7 13 BoundingMap 353 79 96 16 -1
-8 16 TopStair 446 86 32 8 -1
-9 13 BoundingMap 318 143 32 16 -1
-10 13 BoundingMap 289 113 32 16 -1
-11 13 BoundingMap 193 80 96 16 -1
-12 13 BoundingMap 99 81 64 16 -1
-13 13 BoundingMap 65 112 32 16 -1
-14 13 BoundingMap 1 79 32 16 -1
-15 14 Portal 1 46 16 16 4
+#id	type	name	x	y	width	height	ani_set_id item_id
+0 14 Portal 370 187 24 8 3 -2
+1 1 Simon 379 155 16 32 1 -2
+2 16 TopStair 448 88 8 8 1 -2
+3 17 Ground 448 112 32 16 -1 -2
+4 17 Ground 353 79 96 16 -1 -2
+5 17 Ground 318 143 40 16 -1 -2
+6 17 Ground 288 111 32 16 -1 -2
+7 17 Ground 191 79 96 16 -1 -2
+8 17 Ground 96 80 64 16 -1 -2
+9 17 Ground 62 113 32 16 -1 -2
+10 17 Ground 0 80 32 16 -1 -2
+11 18 Wall 481 1 32 184 -1 -2
+12 18 Wall 352 96 32 48 -1 -2
+13 18 Wall 223 99 48 96 -1 -2
+14 18 Wall 128 98 32 96 -1 -2
+15 11 Candle 458 16 8 16 31 0
+16 11 Candle 396 21 8 16 31 0
+17 11 Candle 333 18 8 16 31 0
+18 11 Candle 240 32 8 16 31 0
+19 11 Candle 145 48 8 16 31 0
+20 11 Candle 103 37 8 16 31 0
+21 11 Candle 44 15 8 16 31 2
+22 204 BlackKnight 380 47 16 32 74 0
+23 204 BlackKnight 220 47 16 32 74 0
+24 202 VampireBat 296 32 12 14 72 0
+25 19 BrickAni 50 80 32 16 39 -1
+26 14 Portal 2 48 16 16 4 -2

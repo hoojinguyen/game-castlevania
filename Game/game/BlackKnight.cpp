@@ -9,6 +9,8 @@ BlackKnight::BlackKnight(float startX, float startY)
 	this->hp = BLACK_KNIGHT_HP;
 	isEnable = true;
 
+	damage = BLACK_KNIGHT_DAMAGE;
+
 	Enemy::Enemy();
 
 	SetState(BLACK_KNIGHT_STATE_WALKING);
@@ -21,7 +23,7 @@ BlackKnight::~BlackKnight()
 void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	Enemy::Update(dt, coObject);
-	if (!isDeadth) {
+	if (!isDeadth && isEnable) {
 		x += dx;
 		y += dy;
 
@@ -41,7 +43,7 @@ void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 void BlackKnight::Render()
 {
-	if (!isDeadth) {
+	if (!isDeadth && isEnable) {
 		int posX = x, posY = y;
 		int ani = 0;
 		switch (state)
@@ -63,13 +65,14 @@ void BlackKnight::Render()
 		animation_set->at(ani)->Render(posX, posY);
 		RenderBoundingBox();
 	}
-
 	Enemy::Render();
+
+
 }
 
 void BlackKnight::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (isDeadth) {
+	if (isDeadth && isEnable) {
 		left = 0;
 		top = 0;
 		right = left + 0;

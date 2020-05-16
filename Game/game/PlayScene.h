@@ -12,6 +12,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> coObjects;
+	vector<LPGAMEOBJECT> listItems;
 
 	vector<int> arrTexturesID;
 	vector<int> arrSpritesID;
@@ -26,6 +27,7 @@ protected:
 	DWORD time;
 
 	float mapWidth, mapHeight;
+	float simonX_backup, simonY_backup;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);

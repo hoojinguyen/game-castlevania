@@ -191,8 +191,8 @@ simonY_backup 120.0f
 Resources\Map\Map2A\tilesheet.txt 1000
 
 [OBJECTS]
-Resources\Map\Map2A\object.txt
+Resources\Map\Map2A\object-backup.txt
 
 [GRID]
 #file_grid	cell_size
-Resources\Map\Map2A\grid.txt 260
+Resources\Map\Map2A\grid-backup.txt 260

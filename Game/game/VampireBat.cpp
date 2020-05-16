@@ -11,6 +11,8 @@ VampireBat::VampireBat(float startX, float startY)
 	this->hp = VAMPIRE_BAT_HP;
 	isEnable = true;
 
+	damage = VAMPIRE_BAT_DAMAGE;
+
 	Enemy::Enemy();
 
 	SetState(VAMPIRE_BAT_STATE_IDLE);
@@ -22,7 +24,7 @@ VampireBat::~VampireBat()
 
 void VampireBat::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (isDeadth) {
+	if (isDeadth && isEnable) {
 		left = 0;
 		top = 0;
 		right = left + 0;
@@ -39,7 +41,7 @@ void VampireBat::GetBoundingBox(float& left, float& top, float& right, float& bo
 void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	Enemy::Update(dt, coObject);
-	if (!isDeadth) {
+	if (!isDeadth && isEnable) {
 		x += dx;
 		y += dy;
 
@@ -69,7 +71,7 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 void VampireBat::Render()
 {
-	if (!isDeadth) {
+	if (!isDeadth && isEnable) {
 		int posX = x, posY = y;
 		int ani = 0;
 		switch (state)
@@ -96,8 +98,9 @@ void VampireBat::Render()
 		animation_set->at(ani)->Render(posX, posY);
 		RenderBoundingBox();
 	}
-
 	Enemy::Render();
+
+
 }
 
 
