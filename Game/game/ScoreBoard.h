@@ -4,20 +4,24 @@
 #include "Simon.h"
 #include "HP.h"
 #include "ItemBoard.h"
-
 class ScoreBoard
 {
 	ID3DXFont* font;
-	RECT rect;
+	RECT rectLineOne;
+	RECT rectLineTwo;
+	RECT rectLineThree;
 	Simon* simon;
 	LPDIRECT3DDEVICE9 d3ddv;
-	wstring information;
+	wstring lineOne;
+	wstring lineTwo;
+	wstring lineThree;
 	CSprite* sprite;
 	LPD3DXSPRITE spriteHandler;
 	vector<HP*>* listSimonHP;
 	vector<HP*>* listEnemyHP;
 	vector<HP*>* listDyingHP;
-	ItemBoard* heart;
+	ItemBoard* weaponCollect;
+	ItemBoard* shotCollect;
 	int bossHP;
 	int score;
 	int time;
@@ -28,7 +32,7 @@ class ScoreBoard
 public:
 	ScoreBoard(Simon* simon, int bossHP);
 	~ScoreBoard();
-	void Update(int bossHP, int time, int life, int stage);
+	void Update(int bossHP, int time, int stage);
 	void Render();
 };
 

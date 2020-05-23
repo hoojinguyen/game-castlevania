@@ -8,7 +8,7 @@
 class CPlayScene : public CScene
 {
 protected:
-	Simon* simon;					// A play scene has to have player, right? 
+	Simon *simon; // A play scene has to have player, right?
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> coObjects;
@@ -19,12 +19,16 @@ protected:
 	vector<int> arrAnimationsID;
 	vector<int> arrAnimationSetsID;
 
-	TileMap* tileMap = NULL;
-	Grid* grid = NULL;
-	ScoreBoard* scoreBoard;
-	CCamera* camera;
+	TileMap *tileMap = NULL;
+	Grid *grid = NULL;
+	ScoreBoard *scoreBoard;
+	CCamera *camera;
 
 	DWORD time;
+
+	int stage;
+	int defaultTimeGame;
+	int remainTime;
 
 	float mapWidth, mapHeight;
 	float simonX_backup, simonY_backup;
@@ -40,8 +44,7 @@ protected:
 	void _Load_OBJECTS(string line);
 
 public:
-
-	Simon* GetSimon() { return simon; }
+	Simon *GetSimon() { return simon; }
 
 	CPlayScene(int id, LPCWSTR filePath);
 
@@ -59,9 +62,8 @@ public:
 class CPlayScenceKeyHandler : public CScenceKeyHandler
 {
 public:
-	virtual void KeyState(BYTE* states);
+	virtual void KeyState(BYTE *states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
-	CPlayScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
+	CPlayScenceKeyHandler(CScene *s) : CScenceKeyHandler(s){};
 };
-

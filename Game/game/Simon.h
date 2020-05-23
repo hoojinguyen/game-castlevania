@@ -1,7 +1,14 @@
 ﻿#pragma once
-#include "MorningStar.h"
 #include "GameObject.h"
 #include "Item.h"
+
+#include "Weapon.h"
+#include "MorningStar.h"
+#include "Axe.h"
+#include "Dagger.h"
+#include "Boomerang.h"
+#include "FireBomb.h"
+#include "Stopwatch.h"
 
 class Simon : public CGameObject
 {
@@ -11,18 +18,35 @@ class Simon : public CGameObject
 	int score;
 	int life;
 	int energy;
+	int heart;
+
+	float DoCaoDiDuoc = 0;
+
 	DWORD untouchable_start;
 	DWORD timeAttackStart;
+	DWORD hurtable_start;
 
-	//float oldVy;
+	float oldVy;
 
 	float xBackup, yBackup;
-	MorningStar* morningStar;
 
 	float xStair, yStair;
 
 	int typeWeaponCollect;
 	int typeShotCollect;
+
+	bool _IsFirstOnStair;
+
+	Axe* axes[3];
+	Dagger* daggers[3];
+	Boomerang* boomerangs[3];
+	FireBomb* fireBombs[3];
+	Stopwatch* stopwatchs[3];
+	MorningStar* morningStar;
+
+	void SetTypeOfWeapon(int item);
+
+	Simon();
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -30,11 +54,11 @@ class Simon : public CGameObject
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_SETTINGS(string line);
 
-	Simon();
-
 public:
 
 	static Simon* GetInstance();
+
+	Weapon* weapons[3];
 
 	bool isAttacking;
 	bool isSitting;
@@ -47,7 +71,6 @@ public:
 	bool isHurt;
 
 	int hurtable;
-	DWORD hurtable_start;
 
 	int untouchable;
 
@@ -65,9 +88,15 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 
+	void Load(LPCWSTR simonFile);
+
+	int GetTypeWeaponCollect() { return typeWeaponCollect; }
+	int GetTypeShotCollect() { return typeShotCollect; }
+
+	void Hurted(int damage);
+
 	void SetPosition(float x, float y);
 	void SetPositionBackup(float xBackup, float yBackup);
-
 
 	int GetHP() { return this->hp; }
 	void SetHP(int hp) { this->hp = hp; }
@@ -75,8 +104,8 @@ public:
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 
-	int GetEnergy() { return energy; }
-	void SetEnergy(int e) { energy = e; }
+	int GetHeart() { return heart; }
+	void SetHeart(int h) { heart = h; }
 
 	int GetLevelMorningStar();
 	void SetAnimationSetMorningStar(LPANIMATION_SET ani_set);
@@ -87,9 +116,6 @@ public:
 	int GetScore() { return score; }
 	void SetScore(int sco) { score += sco;  }
 
-	int GetTypeWeaponCollect() { return typeWeaponCollect; }
-	int GetTypeShotCollect() { return typeShotCollect; }
-
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartHurting() { isHurt = true; hurtable = 1; hurtable_start = GetTickCount(); }
 
@@ -97,8 +123,6 @@ public:
 	void ResetAnimationAttacking();
 	void ResetAnimationHurt();
 	void Reset();
-
-	void Load(LPCWSTR simonFile);
 
 	void HandleCollisionSimonWithItem(Item* item, DWORD dt);
 

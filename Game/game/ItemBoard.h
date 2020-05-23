@@ -8,6 +8,8 @@ class ItemBoard : public Effect
 public:
 	ItemBoard(int type);
 	~ItemBoard();
+
+	void SetType(int type);
 	void Render();
 };
 

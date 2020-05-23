@@ -44,3 +44,26 @@ D:\School_Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Properties.Resou
 D:\School_Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.csproj.GenerateResource.cache
 D:\School_Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.exe
 D:\School_Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.pdb
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\bin\Debug\EditorV4.exe.config
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\bin\Debug\EditorV4.exe
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\bin\Debug\EditorV4.pdb
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.csprojAssemblyReference.cache
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Controls.CanvasScrollControl.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Controls.ColorPickerControl.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Controls.TreeViewControl.CustomTreeView.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Controls.TreeViewControl.TestTreeView.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.AddCollisionTypeCollideForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.AddCollisionTypeForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.AddPropertyForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.ChooseObjectTypeForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.CreateObjectCategoryForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.RemovePropertyForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.SettingForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.MapEditor.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.TestForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.CreateNewForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Forms.StartForm.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.Properties.Resources.resources
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.csproj.GenerateResource.cache
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.exe
+D:\School_Project\Game Project\Tool\TOOL_TILEMAP\EditorV4\obj\Debug\EditorV4.pdb

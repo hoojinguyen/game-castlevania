@@ -99,8 +99,6 @@ void VampireBat::Render()
 		RenderBoundingBox();
 	}
 	Enemy::Render();
-
-
 }
 
 
@@ -113,13 +111,13 @@ void VampireBat::SetState(int state)
 		break;
 	case VAMPIRE_BAT_STATE_FLYING:
 		if (nx > 0) {
-			vx = BLACK_KNIGHT_FLYING_SPEED_X;
+			vx = VAMPIRE_BAT_FLYING_SPEED_X;
 		}
 		else {
-			vx = -BLACK_KNIGHT_FLYING_SPEED_X;
+			vx = -VAMPIRE_BAT_FLYING_SPEED_X;
 		}
 
-		vy = BLACK_KNIGHT_FLYING_SPEED_y;
+		vy = VAMPIRE_BAT_FLYING_SPEED_Y;
 		break;
 	}
 }

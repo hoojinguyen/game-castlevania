@@ -1,0 +1,27 @@
+#id	type	name	x	y	width	height	ani_set_id
+0 1 Simon 92 160 16 32 1 -2
+1 13 BoundingMap 3 160 64 32 -1 -2
+2 13 BoundingMap 0 0 32 160 0 -2
+3 13 BoundingMap 127 94 32 32 -1 -2
+4 13 BoundingMap 160 160 160 16 -1 -2
+5 13 BoundingMap 225 95 32 16 -1 -2
+6 13 BoundingMap 352 159 32 16 -1 -2
+7 13 BoundingMap 420 129 32 16 -1 -2
+8 13 BoundingMap 446 159 32 16 -1 -2
+9 13 BoundingMap 480 176 64 16 -1 -2
+10 13 BoundingMap 483 112 32 16 -1 -2
+11 13 BoundingMap 546 97 32 16 -1 -2
+12 13 BoundingMap 609 158 64 16 -1 -2
+13 13 BoundingMap 672 144 32 16 -1 -2
+14 13 BoundingMap 704 111 32 16 -1 -2
+15 13 BoundingMap 736 1 32 80 -1 -2
+16 13 BoundingMap 734 128 32 64 -1 -2
+17 16 TopStair 64 159 8 8 1 -2
+18 15 BottomStair 63 149 8 8 1 -2
+19 16 TopStair 120 93 8 8 1 -2
+20 15 BottomStair 383 153 8 8 1 -2
+21 16 TopStair 409 125 8 8 1 -2
+22 15 BottomStair 448 85 8 8 1 -2
+23 16 TopStair 471 59 8 8 1 -2
+24 15 BottomStair 575 91 8 8 1 -2
+25 16 TopStair 633 148 8 8 1 -2

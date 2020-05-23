@@ -2,7 +2,7 @@
 Resources\Scene\simon.txt
 
 [SETTINGS]
-start 2
+start 7
 
 #scene list
 [SCENES]
@@ -13,3 +13,4 @@ start 2
 5 Resources\Scene\scene3A.txt
 6 Resources\Scene\scene3A-backup.txt
 7 Resources\Scene\scene3B.txt
+8 Resources\Scene\scene4.txt

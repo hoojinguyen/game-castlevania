@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <fstream>
 
+#include "Define.h"
+
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -14,14 +16,21 @@
 #include "BrickAni.h"
 #include "Torch.h"
 #include "Candle.h"
+#include "Gate.h"
 #include "Item.h"
-#include "Define.h"
 
 #include "StairBottom.h"
 #include "StairTop.h"
 
 #include "BlackKnight.h"
 #include "VampireBat.h"
+#include "Hunchback.h"
+#include "Raven.h"
+#include "Skeleton.h"
+#include "Ghost.h"
+#include "BlackLeopard.h"
+#include "FishMan.h"
+#include "Zombie.h"
 
 using namespace std;
 
@@ -45,9 +54,21 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	vector<string> tokens = split(line);
 	float simonX, simonY;
 
-	if (tokens.size() < 2) return;
+	if (tokens.size() < 2)
+		return;
 
-	if (tokens[0] == "map_width")
+	if (tokens[0] == "stage")
+		stage = atoi(tokens[1].c_str());
+	else if (tokens[0] == "time")
+	{
+		int timeDefault = atoi(tokens[1].c_str());
+		if (timeDefault > 0)
+		{
+			defaultTimeGame = timeDefault;
+		}
+		remainTime = atoi(tokens[1].c_str());
+	}
+	else if (tokens[0] == "map_width")
 		mapWidth = atoi(tokens[1].c_str());
 	else if (tokens[0] == "map_height")
 		mapHeight = atoi(tokens[1].c_str());
@@ -55,16 +76,17 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 		simonX_backup = atoi(tokens[1].c_str());
 	else if (tokens[0] == "simonY_backup")
 		simonY_backup = atoi(tokens[1].c_str());
+
 	else
 		DebugOut(L"[ERROR] Unknown scene setting %s\n", ToWSTR(tokens[0]).c_str());
-
 }
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 5) return; // skip invalid lines
+	if (tokens.size() < 5)
+		return; // skip invalid lines
 
 	int texID = atoi(tokens[0].c_str());
 	wstring path = ToWSTR(tokens[1]);
@@ -80,7 +102,8 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 6) return; // skip invalid lines
+	if (tokens.size() < 6)
+		return; // skip invalid lines
 
 	int ID = atoi(tokens[0].c_str());
 	int l = atoi(tokens[1].c_str());
@@ -106,7 +129,8 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
+	if (tokens.size() < 3)
+		return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
 
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
@@ -115,7 +139,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation(100, isLoop);
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 2; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 2; i < tokens.size(); i += 2) // why i+=2 ?  sprite_id | frame_time
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -130,13 +154,14 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 2) return; // skip invalid lines - an animation set must at least id and one animation id
+	if (tokens.size() < 2)
+		return; // skip invalid lines - an animation set must at least id and one animation id
 
 	int ani_set_id = atoi(tokens[0].c_str());
 
 	LPANIMATION_SET s = new CAnimationSet();
 
-	CAnimations* animations = CAnimations::GetInstance();
+	CAnimations *animations = CAnimations::GetInstance();
 
 	for (int i = 1; i < tokens.size(); i++)
 	{
@@ -148,14 +173,14 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 	arrAnimationSetsID.push_back(ani_set_id);
-
 }
 
 void CPlayScene::_ParseSection_TILEMAP(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 2) return;
+	if (tokens.size() < 2)
+		return;
 
 	string pathFile = tokens[0];
 
@@ -163,7 +188,8 @@ void CPlayScene::_ParseSection_TILEMAP(string line)
 
 	LPSPRITE spriteMap = CSprites::GetInstance()->Get(spriteId);
 
-	if (tokens.size() < 1) return;
+	if (tokens.size() < 1)
+		return;
 
 	tileMap = new TileMap(mapWidth, mapHeight, spriteMap, pathFile);
 }
@@ -172,7 +198,8 @@ void CPlayScene::_ParseSection_GRID(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 2) return;
+	if (tokens.size() < 2)
+		return;
 
 	string pathFile = tokens[0];
 
@@ -190,7 +217,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
-	if (tokens.size() < 4) return; // skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 4)
+		return; // skip invalid lines - an object set must have at least id, x, y
 
 	int id = atoi(tokens[0].c_str());
 	int object_type = atoi(tokens[1].c_str());
@@ -204,9 +232,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[7].c_str());
 	int itemType = atoi(tokens[8].c_str());
 
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 
-	CGameObject* obj = NULL;
+	CGameObject *obj = NULL;
 
 	switch (object_type)
 	{
@@ -226,16 +254,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	break;
 	// Object Map
-	case OBJECT_TYPE_BRICKANI: obj = new BrickAni(); break;
-	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
-	case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
-	case OBJECT_TYPE_BOUNGDING_MAP: obj = new BoundingMap(); break;
+	case OBJECT_TYPE_TORCH:
+		obj = new Torch();
 		break;
-	case OBJECT_TYPE_WALL: obj = new Wall(); break;
+	case OBJECT_TYPE_CANDLE:
+		obj = new Candle();
 		break;
-	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
+	case OBJECT_TYPE_GATE:
+		obj = new Gate();
 		break;
-	case OBJECT_TYPE_BOTTOM_STAIR: {
+	case OBJECT_TYPE_BRICKANI:
+		obj = new BrickAni();
+		break;
+	case OBJECT_TYPE_BOUNGDING_MAP:
+		obj = new BoundingMap();
+		break;
+	case OBJECT_TYPE_WALL:
+		obj = new Wall();
+		break;
+	case OBJECT_TYPE_GROUND:
+		obj = new Ground();
+		break;
+	case OBJECT_TYPE_BOTTOM_STAIR:
+	{
 		obj = new StairBottom(ani_set_id);
 		obj->SetID(id);
 		obj->SetPosition(x, y);
@@ -270,16 +311,44 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	break;
 
 	// Object Items
-	case OBJECT_TYPE_ITEM_LARGE_HEART: obj = new Item(ITEM_LARGE_HEART); break;
-	case OBJECT_TYPE_ITEM_SMALL_HEART: obj = new Item(ITEM_SMALL_HEART); break;
-	case OBJECT_TYPE_ITEM_MORNINGSTAR: obj = new Item(ITEM_MORNINGSTAR); break;
-	case OBJECT_TYPE_ITEM_KNIFE: obj = new Item(ITEM_DAGGER); break;
-	case OBJECT_TYPE_ITEM_AXE: obj = new Item(ITEM_AXE); break;
-	case OBJECT_TYPE_ITEM_BOOMERANG: obj = new Item(ITEM_BOOMERANG); break;
+	case OBJECT_TYPE_ITEM_LARGE_HEART:
+		obj = new Item(ITEM_LARGE_HEART);
+		break;
+	case OBJECT_TYPE_ITEM_SMALL_HEART:
+		obj = new Item(ITEM_SMALL_HEART);
+		break;
+	case OBJECT_TYPE_ITEM_MORNINGSTAR:
+		obj = new Item(ITEM_MORNINGSTAR);
+		break;
+	case OBJECT_TYPE_ITEM_KNIFE:
+		obj = new Item(ITEM_DAGGER);
+		break;
+	case OBJECT_TYPE_ITEM_AXE:
+		obj = new Item(ITEM_AXE);
+		break;
+	case OBJECT_TYPE_ITEM_BOOMERANG:
+		obj = new Item(ITEM_BOOMERANG);
+		break;
 
 	// Object Enemy
-	case OBJECT_TYPE_VAMPIRE_BAT: obj = new VampireBat(x, y); break;
-	case OBJECT_TYPE_BLACK_KNGHT: obj = new BlackKnight(x, y); break;
+	case OBJECT_TYPE_VAMPIRE_BAT:
+		obj = new VampireBat(x, y);
+		break;
+	case OBJECT_TYPE_BLACK_KNGHT:
+		obj = new BlackKnight(x, y);
+		break;
+	case OBJECT_TYPE_GHOST:
+		obj = new Ghost(x, y);
+		break;
+	case OBJECT_TYPE_HUNCHBACK:
+		obj = new Hunchback(x, y);
+		break;
+	case OBJECT_TYPE_SKELETON:
+		obj = new Skeleton(x, y);
+		break;
+	case OBJECT_TYPE_RAVEN:
+		obj = new Raven(x, y);
+		break;
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -294,7 +363,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	obj->SetType(object_type);
 	obj->SetTypeItem(itemType);
 
-	if (ani_set_id > 0) {
+	if (ani_set_id > 0)
+	{
 		obj->SetAnimationSet(ani_set_id);
 	}
 
@@ -305,7 +375,8 @@ void CPlayScene::_Load_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 1) return;
+	if (tokens.size() < 1)
+		return;
 
 	string pathFile = tokens[0];
 
@@ -317,8 +388,10 @@ void CPlayScene::_Load_OBJECTS(string line)
 	{
 		getline(pFile, temp);
 
-		if (temp[0] == '/' && temp[1] == '/') continue;	// skip comment lines
-		if (temp[0] == '#') continue;	// skip comment lines
+		if (temp[0] == '/' && temp[1] == '/')
+			continue; // skip comment lines
+		if (temp[0] == '#')
+			continue; // skip comment lines
 
 		_ParseSection_OBJECTS(temp);
 	}
@@ -341,46 +414,86 @@ void CPlayScene::Load()
 	{
 		string line(str);
 
-		if (line[0] == '#') continue;	// skip comment lines
-		if (line[0] == '/' && line[1] == '/') continue;	// skip comment lines
+		if (line[0] == '#')
+			continue; // skip comment lines
+		if (line[0] == '/' && line[1] == '/')
+			continue; // skip comment lines
 
-		if (line == "[SETTINGS]") {
-			section = SCENE_SECTION_SETTINGS; continue;
+		if (line == "[SETTINGS]")
+		{
+			section = SCENE_SECTION_SETTINGS;
+			continue;
 		}
-		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
-		if (line == "[SPRITES]") {
-			section = SCENE_SECTION_SPRITES; continue;
+		if (line == "[TEXTURES]")
+		{
+			section = SCENE_SECTION_TEXTURES;
+			continue;
 		}
-		if (line == "[ANIMATIONS]") {
-			section = SCENE_SECTION_ANIMATIONS; continue;
+		if (line == "[SPRITES]")
+		{
+			section = SCENE_SECTION_SPRITES;
+			continue;
 		}
-		if (line == "[ANIMATION_SETS]") {
-			section = SCENE_SECTION_ANIMATION_SETS; continue;
+		if (line == "[ANIMATIONS]")
+		{
+			section = SCENE_SECTION_ANIMATIONS;
+			continue;
 		}
-		if (line == "[OBJECTS]") {
-			section = SCENE_SECTION_OBJECTS; continue;
+		if (line == "[ANIMATION_SETS]")
+		{
+			section = SCENE_SECTION_ANIMATION_SETS;
+			continue;
 		}
-		if (line == "[TILEMAP]") {
-			section = SCENE_SECTION_TILEMAP; continue;
+		if (line == "[OBJECTS]")
+		{
+			section = SCENE_SECTION_OBJECTS;
+			continue;
 		}
-		if (line == "[GRID]") {
-			section = SCENE_SECTION_GRID; continue;
+		if (line == "[TILEMAP]")
+		{
+			section = SCENE_SECTION_TILEMAP;
+			continue;
 		}
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+		if (line == "[GRID]")
+		{
+			section = SCENE_SECTION_GRID;
+			continue;
+		}
+		if (line[0] == '[')
+		{
+			section = SCENE_SECTION_UNKNOWN;
+			continue;
+		}
 
 		//
 		// data section
 		//
 		switch (section)
 		{
-		case SCENE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
-		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
-		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
-		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-		case SCENE_SECTION_OBJECTS: _Load_OBJECTS(line); break;
-		case SCENE_SECTION_TILEMAP: _ParseSection_TILEMAP(line); break;
-		case SCENE_SECTION_GRID: _ParseSection_GRID(line); break;
+		case SCENE_SECTION_SETTINGS:
+			_ParseSection_SETTINGS(line);
+			break;
+		case SCENE_SECTION_TEXTURES:
+			_ParseSection_TEXTURES(line);
+			break;
+		case SCENE_SECTION_SPRITES:
+			_ParseSection_SPRITES(line);
+			break;
+		case SCENE_SECTION_ANIMATIONS:
+			_ParseSection_ANIMATIONS(line);
+			break;
+		case SCENE_SECTION_ANIMATION_SETS:
+			_ParseSection_ANIMATION_SETS(line);
+			break;
+		case SCENE_SECTION_OBJECTS:
+			_Load_OBJECTS(line);
+			break;
+		case SCENE_SECTION_TILEMAP:
+			_ParseSection_TILEMAP(line);
+			break;
+		case SCENE_SECTION_GRID:
+			_ParseSection_GRID(line);
+			break;
 		}
 	}
 
@@ -389,6 +502,8 @@ void CPlayScene::Load()
 	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\BBox\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	scoreBoard = new ScoreBoard(simon, 16);
+
+	time = 0;
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
@@ -402,12 +517,14 @@ void CPlayScene::Unload()
 	coObjects.clear();
 	simon = NULL;
 
-	if (tileMap) {
+	if (tileMap)
+	{
 		tileMap->Unload();
 		delete tileMap;
 		tileMap = NULL;
 	}
-	if (grid) {
+	if (grid)
+	{
 		grid->Unload();
 		delete grid;
 		grid = NULL;
@@ -439,19 +556,20 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects[i]->Update(dt, &coObjects);
 
-		if (coObjects[i]->GetDeadth()
-			&& !dynamic_cast<Item*>(coObjects[i]))
+		if (coObjects[i]->GetDeadth() && !dynamic_cast<Item *>(coObjects[i]))
 		{
 			coObjects[i]->SetDeadth(false);
 			int typeItem = coObjects[i]->GetTypeItem();
-			if (typeItem == -1) {
-				Item* item = new Item();
+			if (typeItem == -1)
+			{
+				Item *item = new Item();
 				item->SetEnable(true);
 				item->SetPosition(coObjects[i]->x, coObjects[i]->y);
 				listItems.push_back(item);
 			}
-			else if (typeItem > -1) {
-				Item* item = new Item(typeItem);
+			else if (typeItem > -1)
+			{
+				Item *item = new Item(typeItem);
 				item->SetEnable(true);
 				item->SetPosition(coObjects[i]->x, coObjects[i]->y);
 				listItems.push_back(item);
@@ -461,11 +579,14 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// skip the rest if scene was already unloaded (Simon::Update might trigger PlayScene::Unload)
-	if (simon == NULL) return;
+	if (simon == NULL)
+		return;
 
 	//update scoreBoard
 	time += dt;
-	scoreBoard->Update(16, 300 - time * 0.001, 3, 1);
+	remainTime = defaultTimeGame - time * 0.001;
+	//scoreBoard->Update(16, 300 - time * 0.001, 3, 1);
+	scoreBoard->Update(16, remainTime, stage);
 
 	// Update camera to follow player
 	D3DXVECTOR3 pos = camera->GetCameraPosition();
@@ -475,42 +596,49 @@ void CPlayScene::Update(DWORD dt)
 
 	boundHeight = mapHeight;
 
-	if (mapWidth > SCREEN_WIDTH) {
-		if (cx + simon->GetWidth() + 5 < SCREEN_WIDTH / 2) {
+	if (mapWidth > SCREEN_WIDTH)
+	{
+		if (cx + simon->GetWidth() + 5 < SCREEN_WIDTH / 2)
+		{
 			cx = pos.x;
 		}
-		else if (cx + simon->GetWidth() + 5 + SCREEN_WIDTH / 2 > mapWidth - 1) {
+		else if (cx + simon->GetWidth() + 5 + SCREEN_WIDTH / 2 > mapWidth - 1)
+		{
 			cx = mapWidth - SCREEN_WIDTH - 1;
 		}
-		else {
+		else
+		{
 			cx = cx + simon->GetWidth() + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
 		}
 	}
-	else {
+	else
+	{
 		cx = 0;
 	}
 
 	if (mapHeight > SCREEN_HEIGHT)
 	{
-		if (cy + simon->GetHeight() / 2 < mapHeight - SCREEN_HEIGHT / 2) {
+		if (cy + simon->GetHeight() / 2 < mapHeight - SCREEN_HEIGHT / 2)
+		{
 			cy = cy + simon->GetHeight() / 2 - SCREEN_HEIGHT / 2;
 		}
-		else {
+		else
+		{
 			cy = boundHeight - SCREEN_HEIGHT;
 		}
 	}
-	else {
+	else
+	{
 		cy = mapHeight > SCREEN_HEIGHT;
 	}
 
 	camera->SetCameraPosition((int)cx, (int)cy);
 
-	// Không cho simon lọt khỏi map 
+	// Không cho simon lọt khỏi map
 	if (simon->x < 0)
 		simon->x = 0;
 	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
 		simon->x = mapWidth - SIMON_BBOX_WIDTH;
-	
 }
 
 void CPlayScene::Render()
@@ -534,7 +662,6 @@ void CPlayScene::Render()
 	scoreBoard->Render();
 }
 
-
 /*
 	Handle Keyboard
 */
@@ -542,8 +669,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	Simon* simon = ((CPlayScene*)scence)->GetSimon();
-	if (simon->isFreeze) return;
+	Simon *simon = ((CPlayScene *)scence)->GetSimon();
+	if (simon->isFreeze)
+		return;
 	//if (simon->isWall && simon->isJumping) return;
 
 	switch (KeyCode)
@@ -571,9 +699,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
-	Simon* simon = ((CPlayScene*)scence)->GetSimon();
+	Simon *simon = ((CPlayScene *)scence)->GetSimon();
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-	if (simon->isFreeze) return;
+	if (simon->isFreeze)
+		return;
 	//if (simon->isWall && simon->isJumping) return;
 
 	switch (KeyCode)
@@ -581,7 +710,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_LEFT:
 		simon->vx = 0;
 		simon->isRunning = false;
-		if (simon->isOnStair) {
+		if (simon->isOnStair)
+		{
 			simon->vx = 0;
 			simon->vy = 0;
 		}
@@ -589,23 +719,27 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_RIGHT:
 		simon->vx = 0;
 		simon->isRunning = false;
-		if (simon->isOnStair) {
+		if (simon->isOnStair)
+		{
 			simon->vx = 0;
 			simon->vy = 0;
 		}
 		break;
 	case DIK_DOWN:
-		if (simon->isSitting) {
+		if (simon->isSitting)
+		{
 			simon->isSitting = false;
 			simon->y -= 8;
 		}
-		if (simon->isOnStair) {
+		if (simon->isOnStair)
+		{
 			simon->vx = 0;
 			simon->vy = 0;
 		}
 		break;
 	case DIK_UP:
-		if (simon->isOnStair) {
+		if (simon->isOnStair)
+		{
 			simon->vx = 0;
 			simon->vy = 0;
 		}
@@ -613,45 +747,54 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	}
 }
 
-void CPlayScenceKeyHandler::KeyState(BYTE* states)
+void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
-	CGame* game = CGame::GetInstance();
-	Simon* simon = ((CPlayScene*)scence)->GetSimon();
+	CGame *game = CGame::GetInstance();
+	Simon *simon = ((CPlayScene *)scence)->GetSimon();
 
-	// disable control key when Simon die 
-	if (simon->isFreeze) return;
+	// disable control key when Simon die
+	if (simon->isFreeze)
+		return;
 	//if (simon->isWall && simon->isJumping) return;
-	if (simon->GetState() == SIMON_STATE_DIE) return;
+	if (simon->GetState() == SIMON_STATE_DIE)
+		return;
+
 	if (game->IsKeyDown(DIK_DOWN))
 	{
 		if (simon->canClimbDownStair)
 		{
 			simon->SetState(SIMON_STATE_CLIMB_STAIR_DOWN);
 		}
-		else if (simon->isOnStair) {
+		else if (simon->isOnStair)
+		{
 			simon->SetState(SIMON_STATE_CLIMB_STAIR_DOWN);
 		}
-		else {
+		else
+		{
 			simon->SetState(SIMON_STATE_SIT_DOWN);
 		}
 	}
-	else if (game->IsKeyDown(DIK_UP)) {
+	else if (game->IsKeyDown(DIK_UP))
+	{
 		if (simon->canClimbUpStair)
 		{
 			simon->SetState(SIMON_STATE_CLIMB_STAIR_UP);
 		}
-		else if (simon->isOnStair) {
+		else if (simon->isOnStair)
+		{
 			simon->SetState(SIMON_STATE_CLIMB_STAIR_UP);
 		}
 	}
 	else if (game->IsKeyDown(DIK_RIGHT))
 	{
-		if (simon->isOnStair && !simon->canClimbDownStair && !simon->canClimbUpStair) {
+		if (simon->isOnStair && (!simon->canClimbDownStair || !simon->canClimbUpStair))
+		{
 			if (simon->directionStair == 1)
 			{
 				simon->SetState(SIMON_STATE_CLIMB_STAIR_UP);
 			}
-			else if (simon->directionStair == -1) {
+			else if (simon->directionStair == -1)
+			{
 				simon->SetState(SIMON_STATE_CLIMB_STAIR_DOWN);
 			}
 		}
@@ -662,12 +805,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
-		if (simon->isOnStair && !simon->canClimbDownStair && !simon->canClimbUpStair) {
+		if (simon->isOnStair && (!simon->canClimbDownStair || !simon->canClimbUpStair))
+		{
 			if (simon->directionStair == 1)
 			{
 				simon->SetState(SIMON_STATE_CLIMB_STAIR_DOWN);
 			}
-			else if (simon->directionStair == -1) {
+			else if (simon->directionStair == -1)
+			{
 				simon->SetState(SIMON_STATE_CLIMB_STAIR_UP);
 			}
 		}
