@@ -17,7 +17,6 @@ class Simon : public CGameObject
 	int hp;
 	int score;
 	int life;
-	int energy;
 	int heart;
 
 	float DoCaoDiDuoc = 0;
@@ -32,17 +31,15 @@ class Simon : public CGameObject
 
 	float xStair, yStair;
 
-	int typeWeaponCollect;
-	int typeShotCollect;
-
 	bool _IsFirstOnStair;
 
-	Axe* axes[3];
-	Dagger* daggers[3];
-	Boomerang* boomerangs[3];
-	FireBomb* fireBombs[3];
-	Stopwatch* stopwatchs[3];
 	MorningStar* morningStar;
+
+	vector<Weapon*> weapons;
+
+	int numberSubWeaponAble;
+	int typeShotCollect;
+	int typeWeaponCollect;
 
 	void SetTypeOfWeapon(int item);
 
@@ -55,10 +52,10 @@ class Simon : public CGameObject
 	void _ParseSection_SETTINGS(string line);
 
 public:
+	bool isKeyState_DIK_UP;
+	bool isUseSubWeapons;
 
 	static Simon* GetInstance();
-
-	Weapon* weapons[3];
 
 	bool isAttacking;
 	bool isSitting;

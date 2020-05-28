@@ -5,13 +5,14 @@
 
 void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Weapon::Update(dt, coObjects);
 	if (IsFiring == true)
 	{
 		vy = 0;
 		vx = 0;
 	}
 	if (isEnable == true)
-		vy += 0.000900 * dt;
+		vy += 0.0007 * dt;
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -54,7 +55,7 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			IsFiring = false;
 			isEnable = false;
-			vy = -0.4;
+			vy = -0.2;
 			timefiring = 0;
 		}
 	}
@@ -64,9 +65,14 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void FireBomb::Render()
 {
-	Weapon::Render();
-	if (IsFiring == true)
-		animation_set->at(2)->Render(x, y);
+
+	if (IsFiring == true) {
+		animation_set->at(2)->Render(x, y - 5);
+	}
+	else {
+		Weapon::Render();
+	}
+
 }
 
 void FireBomb::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -81,7 +87,7 @@ FireBomb::FireBomb()
 {
 	useHeart = 1;
 	damage = 2;
-	vy = -0.4;
+	vy = -0.2;
 	SetAnimationSet(6);
 }
 

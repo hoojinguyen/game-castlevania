@@ -5,8 +5,9 @@
 
 void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Weapon::Update(dt, coObjects);
 	if (isEnable)
-		vy += 0.000900 * dt;
+		vy += 0.0007 * dt;
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if ((dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i))))
@@ -56,7 +57,7 @@ Axe::Axe()
 	SetAnimationSet(5);
 	useHeart = 1;
 	damage = 2;
-	vy = -0.4;
+	vy = -0.25;
 }
 
 Axe::~Axe()

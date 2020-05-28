@@ -9,4 +9,3 @@ public:
 	Axe();
 	~Axe();
 };
-

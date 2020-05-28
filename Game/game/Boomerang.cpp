@@ -1,8 +1,32 @@
 #include "Boomerang.h"
 #include "Enemy.h"
+#include "Define.h"
+
+#define DELTA_X 10
 
 void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Weapon::Update(dt, coObjects);
+
+	if (vx > 0 && abs(x - startX) >= SCREEN_WIDTH / 2 - DELTA_X) {
+		x = startX + SCREEN_WIDTH / 2 - DELTA_X;
+		vx = -vx;
+		nx = -1;
+		countReturn++;
+	}
+
+	if (vx < 0 && x <= startX - SCREEN_WIDTH / 2 + DELTA_X) {
+		x = startX - SCREEN_WIDTH / 2 + DELTA_X;
+		vx = -vx;
+		nx = 1;
+		countReturn++;
+	}
+
+	if (countReturn > 1) {
+		isEnable = false;
+		return;
+	}
+
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
@@ -38,11 +62,14 @@ void Boomerang::GetBoundingBox(float& left, float& top, float& right, float& bot
 	bottom = y + 14;
 }
 
-Boomerang::Boomerang()
+Boomerang::Boomerang(float _startX)
 {
 	SetAnimationSet(4);
 	useHeart = 1;
 	damage = 2;
+	this->startX = _startX;
+
+	countReturn = 0;
 }
 
 Boomerang::~Boomerang()

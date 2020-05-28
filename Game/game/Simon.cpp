@@ -24,7 +24,7 @@ Simon::Simon()
 {
 	level = 0;
 	hp = SIMON_HP;
-	energy = 5;
+	heart = 5;
 	score = 0;
 	life = 3;
 
@@ -49,15 +49,10 @@ Simon::Simon()
 
 	morningStar = new MorningStar();
 
-	for (int i = 0; i < 3; i++)
-	{
-		daggers[i] = new Dagger();
-		boomerangs[i] = new Boomerang();
-		axes[i] = new Axe();
-		fireBombs[i] = new FireBomb();
-		stopwatchs[i] = new Stopwatch();
-		weapons[i] = daggers[i];
-	}
+	isUseSubWeapons = false;
+
+	numberSubWeaponAble = 1;
+
 }
 
 Simon* Simon::GetInstance()
@@ -74,23 +69,18 @@ void Simon::SetTypeOfWeapon(int item)
 		{
 
 		case ITEM_HOLY_WATER:
-			weapons[i] = fireBombs[i];
 			typeWeaponCollect = item;
 			break;
 		case ITEM_AXE:
-			weapons[i] = axes[i];
 			typeWeaponCollect = item;
 			break;
 		case ITEM_DAGGER:
-			weapons[i] = daggers[i];
 			typeWeaponCollect = item;
 			break;
 		case ITEM_BOOMERANG:
-			weapons[i] = boomerangs[i];
 			typeWeaponCollect = item;
 			break;
 		case ITEM_STOP_WATCH:
-			weapons[i] = stopwatchs[i];
 			typeWeaponCollect = item;
 			break;
 		default:
@@ -148,7 +138,14 @@ void Simon::SetState(int state)
 	case SIMON_STATE_CLIMB_STAIR_UP:
 		/*
 		if (!isOnStair && !isSitting) {
-			x = xStair - 6;
+			if (directionStair > 0) 
+			{
+				x = xStair - 6;
+			}
+			else 
+			{
+				x = xStair + 5;
+			}
 		}
 		if (canClimbDownStair) {
 			isOnStair = false;
@@ -166,14 +163,17 @@ void Simon::SetState(int state)
 			isDownStair = false;
 		}
 		break;
+
 		*/
+		
 		if (!isOnStair) {
 			if (directionStair > 0) {
 				x = xStair - 6;
 			}
 			else {
 				x = xStair + 5;
-				//y = posYStair + 7 - SIMON_BBOX_HEIGHT;
+				//y -= 15;
+				//y = yStair + 7 - SIMON_BBOX_HEIGHT;
 			}
 			isOnStair = true;
 			isUpStair = true;
@@ -215,8 +215,10 @@ void Simon::SetState(int state)
 		isUpStair = false;
 		isDownStair = true;
 		break;
+		
 		*/
 
+		
 		if (!isOnStair) {
 			if (directionStair > 0) {
 				x = xStair;
@@ -254,8 +256,56 @@ void Simon::SetState(int state)
 		vx = 0;
 		isAttacking = true;
 		timeAttackStart = currentTime;
-		morningStar->SetEnable(true);
-		morningStar->SetState(MORNINGSTAR_STATE_PREPARE);
+		if (isKeyState_DIK_UP && typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect <= ITEM_STOP_WATCH && heart > 0 && !isUseSubWeapons) {
+			for (int i = 0; i < numberSubWeaponAble; i++)
+			{
+				if (heart <= 0) {
+					break;
+				}
+
+				Weapon* weapon = nullptr;
+				switch (typeWeaponCollect)
+				{
+
+				case ITEM_HOLY_WATER:
+					weapon = new FireBomb();
+					break;
+				case ITEM_AXE:
+					weapon = new Axe();
+					break;
+				case ITEM_DAGGER:
+					weapon = new Dagger();
+					break;
+				case ITEM_BOOMERANG:
+					weapon = new Boomerang(x);
+					break;
+				case ITEM_STOP_WATCH:
+					weapon = new Stopwatch();
+					break;
+				default:
+					break;
+				}
+				if (weapon != nullptr) {
+					if (heart - weapon->GetUseHeart() >= 0)
+					{
+						isUseSubWeapons = true;
+						heart -= weapon->GetUseHeart();
+						weapon->SetEnable(true);
+						weapon->SetPosition(this->x, this->y);
+						if (this->nx == -1)
+							weapon->nx = -1;
+						else
+							weapon->nx = 1;
+						weapons.push_back(weapon);
+					}
+				}
+
+			}
+		}
+		if (!isUseSubWeapons) {
+			morningStar->SetEnable(true);
+			morningStar->SetState(MORNINGSTAR_STATE_PREPARE);
+		}
 		break;
 	case SIMON_STATE_HURT:
 		isGround = false;
@@ -326,10 +376,10 @@ void Simon::HandleCollisionSimonWithItem(Item* item, DWORD now)
 		}
 		break;
 	case ITEM_SMALL_HEART:
-		energy += 1;
+		heart += 1;
 		break;
 	case ITEM_LARGE_HEART:
-		energy += 5;
+		heart += 5;
 		break;
 	case ITEM_MONEY_BAG_RED:
 		score += 100;
@@ -436,12 +486,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Check xem simon có đang đánh hay ko ??
 	if (isAttacking)
 	{
-		morningStar->SetPosition(x, y, isSitting);
-		morningStar->Update(dt, coObjects);
-		if (now - timeAttackStart > (SIMON_ATTACK_TIME - 150))
-		{
-			morningStar->SetState(MORNINGSTAR_STATE_HIT);
+		if (!isUseSubWeapons) {
+			morningStar->SetPosition(x, y, isSitting);
+			morningStar->Update(dt, coObjects);
+
+			if (now - timeAttackStart > (SIMON_ATTACK_TIME - 150))
+			{
+				morningStar->SetState(MORNINGSTAR_STATE_HIT);
+			}
 		}
+
 		if (now - timeAttackStart > SIMON_ATTACK_TIME)
 		{
 			timeAttackStart = 0;
@@ -449,6 +503,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			morningStar->ResetAnimation();
 			morningStar->SetEnable(false);
 			ResetAnimationAttacking();
+			isUseSubWeapons = false;
+		}
+	}
+
+	if (typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect <= ITEM_STOP_WATCH) {
+		for (int i = 0; i < weapons.size(); i++)
+		{
+			if (weapons[i]->GetEnable())
+				weapons[i]->Update(dt, coObjects);
 		}
 	}
 
@@ -569,13 +632,26 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect >= ITEM_STOP_WATCH) {
-		for (int i = 0; i < typeShotCollect; i++)
-		{
-			if (!weapons[i])
-				weapons[i] = weapons[0];
-			if (weapons[i]->GetEnable())
-				weapons[i]->Update(dt, coObjects);
+	for (int i = 0; i < weapons.size(); i++) {
+		if (weapons[i]->GetEnable()) {
+			if (dynamic_cast<Boomerang*>(weapons[i])) {
+
+				Boomerang* weapon = dynamic_cast<Boomerang*>(weapons[i]);
+
+				if (weapon->countReturn == 0) {
+					continue;
+				}
+
+				float l1, t1, r1, b1, l2, t2, r2, b2;
+				GetBoundingBox(l1, t1, r1, b1);
+				weapons[i]->GetBoundingBox(l2, t2, r2, b2);
+
+				if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
+				{
+					weapons[i]->SetEnable(false);
+					heart++;
+				}
+			}
 		}
 	}
 
@@ -623,13 +699,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//x += dx;
 		//y += dy;
 
+		
 		if (!_IsFirstOnStair) {
 			x += dx;
 			y += dy;
 		}
 		else {
 			_IsFirstOnStair = false;
+		
 		}
+		
 	}
 	else
 	{
@@ -712,19 +791,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				else {
-					/*
+					
 					x += dx;
 					if (ny < 0)
 						y += dy + ny * 0.7f;
 					else if (ny > 0)
 						y += dy + ny * -0.7f;	
-					*/
+					
 
+					/*
+					
 					x += min_tx * dx + nx * 0.4f;
 					y += min_ty * dy + ny * 0.4f;
 
 					if (nx != 0) vx = 0;
 					if (ny != 0) vy = 0;
+					
+					*/
 
 				}
 
@@ -968,8 +1051,8 @@ void Simon::Render()
 		morningStar->Render(isRight);
 	}
 
-	if (typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect >= ITEM_STOP_WATCH) {
-		for (int i = 0; i < typeShotCollect; i++)
+	if (typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect <= ITEM_STOP_WATCH) {
+		for (int i = 0; i < weapons.size(); i++)
 		{
 			if (weapons[i]->GetEnable())
 				weapons[i]->Render();

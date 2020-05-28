@@ -32,6 +32,8 @@
 #include "FishMan.h"
 #include "Zombie.h"
 
+#include "PhantomBat.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
@@ -349,6 +351,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_RAVEN:
 		obj = new Raven(x, y);
 		break;
+	case OBJECT_TYPE_ZOOMBIE: 
+		obj = new Zombie(x, y); 
+		break;
+	case OBJECT_TYPE_PHANTOM_BAT: 
+		obj = new PhantomBat(x, y); 
+		break;
+
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -743,6 +752,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 			simon->vx = 0;
 			simon->vy = 0;
 		}
+		simon->isKeyState_DIK_UP = false;
 		break;
 	}
 }
@@ -784,6 +794,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			simon->SetState(SIMON_STATE_CLIMB_STAIR_UP);
 		}
+		simon->isKeyState_DIK_UP = true;
 	}
 	else if (game->IsKeyDown(DIK_RIGHT))
 	{

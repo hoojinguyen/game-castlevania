@@ -163,6 +163,12 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>Object\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="BossDeadEffect.cpp">
+      <Filter>Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="PhantomBat.cpp">
+      <Filter>Object\Enemy\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -327,6 +333,12 @@
     <ClInclude Include="Weapon.h">
       <Filter>Object\Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="BossDeadEffect.h">
+      <Filter>Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="PhantomBat.h">
+      <Filter>Object\Enemy\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">
@@ -391,6 +403,9 @@
     </Filter>
     <Filter Include="Object\Enemy\Weapon">
       <UniqueIdentifier>{45796bfe-953b-4098-b34b-19046265c48b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Enemy\Boss">
+      <UniqueIdentifier>{2c44823b-6dec-44a4-acf7-7b9a9c842935}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
