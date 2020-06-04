@@ -32,6 +32,7 @@ class Simon : public CGameObject
 	float xStair, yStair;
 
 	bool _IsFirstOnStair;
+	bool isKillAllEnemies;
 
 	MorningStar* morningStar;
 
@@ -52,9 +53,6 @@ class Simon : public CGameObject
 	void _ParseSection_SETTINGS(string line);
 
 public:
-	bool isKeyState_DIK_UP;
-	bool isUseSubWeapons;
-
 	static Simon* GetInstance();
 
 	bool isAttacking;
@@ -63,7 +61,6 @@ public:
 
 	bool isRunning;
 	bool isGround;
-	bool isWall;
 
 	bool isHurt;
 
@@ -80,6 +77,9 @@ public:
 
 	bool isFreeze; // Trạng thái đóng băng thay đổi màu liên tục
 	DWORD timeFreezeStart; // thời gian đã đóng băng
+
+	bool isKeyState_DIK_UP;
+	bool isUseSubWeapons;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
@@ -112,6 +112,9 @@ public:
 
 	int GetScore() { return score; }
 	void SetScore(int sco) { score += sco;  }
+
+	bool GetKillAllEnemies() { return isKillAllEnemies; }
+	void SetKillAllEnemies(bool isKill) { this->isKillAllEnemies = isKill; }
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartHurting() { isHurt = true; hurtable = 1; hurtable_start = GetTickCount(); }

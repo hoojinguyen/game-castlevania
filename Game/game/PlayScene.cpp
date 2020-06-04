@@ -13,7 +13,7 @@
 #include "Ground.h"
 
 #include "Brick.h"
-#include "BrickAni.h"
+#include "BrickMoving.h"
 #include "Torch.h"
 #include "Candle.h"
 #include "Gate.h"
@@ -163,7 +163,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	LPANIMATION_SET s = new CAnimationSet();
 
-	CAnimations *animations = CAnimations::GetInstance();
+	CAnimations* animations = CAnimations::GetInstance();
 
 	for (int i = 1; i < tokens.size(); i++)
 	{
@@ -234,13 +234,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[7].c_str());
 	int itemType = atoi(tokens[8].c_str());
 
-	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
-	CGameObject *obj = NULL;
+	CGameObject* obj = NULL;
 
 	switch (object_type)
 	{
-	//Player
+		//Player
 	case OBJECT_TYPE_SIMON:
 	{
 		if (simon != NULL)
@@ -265,8 +265,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GATE:
 		obj = new Gate();
 		break;
-	case OBJECT_TYPE_BRICKANI:
-		obj = new BrickAni();
+	case OBJECT_TYPE_BRICK_MOVING:
+		obj = new BrickMoving();
 		break;
 	case OBJECT_TYPE_BOUNGDING_MAP:
 		obj = new BoundingMap();
@@ -332,7 +332,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Item(ITEM_BOOMERANG);
 		break;
 
-	// Object Enemy
+		// Object Enemy
 	case OBJECT_TYPE_VAMPIRE_BAT:
 		obj = new VampireBat(x, y);
 		break;
@@ -351,11 +351,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_RAVEN:
 		obj = new Raven(x, y);
 		break;
-	case OBJECT_TYPE_ZOOMBIE: 
-		obj = new Zombie(x, y); 
+	case OBJECT_TYPE_ZOOMBIE:
+		obj = new Zombie(x, y);
 		break;
-	case OBJECT_TYPE_PHANTOM_BAT: 
-		obj = new PhantomBat(x, y); 
+	case OBJECT_TYPE_PHANTOM_BAT:
+		obj = new PhantomBat(x, y);
 		break;
 
 
@@ -561,35 +561,61 @@ void CPlayScene::Update(DWORD dt)
 
 	simon->Update(dt, &coObjects);
 
+	if (simon == NULL) return;
+
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
 		coObjects[i]->Update(dt, &coObjects);
 
-		if (coObjects[i]->GetDeadth() && !dynamic_cast<Item *>(coObjects[i]))
+		if (coObjects[i]->GetDeadth() && !dynamic_cast<Item*>(coObjects[i]))
 		{
 			coObjects[i]->SetDeadth(false);
 			int typeItem = coObjects[i]->GetTypeItem();
 			if (typeItem == -1)
 			{
-				Item *item = new Item();
+				Item* item = new Item();
 				item->SetEnable(true);
-				item->SetPosition(coObjects[i]->x, coObjects[i]->y);
+				item->SetPosition(coObjects[i]->x, coObjects[i]->y - 3); // Why -3
 				listItems.push_back(item);
 			}
 			else if (typeItem > -1)
 			{
-				Item *item = new Item(typeItem);
+				Item* item = new Item(typeItem);
 				item->SetEnable(true);
-				item->SetPosition(coObjects[i]->x, coObjects[i]->y);
+				item->SetPosition(coObjects[i]->x, coObjects[i]->y - 3); // Why -3
 				listItems.push_back(item);
 			}
 			coObjects[i]->SetEnable(false);
 		}
 	}
 
-	// skip the rest if scene was already unloaded (Simon::Update might trigger PlayScene::Unload)
-	if (simon == NULL)
-		return;
+
+	if (simon->GetKillAllEnemies())
+	{
+		for (int i = 0; i < coObjects.size(); i++)
+		{
+			if (dynamic_cast<Enemy*>(coObjects[i])) {
+				Enemy* enemy = dynamic_cast<Enemy*>(coObjects[i]);
+				enemy->SetHP(0);
+				enemy->SetTypeItem(-2);
+			}
+		}
+		timeKillAll += dt;
+		if (timeKillAll < 400)
+		{
+			if ((int)(timeKillAll) % 2 == 0)
+				CGame::GetInstance()->SetBackgroundColor(CROSS_COLOR_BACKGROUND);
+			else
+				CGame::GetInstance()->SetBackgroundColor(BACKGROUND_COLOR);
+		}
+		else
+		{
+			CGame::GetInstance()->SetBackgroundColor(BACKGROUND_COLOR);
+			simon->SetKillAllEnemies(false);
+			timeKillAll = 0;
+		}
+	}
+
 
 	//update scoreBoard
 	time += dt;
@@ -605,39 +631,32 @@ void CPlayScene::Update(DWORD dt)
 
 	boundHeight = mapHeight;
 
-	if (mapWidth > SCREEN_WIDTH)
-	{
-		if (cx + simon->GetWidth() + 5 < SCREEN_WIDTH / 2)
-		{
-			cx = pos.x;
+
+	if (mapWidth > SCREEN_WIDTH - 15) {
+		if (cx < (SCREEN_WIDTH - 15) / 2) {
+			cx = 0;
 		}
-		else if (cx + simon->GetWidth() + 5 + SCREEN_WIDTH / 2 > mapWidth - 1)
-		{
-			cx = mapWidth - SCREEN_WIDTH - 1;
+		else if (cx + (SCREEN_WIDTH - 15) / 2 > mapWidth) {
+			cx = mapWidth - (SCREEN_WIDTH - 15);
 		}
-		else
-		{
-			cx = cx + simon->GetWidth() + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
+		else {
+			cx = cx + (SCREEN_WIDTH - 15) / 2 - (SCREEN_WIDTH - 15);
 		}
 	}
-	else
-	{
+	else {
 		cx = 0;
 	}
 
 	if (mapHeight > SCREEN_HEIGHT)
 	{
-		if (cy + simon->GetHeight() / 2 < mapHeight - SCREEN_HEIGHT / 2)
-		{
+		if (cy + simon->GetHeight() / 2 < mapHeight - SCREEN_HEIGHT / 2) {
 			cy = cy + simon->GetHeight() / 2 - SCREEN_HEIGHT / 2;
 		}
-		else
-		{
-			cy = boundHeight - SCREEN_HEIGHT;
+		else {
+			cy = mapHeight - SCREEN_HEIGHT;
 		}
 	}
-	else
-	{
+	else {
 		cy = mapHeight > SCREEN_HEIGHT;
 	}
 
@@ -678,13 +697,39 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	Simon *simon = ((CPlayScene *)scence)->GetSimon();
+	Simon* simon = ((CPlayScene*)scence)->GetSimon();
 	if (simon->isFreeze)
 		return;
-	//if (simon->isWall && simon->isJumping) return;
+
+	if (KeyCode == DIK_1 || KeyCode == DIK_2 || KeyCode == DIK_3 || KeyCode == DIK_4)
+	{
+		simon->isOnStair = false;
+		simon->isUpStair = false;
+		simon->isDownStair = false;
+	}
 
 	switch (KeyCode)
 	{
+	case DIK_1:
+	{
+		CGame::GetInstance()->SwitchScene(1);
+		break;
+	}
+	case DIK_2:
+	{
+		CGame::GetInstance()->SwitchScene(2);
+		break;
+	}
+	case DIK_3:
+	{
+		CGame::GetInstance()->SwitchScene(5);
+		break;
+	}
+	case DIK_4:
+	{
+		CGame::GetInstance()->SwitchScene(8);
+		break;
+	}
 	case DIK_Z:
 		if (!simon->isAttacking)
 		{
@@ -692,7 +737,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		break;
 	case DIK_X:
-		if (!simon->isJumping && !simon->isAttacking && !simon->isSitting)
+		if (!simon->isJumping && !simon->isAttacking && !simon->isSitting && !simon->isOnStair)
 		{
 			simon->SetState(SIMON_STATE_JUMP);
 		}
@@ -708,7 +753,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
-	Simon *simon = ((CPlayScene *)scence)->GetSimon();
+	Simon* simon = ((CPlayScene*)scence)->GetSimon();
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	if (simon->isFreeze)
 		return;
@@ -757,10 +802,10 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	}
 }
 
-void CPlayScenceKeyHandler::KeyState(BYTE *states)
+void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
-	CGame *game = CGame::GetInstance();
-	Simon *simon = ((CPlayScene *)scence)->GetSimon();
+	CGame* game = CGame::GetInstance();
+	Simon* simon = ((CPlayScene*)scence)->GetSimon();
 
 	// disable control key when Simon die
 	if (simon->isFreeze)

@@ -124,9 +124,6 @@
     <ClCompile Include="Wall.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
-    <ClCompile Include="BrickAni.cpp">
-      <Filter>Object\Ground</Filter>
-    </ClCompile>
     <ClCompile Include="Ghost.cpp">
       <Filter>Object\Enemy</Filter>
     </ClCompile>
@@ -168,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="PhantomBat.cpp">
       <Filter>Object\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickMoving.cpp">
+      <Filter>Object\Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,9 +294,6 @@
     <ClInclude Include="Wall.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
-    <ClInclude Include="BrickAni.h">
-      <Filter>Object\Ground</Filter>
-    </ClInclude>
     <ClInclude Include="Ghost.h">
       <Filter>Object\Enemy</Filter>
     </ClInclude>
@@ -338,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="PhantomBat.h">
       <Filter>Object\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickMoving.h">
+      <Filter>Object\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

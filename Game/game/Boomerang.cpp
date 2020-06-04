@@ -3,6 +3,32 @@
 #include "Define.h"
 
 #define DELTA_X 10
+#define BOOMERANG_DAMAGE 2
+#define BOOMERANG_USE_HEART 1
+
+Boomerang::Boomerang(float _startX)
+{
+	useHeart = BOOMERANG_USE_HEART;
+	damage = BOOMERANG_DAMAGE;
+
+	countReturn = 0;
+	startX = _startX;
+
+	SetAnimationSet(4);
+}
+
+Boomerang::~Boomerang()
+{
+}
+
+void Boomerang::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x;
+	top = y;
+	right = x + 15;
+	bottom = y + 14;
+}
+
 
 void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -52,26 +78,4 @@ void Boomerang::Render()
 	Weapon::Render();
 	if (this->isEnable == false)
 		count = 0;
-}
-
-void Boomerang::GetBoundingBox(float& left, float& top, float& right, float& bottom)
-{
-	left = x;
-	top = y;
-	right = x + 15;
-	bottom = y + 14;
-}
-
-Boomerang::Boomerang(float _startX)
-{
-	SetAnimationSet(4);
-	useHeart = 1;
-	damage = 2;
-	this->startX = _startX;
-
-	countReturn = 0;
-}
-
-Boomerang::~Boomerang()
-{
 }

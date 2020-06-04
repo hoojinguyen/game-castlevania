@@ -3,10 +3,11 @@
 class Dagger : public Weapon
 {
 public:
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void Render();
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	Dagger();
 	~Dagger();
+
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
 };
 

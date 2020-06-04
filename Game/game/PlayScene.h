@@ -21,10 +21,12 @@ protected:
 
 	TileMap *tileMap = NULL;
 	Grid *grid = NULL;
-	ScoreBoard *scoreBoard;
 	CCamera *camera;
 
+	ScoreBoard *scoreBoard;
+
 	DWORD time;
+	DWORD timeKillAll;
 
 	int stage;
 	int defaultTimeGame;
@@ -53,10 +55,13 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 
-	friend class CPlayScenceKeyHandler;
+	int GetRemainTime() { return remainTime; }
+	void SetDefaultTime(int time) { this->defaultTimeGame = time; }
 
 	float GetMapWidth() { return mapWidth; }
 	float GetMapHeight() { return mapHeight; }
+
+	friend class CPlayScenceKeyHandler;
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

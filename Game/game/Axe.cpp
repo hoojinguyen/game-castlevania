@@ -3,11 +3,39 @@
 #include "BoundingMap.h"
 #include "Enemy.h"
 
+#define AXE_SPEED_Y_DEFAULT 0.25
+#define AXE_SPEED_Y 0.0007
+#define AXE_DAMAGE 2
+#define AXE_USE_HEART 1
+
+Axe::Axe()
+{
+	useHeart = AXE_USE_HEART;
+	damage = AXE_DAMAGE;
+	vy = -AXE_SPEED_Y_DEFAULT;
+
+	SetAnimationSet(5);
+}
+
+Axe::~Axe()
+{
+}
+
+void Axe::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x;
+	top = y;
+	right = x + 15;
+	bottom = y + 14;
+}
+
 void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
+
 	if (isEnable)
-		vy += 0.0007 * dt;
+		vy += AXE_SPEED_Y * dt;
+
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if ((dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i))))
@@ -16,8 +44,8 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			GetBoundingBox(l1, t1, r1, b1);
 			coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
-				vy = -0.4;
-				isEnable = false;
+				//vy = -0.4;
+				//isEnable = false;
 			}
 		}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
@@ -44,22 +72,5 @@ void Axe::Render()
 	Weapon::Render();
 }
 
-void Axe::GetBoundingBox(float& left, float& top, float& right, float& bottom)
-{
-	left = x;
-	top = y;
-	right = x + 15;
-	bottom = y + 14;
-}
 
-Axe::Axe()
-{
-	SetAnimationSet(5);
-	useHeart = 1;
-	damage = 2;
-	vy = -0.25;
-}
 
-Axe::~Axe()
-{
-}

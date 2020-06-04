@@ -180,13 +180,13 @@
 116 1 10021 100 10022 100 10023 150
 // fighting sitting right
 117 1 11021 100 11022 100 11023 150
-// fighting ascending stair left
+// fighting up stair left
 118 1 10024 100 10025 100 10026 150
-// fighting ascending stair right
+// fighting up stair right
 119 1 11024 100 11025 100 11026 150
-// fighting descending stair left
+// fighting downstair left
 120 1 10027 100 10028 100 10029 150
-// fighting descending stair right
+// fighting down stair right
 121 1 11027 100 11028 100 11029 150
 // intro
 122 1 10012 100
@@ -240,6 +240,7 @@
 # --- Fireboom ---
 260 1 20060 100
 261 1 21060 100
+262 1 50000 100 50001 100 50002 100 50003 100 50004 100 50000 100 50001 100 50002 100 50003 100 50004 100
 
 //dead effect
 500 1 50000 100 50001 100 50002 100 50003 100 50004 100
@@ -267,7 +268,7 @@
 # Axe
 5 250 251
 # Fireboom
-6 260 261
+6 260 261 262
 
 [SETTINGS]
 1 SIMON

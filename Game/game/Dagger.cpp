@@ -3,9 +3,43 @@
 #include "BoundingMap.h"
 #include "Enemy.h"
 
+#define DAGGER_DAMAGE 1
+#define DAGGER_USE_HEART 1
+
+Dagger::Dagger()
+{
+	damage = DAGGER_DAMAGE;
+	useHeart = DAGGER_USE_HEART;
+	SetAnimationSet(3);
+}
+
+Dagger::~Dagger()
+{
+}
+
+void Dagger::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	if (nx > 0)
+	{
+		left = x;
+		top = y;
+		right = x + 16;
+		bottom = y + 9;
+	}
+	else
+	{
+		left = x - 16;
+		top = y;
+		right = left + 16;
+		bottom = y + 9;
+	}
+}
+
+
 void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
+
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i)))
@@ -18,9 +52,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
-
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
-
 			float l1, t1, r1, b1, l2, t2, r2, b2;
 			GetBoundingBox(l1, t1, r1, b1);
 			enemy->GetBoundingBox(l2, t2, r2, b2);
@@ -43,33 +75,4 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Dagger::Render()
 {
 	Weapon::Render();
-}
-
-void Dagger::GetBoundingBox(float& left, float& top, float& right, float& bottom)
-{
-	if (nx > 0)
-	{
-		left = x;
-		top = y;
-		right = x + 16;
-		bottom = y + 9;
-	}
-	else
-	{
-		left = x - 16;
-		top = y;
-		right = left + 16;
-		bottom = y + 9;
-	}
-}
-
-Dagger::Dagger()
-{
-	SetAnimationSet(3);
-	useHeart = 1;
-	damage = 1;
-}
-
-Dagger::~Dagger()
-{
 }

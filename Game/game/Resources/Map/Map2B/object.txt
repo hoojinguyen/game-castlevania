@@ -1,7 +1,7 @@
 #id	type	name	x	y	width	height	ani_set_id item_id
 0 14 Portal 370 187 24 8 3 -2
 1 1 Simon 379 155 16 32 1 -2
-2 16 TopStair 448 88 8 8 1 -2
+2 16 TopStair 448 76 32 8 1 -2
 3 17 Ground 448 112 32 16 -1 -2
 4 17 Ground 353 79 96 16 -1 -2
 5 17 Ground 318 143 40 16 -1 -2

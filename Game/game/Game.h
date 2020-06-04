@@ -36,6 +36,8 @@ class CGame
 
 	LPKEYEVENTHANDLER keyHandler;
 
+	D3DCOLOR backgroundColor;
+
 	int screen_width;
 	int screen_height;
 
@@ -77,6 +79,9 @@ public:
 
 	void SetDeviationY(int _deviation_y) { deviation_y = _deviation_y; }
 
+	void SetBackgroundColor(D3DCOLOR color) { backgroundColor = color; }
+	D3DCOLOR GetBackgroundColor() { return backgroundColor; }
+
 	static void SweptAABB(
 		float ml,			// move left 
 		float mt,			// move top
@@ -93,8 +98,6 @@ public:
 		float& ny);
 
 	static bool AABBCheck(float ml, float mt, float mr, float mb, float sl, float st, float sr, float sb);
-
-
 
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene();

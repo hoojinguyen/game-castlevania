@@ -2,6 +2,7 @@
 #include "FireBomb.h"
 
 #define SUBWEAPON_SPEED_X 0.1f
+
 Weapon::Weapon()
 {
 	isEnable = false;
@@ -21,7 +22,7 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (dynamic_cast<FireBomb*>(this))
 	{
 		FireBomb* fireBomb = dynamic_cast<FireBomb*>(this);
-		if (fireBomb->IsFire())
+		if (fireBomb->GetFiring() == true)
 		{
 			vx = 0;
 			vy = 0;

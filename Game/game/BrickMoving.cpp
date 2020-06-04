@@ -1,15 +1,15 @@
 #include "Define.h"
-#include "BrickAni.h"
+#include "BrickMoving.h"
 
 #include "Ground.h"
 
-BrickAni::BrickAni()
+BrickMoving::BrickMoving()
 {
-	vx = -BRICKANI_SPEED;
+	vx = -BRICK_MOVING_SPEED;
 	nx = -1;
 }
 
-void BrickAni::GetBoundingBox(float& l, float& t, float& r, float& b)
+void BrickMoving::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
@@ -17,7 +17,7 @@ void BrickAni::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = y + 8;
 }
 
-void BrickAni::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void BrickMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	x += dx;
@@ -41,7 +41,7 @@ void BrickAni::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 }
 
-void BrickAni::Render()
+void BrickMoving::Render()
 {
 	animation_set->at(0)->Render(x, y);
 	RenderBoundingBox();

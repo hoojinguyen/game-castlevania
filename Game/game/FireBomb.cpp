@@ -3,16 +3,44 @@
 #include "BoundingMap.h"
 #include "Enemy.h"
 
+#define FIRE_BOMB_DAMAGE 2
+#define FIRE_BOMB_USE_HEART 1
+#define FIRE_BOMB_SPEED_Y_DEFAULT 0.2
+#define FIRE_BOMB_SPEED_Y 0.0007
+
+FireBomb::FireBomb()
+{
+	useHeart = FIRE_BOMB_USE_HEART;
+	damage = FIRE_BOMB_DAMAGE;
+	vy = -FIRE_BOMB_SPEED_Y_DEFAULT;
+
+	SetAnimationSet(6);
+}
+
+FireBomb::~FireBomb()
+{
+}
+
+
+void FireBomb::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x;
+	top = y;
+	right = x + 8;
+	bottom = y + 8;
+}
+
+
 void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
-	if (IsFiring == true)
+	if (isFiring == true)
 	{
 		vy = 0;
 		vx = 0;
 	}
 	if (isEnable == true)
-		vy += 0.0007 * dt;
+		vy += FIRE_BOMB_SPEED_Y * dt;
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -23,17 +51,14 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
 
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
-				IsFiring = true;
+				isFiring = true;
 			}
 		}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
-
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
-
 			float l1, t1, r1, b1, l2, t2, r2, b2;
 			GetBoundingBox(l1, t1, r1, b1);
 			enemy->GetBoundingBox(l2, t2, r2, b2);
-
 			if (t1 <= b2 && b1 >= t2 && l1 <= r2 && r1 >= l2) {
 				if ((coObjects->at(i))->nx != 0)
 				{
@@ -48,25 +73,24 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (IsFiring == true)
+	if (isFiring == true)
 	{
 		timefiring += dt;
 		if (timefiring > 1000)
 		{
-			IsFiring = false;
+			isFiring = false;
 			isEnable = false;
-			vy = -0.2;
+			vy = -FIRE_BOMB_SPEED_Y_DEFAULT;
 			timefiring = 0;
 		}
 	}
 	if (isEnable == false)
-		IsFiring = false;
+		isFiring = false;
 }
 
 void FireBomb::Render()
 {
-
-	if (IsFiring == true) {
+	if (isFiring == true) {
 		animation_set->at(2)->Render(x, y - 5);
 	}
 	else {
@@ -75,22 +99,3 @@ void FireBomb::Render()
 
 }
 
-void FireBomb::GetBoundingBox(float& left, float& top, float& right, float& bottom)
-{
-	left = x;
-	top = y;
-	right = x + 8;
-	bottom = y + 8;
-}
-
-FireBomb::FireBomb()
-{
-	useHeart = 1;
-	damage = 2;
-	vy = -0.2;
-	SetAnimationSet(6);
-}
-
-FireBomb::~FireBomb()
-{
-}
