@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Item.h"
+#include "Enemy.h"
 
 #include "Weapon.h"
 #include "MorningStar.h"
@@ -19,11 +20,9 @@ class Simon : public CGameObject
 	int life;
 	int heart;
 
-	float DoCaoDiDuoc = 0;
-
-	DWORD untouchable_start;
+	DWORD untouchableStart;
 	DWORD timeAttackStart;
-	DWORD hurtable_start;
+	DWORD hurtableStart;
 
 	float oldVy;
 
@@ -31,8 +30,8 @@ class Simon : public CGameObject
 
 	float xStair, yStair;
 
-	bool _IsFirstOnStair;
-	bool isKillAllEnemies;
+	float DoCaoDiDuoc = 0;
+	bool isFirstOnStair;
 
 	MorningStar* morningStar;
 
@@ -43,6 +42,8 @@ class Simon : public CGameObject
 	int typeWeaponCollect;
 
 	void SetTypeOfWeapon(int item);
+
+	bool isKillAllEnemies;
 
 	Simon();
 
@@ -116,15 +117,21 @@ public:
 	bool GetKillAllEnemies() { return isKillAllEnemies; }
 	void SetKillAllEnemies(bool isKill) { this->isKillAllEnemies = isKill; }
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
-	void StartHurting() { isHurt = true; hurtable = 1; hurtable_start = GetTickCount(); }
+	void StartUntouchable() { untouchable = 1; untouchableStart = GetTickCount(); }
+	void StartHurting() { isHurt = true; hurtable = 1; hurtableStart = GetTickCount(); }
 
 	void ResetBackupSimon();
 	void ResetAnimationAttacking();
 	void ResetAnimationHurt();
 	void Reset();
 
-	void HandleCollisionSimonWithItem(Item* item, DWORD dt);
+	void CheckAABB(vector<LPGAMEOBJECT>* coObjects);
+	void CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects);
+
+	void HandleCollisionSimonWithItem(Item* item);
+	void HandleCollisionSimonWithEnemy(Enemy* enemy);
+
+	void UpdateSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 
 };
 

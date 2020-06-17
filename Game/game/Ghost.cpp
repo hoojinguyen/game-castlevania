@@ -89,7 +89,10 @@ void Ghost::Render()
 		}
 
 		animation_set->at(ani)->Render(x, y);
-		RenderBoundingBox();
+		if (this->enableBoundingBox)
+		{
+			RenderBoundingBox();
+		}
 	}
 
 	Enemy::Render();

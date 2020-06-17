@@ -148,7 +148,10 @@ void Hunchback::Render()
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
-		RenderBoundingBox();
+		if (this->enableBoundingBox)
+		{
+			RenderBoundingBox();
+		}
 	}
 
 	Enemy::Render();

@@ -30,12 +30,12 @@ void BrickMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
 		{
-			 if (dynamic_cast<Ground*>(coObjects->at(i))) {
-				 x -= dx;
-				 vx = -vx;
-				 nx = -nx;
+			if (dynamic_cast<Ground*>(coObjects->at(i))) {
+				x -= dx;
+				vx = -vx;
+				nx = -nx;
 			}
-			
+
 		}
 	}
 
@@ -44,5 +44,8 @@ void BrickMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void BrickMoving::Render()
 {
 	animation_set->at(0)->Render(x, y);
-	RenderBoundingBox();
+	if (this->enableBoundingBox)
+	{
+		RenderBoundingBox();
+	}
 }

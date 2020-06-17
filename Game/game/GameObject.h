@@ -71,6 +71,11 @@ public:
 	int type;
 	int typeItem;
 
+	bool enableBoundingBox = true;
+
+	void SetEnableBoundingBox(bool e) { enableBoundingBox = e; }
+	bool GetEnableBoundingBox() { return enableBoundingBox; }
+
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -114,6 +119,8 @@ public:
 
 	void SetEnable(bool e) { if (e) { isDeadth = false; } isEnable = e; }
 	bool GetEnable() { return isEnable; }
+
+	
 
 	void SetDeadth(bool dead) { isDeadth = dead; }
 	bool GetDeadth() { return isDeadth; }

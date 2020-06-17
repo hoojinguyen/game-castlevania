@@ -28,8 +28,6 @@
 #include "Raven.h"
 #include "Skeleton.h"
 #include "Ghost.h"
-#include "BlackLeopard.h"
-#include "FishMan.h"
 #include "Zombie.h"
 
 #include "PhantomBat.h"
@@ -410,6 +408,10 @@ void CPlayScene::_Load_OBJECTS(string line)
 
 void CPlayScene::Load()
 {
+	/* Set Chờ hiển thị màn đen */
+	isWaitResetGame = true;
+	TimeWaitedResetGame = 0;
+
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
 	ifstream f;
@@ -548,10 +550,22 @@ void CPlayScene::Unload()
 	arrSpritesID.clear();
 	arrAnimationsID.clear();
 	arrAnimationSetsID.clear();
+
 }
 
 void CPlayScene::Update(DWORD dt)
 {
+	if (isWaitResetGame)
+	{
+		TimeWaitedResetGame += dt;
+		if (TimeWaitedResetGame >= TIME_LIMIT_WAIT_RESET_GAME)
+		{
+			isWaitResetGame = false;
+		}
+		else
+			return;
+	}
+
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	for (size_t i = 0; i < listItems.size(); i++)
@@ -671,6 +685,9 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	if (isWaitResetGame) // màn đen trước khi bắt đầu game
+		return; // thoát và ko vẽ gì
+
 	tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -698,8 +715,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	Simon* simon = ((CPlayScene*)scence)->GetSimon();
+	//CGameObject* gameObject = ((CPlayScene*)scence)->GetGameObject();
+
 	if (simon->isFreeze)
 		return;
+
 
 	if (KeyCode == DIK_1 || KeyCode == DIK_2 || KeyCode == DIK_3 || KeyCode == DIK_4)
 	{
@@ -710,6 +730,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_B:
+	{
+		//bool isBoundingBox = gameObject->GetEnableBoundingBox();
+		//gameObject->SetEnableBoundingBox(!gameObject->enableBoundingBox);
+		break;
+	}
+	case DIK_0:
+	{
+		simon->SetPosition(600.0f, 20.0f);
+		break;
+	}
 	case DIK_1:
 	{
 		CGame::GetInstance()->SwitchScene(1);
@@ -757,7 +788,6 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	if (simon->isFreeze)
 		return;
-	//if (simon->isWall && simon->isJumping) return;
 
 	switch (KeyCode)
 	{
@@ -810,7 +840,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	// disable control key when Simon die
 	if (simon->isFreeze)
 		return;
-	//if (simon->isWall && simon->isJumping) return;
 	if (simon->GetState() == SIMON_STATE_DIE)
 		return;
 

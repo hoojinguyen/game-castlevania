@@ -34,7 +34,9 @@ void Torch::Render()
 	if (isEnable)
 	{
 		animation_set->at(0)->Render(x, y);
-		RenderBoundingBox();
+		if (this->enableBoundingBox) {
+			RenderBoundingBox();
+		}
 	} 
 	collisionEffect->Render();
 	deadEffect->Render();

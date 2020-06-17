@@ -7,6 +7,8 @@
 #define SCREEN_WIDTH 272
 #define SCREEN_HEIGHT 240
 
+#define TIME_LIMIT_WAIT_RESET_GAME 300 // Thời gian chờ vẽ màn màu đen khi reset game
+
 #define MAX_FRAME_RATE 120
 
 // SCENE
@@ -229,7 +231,7 @@
 
 // Time Display Item
 
-#define ITEM_TIMEDISPLAYMAX 100000
+#define ITEM_TIMEDISPLAYMAX 3000
 
 //item board
 #define ITEM_BOARD_HEART 40001
@@ -328,7 +330,7 @@
 #define BONE_STATE_FLY 1
 
 //Ghost
-#define GHOST_HP 6
+#define GHOST_HP 2
 #define GHOST_DAMAGE 1
 #define GHOST_DISTANCE_ATTACK_X 100
 #define GHOST_DISTANCE_WAITING_X 30

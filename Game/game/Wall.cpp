@@ -13,7 +13,10 @@ Wall::Wall(int width, int height)
 
 void Wall::Render()
 {
-	RenderBoundingBox();
+	if (this->enableBoundingBox)
+	{
+		RenderBoundingBox();
+	}
 }
 
 

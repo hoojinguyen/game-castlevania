@@ -13,7 +13,10 @@ BoundingMap::BoundingMap(int width, int height)
 
 void BoundingMap::Render()
 {
-	RenderBoundingBox();
+	if (this->enableBoundingBox)
+	{
+		RenderBoundingBox();
+	}
 }
 
 

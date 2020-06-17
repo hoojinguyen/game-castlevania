@@ -392,7 +392,10 @@ void Item::Render()
 {
 	if (isEnable) {
 		animation_set->at(typeItem)->Render(x, y);
-		//RenderBoundingBox();
+		if (this->enableBoundingBox)
+		{
+			RenderBoundingBox();
+		}
 	}
 
 	if (moneyEffect != nullptr) {

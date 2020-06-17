@@ -4,11 +4,13 @@
 #include "TileMap.h"
 #include "ScoreBoard.h"
 
+#include "GameObject.h"
 #include "Simon.h"
 class CPlayScene : public CScene
 {
 protected:
 	Simon *simon; // A play scene has to have player, right?
+	CGameObject *gameObject;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> coObjects;
@@ -27,6 +29,10 @@ protected:
 
 	DWORD time;
 	DWORD timeKillAll;
+
+	/* xử lí chờ vẽ màn đen khi bắt đầu lại game*/
+	bool isWaitResetGame;
+	DWORD TimeWaitedResetGame;
 
 	int stage;
 	int defaultTimeGame;
@@ -47,6 +53,8 @@ protected:
 
 public:
 	Simon *GetSimon() { return simon; }
+	CGameObject *GetGameObject() { return gameObject; }
+
 
 	CPlayScene(int id, LPCWSTR filePath);
 

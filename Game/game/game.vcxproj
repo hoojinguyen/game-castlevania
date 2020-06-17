@@ -125,7 +125,6 @@
   <ItemGroup>
     <ClInclude Include="Axe.h" />
     <ClInclude Include="BlackKnight.h" />
-    <ClInclude Include="BlackLeopard.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="BossDeadEffect.h" />
@@ -143,7 +142,6 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FireBomb.h" />
-    <ClInclude Include="FishMan.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gate.h" />
@@ -183,7 +181,6 @@
   <ItemGroup>
     <ClCompile Include="Axe.cpp" />
     <ClCompile Include="BlackKnight.cpp" />
-    <ClCompile Include="BlackLeopard.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="BossDeadEffect.cpp" />
@@ -201,7 +198,6 @@
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FireBomb.cpp" />
-    <ClCompile Include="FishMan.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gate.cpp" />

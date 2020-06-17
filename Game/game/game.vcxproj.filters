@@ -112,12 +112,6 @@
     <ClCompile Include="MoneyEffect.cpp">
       <Filter>Object\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="BlackLeopard.cpp">
-      <Filter>Object\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="FishMan.cpp">
-      <Filter>Object\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Zombie.cpp">
       <Filter>Object\Enemy</Filter>
     </ClCompile>
@@ -281,12 +275,6 @@
     </ClInclude>
     <ClInclude Include="MoneyEffect.h">
       <Filter>Object\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="BlackLeopard.h">
-      <Filter>Object\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="FishMan.h">
-      <Filter>Object\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
       <Filter>Object\Enemy</Filter>

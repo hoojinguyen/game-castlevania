@@ -7,7 +7,10 @@ StairBottom::StairBottom(int _nx)
 
 void StairBottom::Render()
 {
-	RenderBoundingBox();
+	if (this->enableBoundingBox)
+	{
+		RenderBoundingBox();
+	}
 }
 
 void StairBottom::GetBoundingBox(float& l, float& t, float& r, float& b)
