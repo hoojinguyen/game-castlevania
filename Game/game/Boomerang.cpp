@@ -1,6 +1,9 @@
+#include "Define.h"
+
 #include "Boomerang.h"
 #include "Enemy.h"
-#include "Define.h"
+#include "Torch.h"
+#include "Candle.h"
 
 #define DELTA_X 10
 #define BOOMERANG_DAMAGE 2

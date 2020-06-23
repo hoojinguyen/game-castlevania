@@ -71,7 +71,7 @@ public:
 	int type;
 	int typeItem;
 
-	bool enableBoundingBox = true;
+	bool enableBoundingBox = false;
 
 	void SetEnableBoundingBox(bool e) { enableBoundingBox = e; }
 	bool GetEnableBoundingBox() { return enableBoundingBox; }
