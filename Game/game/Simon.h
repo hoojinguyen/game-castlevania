@@ -45,6 +45,8 @@ class Simon : public CGameObject
 
 	bool isKillAllEnemies;
 
+	bool isWaitingTimeToRevive; // Thời gian chờ hồi sinh
+
 	Simon();
 
 	void _ParseSection_TEXTURES(string line);
@@ -95,6 +97,9 @@ public:
 
 	void SetPosition(float x, float y);
 	void SetPositionBackup(float xBackup, float yBackup);
+	
+	float GetPositionXBackup() { return xBackup; }
+	float GetPositionYBackup() { return yBackup; }
 
 	int GetHP() { return this->hp; }
 	void SetHP(int hp) { this->hp = hp; }
@@ -109,13 +114,16 @@ public:
 	void SetAnimationSetMorningStar(LPANIMATION_SET ani_set);
 
 	int GetLife() { return life; }
-	void SetLife(int l) { life = l;  }
+	void SetLife(int l) { life = life + l;  }
 
 	int GetScore() { return score; }
 	void SetScore(int sco) { score += sco;  }
 
 	bool GetKillAllEnemies() { return isKillAllEnemies; }
 	void SetKillAllEnemies(bool isKill) { this->isKillAllEnemies = isKill; }
+
+	bool GetWaitingTimeToRevive() { return isWaitingTimeToRevive; }
+	void SetWaitingTimeToRevive(bool isWaiting) { this->isWaitingTimeToRevive = isWaiting; }
 
 	void StartUntouchable() { untouchable = 1; untouchableStart = GetTickCount(); }
 	void StartHurting() { isHurt = true; hurtable = 1; hurtableStart = GetTickCount(); }

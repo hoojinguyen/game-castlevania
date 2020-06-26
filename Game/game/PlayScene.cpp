@@ -566,6 +566,26 @@ void CPlayScene::Update(DWORD dt)
 			return;
 	}
 
+	if (simon->GetWaitingTimeToRevive() == true)
+	{
+		TimeWaitedResetGame += dt;
+		if (TimeWaitedResetGame >= TIME_LIMIT_WAIT_RESET_GAME * 2)
+		{
+			TimeWaitedResetGame = 0;
+			simon->SetWaitingTimeToRevive(false);
+			simon->SetHP(SIMON_HP);
+			simon->SetPosition(simon->GetPositionXBackup(), simon->GetPositionYBackup());
+		}
+		else
+			return;
+	}
+
+	if (simon->GetLife() == 0) {
+		// Hien Menu Countinue game ?
+		//return;
+	}
+
+
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	for (size_t i = 0; i < listItems.size(); i++)
@@ -688,6 +708,9 @@ void CPlayScene::Render()
 	if (isWaitResetGame) // màn đen trước khi bắt đầu game
 		return; // thoát và ko vẽ gì
 
+	if (simon->GetWaitingTimeToRevive() == true) 
+		return;
+
 	tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -730,6 +753,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_R:
+	{
+		simon->SetHP(SIMON_HP);
+	}
 	case DIK_B:
 	{
 		//bool isBoundingBox = gameObject->GetEnableBoundingBox();

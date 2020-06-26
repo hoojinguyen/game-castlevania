@@ -13,4 +13,4 @@
 11 204 BlackKnight 83 48 16 32 74 2
 12 202 VampireBat 39 39 12 14 72 -2
 13 15 BottomStair 80 72 8 8 1 -2
-14 14 ObjectHidden 155 -8 8 8 4 -2
+14 14 ObjectHidden 145 -20 8 8 4 -2

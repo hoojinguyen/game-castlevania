@@ -1,5 +1,5 @@
 #id	type	name	x	y	width	height	ani_set_id item_id
-0 14 Portal 370 187 24 8 3 -2
+0 14 ObjectHidden 352 151 24 8 3 -2
 1 1 Simon 379 155 16 32 1 -2
 2 16 TopStair 448 76 32 8 1 -2
 3 17 Ground 448 112 32 16 -1 -2
@@ -25,4 +25,4 @@
 23 204 BlackKnight 220 47 16 32 74 0
 24 202 VampireBat 296 32 12 14 72 2
 25 19 BrickAni 50 80 32 16 33 -1
-26 14 Portal 2 48 16 16 5 -2
+26 14 ObjectHidden 2 48 16 16 5 -2

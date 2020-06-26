@@ -52,6 +52,8 @@ Simon::Simon()
 	numberSubWeaponAble = 1;
 
 	isKillAllEnemies = false;
+
+	isWaitingTimeToRevive = false;
 }
 
 Simon* Simon::GetInstance()
@@ -94,7 +96,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	DWORD now = GetTickCount();
 	CGameObject::Update(dt);
 
-	//if (hp <= 0) SetState(SIMON_STATE_DIE);
+	if (hp <= 0)
+	{
+		SetWaitingTimeToRevive(true);
+		SetLife(-1);
+		CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetNumberScene());
+		//SetState(SIMON_STATE_DIE);
+	}
 
 	// Simple fall down
 	if (!isOnStair) {
@@ -448,7 +456,13 @@ void Simon::HandleCollisionSimonWithEnemy(Enemy* enemy)
 					}
 				}
 				else
-					SetState(SIMON_STATE_DIE);
+				{
+					return;
+					/*	SetWaitingTimeToRevive(true);
+					SetLife(-1);*/
+					//SetState(SIMON_STATE_DIE);
+				}
+				
 			}
 		}
 	}

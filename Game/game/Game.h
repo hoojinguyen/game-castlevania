@@ -101,6 +101,7 @@ public:
 
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene();
+	int GetNumberScene() { return this->current_scene; };
 	void SwitchScene(int scene_id);
 
 	~CGame();
