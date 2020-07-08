@@ -1,4 +1,4 @@
-#id	type	name	x	y	width	height	ani_set_id
+#id	type	name	x	y	width	height	ani_set_id type_item
 0 1 Simon 38 46 16 32 1 -2
 1 11 Candle 92 48 8 16 31 9
 2 11 Candle 159 82 8 16 31 7

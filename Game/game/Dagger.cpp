@@ -2,6 +2,8 @@
 #include "Ground.h"
 #include "BoundingMap.h"
 #include "Enemy.h"
+#include "Torch.h"
+#include "Candle.h"
 
 #define DAGGER_DAMAGE 1
 #define DAGGER_USE_HEART 1
@@ -68,6 +70,36 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+		}
+		if (dynamic_cast<Candle*>(coObjects->at(i))) {
+			Candle* candle = dynamic_cast<Candle*>(coObjects->at(i));
+			float l1, t1, r1, b1, l2, t2, r2, b2;
+			GetBoundingBox(l1, t1, r1, b1);
+			candle->GetBoundingBox(l2, t2, r2, b2);
+			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
+				if (candle->isEnable) {
+					candle->GetCollisionEffect()->SetEnable(true);
+					candle->GetDeadEffect()->SetEnable(true);
+					candle->isEnable = false;
+					candle->isDeadth = true;
+					isEnable = false;
+				}
+			}
+		}
+		if (dynamic_cast<Torch*>(coObjects->at(i))) {
+			Torch* torch = dynamic_cast<Torch*>(coObjects->at(i));
+			float l1, t1, r1, b1, l2, t2, r2, b2;
+			GetBoundingBox(l1, t1, r1, b1);
+			torch->GetBoundingBox(l2, t2, r2, b2);
+			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
+				if (torch->isEnable) {
+					torch->GetCollisionEffect()->SetEnable(true);
+					torch->GetDeadEffect()->SetEnable(true);
+					torch->isEnable = false;
+					torch->isDeadth = true;
+					isEnable = false;
+				}
+			}
 		}
 	}
 }

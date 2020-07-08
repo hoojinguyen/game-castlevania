@@ -13,6 +13,7 @@ class Grid
 	int numXCells;
 	int numYCells;
 	vector <LPGAMEOBJECT>* listObject;
+
 	void LoadSetting(string line);
 	void LoadObject(string line);
 public:

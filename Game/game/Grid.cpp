@@ -1,9 +1,11 @@
-﻿#include "Grid.h"
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
+
+#include "Grid.h"
 #include "Utils.h"
+#include "define.h"
 
 using namespace std;
 
@@ -100,14 +102,53 @@ bool checkContainId(vector<LPGAMEOBJECT>* list_object, LPGAMEOBJECT e)
 		if (obj->GetID() == e->GetID()) {
 			return true;
 		}
+		//else if (obj->GetID() >= OBJECT_TYPE_ZOOMBIE && obj->GetID() <= OBJECT_TYPE_PHANTOM_BAT) {
+		//	return true;
+		//}
+
 	}
+
+	//if (e->GetType() == 205) {
+	//	return false;
+	//}
+
 	return false;
 }
 
 void Grid::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, int screenWidth, int screenHeight)
 {
 	CCamera* camera = CCamera::GetInstance();
+	int size = list_object->size();
+
+	vector <LPGAMEOBJECT>* listObjectCopy(list_object);
+
+	//for (int i = 0; i < listObjectCopy->size(); i++)
+	//{
+	//	delete listObjectCopy[i];
+	//}
+
+	//listObjectCopy = list_object;
+
+	//listObjectCopy->assign(list_object->begin(), list_object->end());
+
+
+	//for (int i = 0; i < size ; i++)
+	//{
+	//	int type = listObjectCopy->at(i)->GetType();
+	//	if (listObjectCopy->at(i)->GetType() != 205) {
+	//		listObjectCopy->erase(listObjectCopy->begin());
+	//	}
+	//}
+
+	//for (int i = 0; i < size; i++) {
+	//	if (list_object->at(i)->GetType() != 205)
+	//	{
+	//		listObjectCopy->push_back(list_object->at(i));
+	//	}
+	//}
+
 	list_object->clear();
+
 	int left, top, right, bottom;
 	int i, j, k;
 

@@ -34,7 +34,7 @@ PhantomBat::PhantomBat(float startX, float startY)
 	vy = 0.120;
 	nx = 0;
 	ny = 0;
-	SetState(PHANTOM_BAT_STATE_IDLE);
+
 	previousHP = hp;
 	introTime = 2000;
 	simonPos.x = -1;
@@ -48,6 +48,8 @@ PhantomBat::~PhantomBat()
 
 void PhantomBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Enemy::Update(dt, coObjects);
+
 	if (isEnable == true)
 	{
 		if (Intro(dt) == true)
@@ -110,8 +112,10 @@ void PhantomBat::Render()
 			RenderBoundingBox();
 		}
 	}
-
 	collisionEffect->Render();
+
+	Enemy::Render();
+
 }
 
 void PhantomBat::GetBoundingBox(float& left, float& top, float& right, float& bottom)

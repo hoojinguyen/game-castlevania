@@ -2,6 +2,9 @@
 #include "Ground.h"
 #include "BoundingMap.h"
 #include "Enemy.h"
+#include "Candle.h"
+#include "Torch.h"
+#include "Game.h"
 
 #define FIRE_BOMB_DAMAGE 2
 #define FIRE_BOMB_USE_HEART 1
@@ -62,14 +65,46 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (t1 <= b2 && b1 >= t2 && l1 <= r2 && r1 >= l2) {
 				if ((coObjects->at(i))->nx != 0)
 				{
-					if (!enemy->isEnable) {
+					if (enemy->isEnable != false) {
 						vx = 0;
 						enemy->SetHP(enemy->GetHP() - this->damage);
 						enemy->GetCollisionEffect()->SetEnable(true);
+						isEnable = false;
 					}
 				}
+
 			}
 
+		}
+		if (dynamic_cast<Candle*>(coObjects->at(i))) {
+			Candle* candle = dynamic_cast<Candle*>(coObjects->at(i));
+			float l1, t1, r1, b1, l2, t2, r2, b2;
+			GetBoundingBox(l1, t1, r1, b1);
+			candle->GetBoundingBox(l2, t2, r2, b2);
+			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
+				if (candle->isEnable) {
+					candle->GetCollisionEffect()->SetEnable(true);
+					candle->GetDeadEffect()->SetEnable(true);
+					candle->isEnable = false;
+					candle->isDeadth = true;
+					isEnable = false;
+				}
+			}
+		}
+		if (dynamic_cast<Torch*>(coObjects->at(i))) {
+			Torch* torch = dynamic_cast<Torch*>(coObjects->at(i));
+			float l1, t1, r1, b1, l2, t2, r2, b2;
+			GetBoundingBox(l1, t1, r1, b1);
+			torch->GetBoundingBox(l2, t2, r2, b2);
+			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
+				if (torch->isEnable) {
+					torch->GetCollisionEffect()->SetEnable(true);
+					torch->GetDeadEffect()->SetEnable(true);
+					torch->isEnable = false;
+					torch->isDeadth = true;
+					isEnable = false;
+				}
+			}
 		}
 	}
 

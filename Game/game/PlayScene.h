@@ -3,18 +3,20 @@
 #include "Grid.h"
 #include "TileMap.h"
 #include "ScoreBoard.h"
+#include "Enemy.h"
 
 #include "GameObject.h"
 #include "Simon.h"
 class CPlayScene : public CScene
 {
 protected:
-	Simon *simon; // A play scene has to have player, right?
+	Simon *simon; 
 	CGameObject *gameObject;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> coObjects;
 	vector<LPGAMEOBJECT> listItems;
+	vector<Enemy*> listEnemies;
 
 	vector<int> arrTexturesID;
 	vector<int> arrSpritesID;
@@ -40,6 +42,8 @@ protected:
 
 	float mapWidth, mapHeight;
 	float simonX_backup, simonY_backup;
+
+	bool _checkInBoundMap();
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);

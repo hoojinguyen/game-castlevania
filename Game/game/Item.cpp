@@ -65,6 +65,10 @@ void Item::Init()
 	case ITEM_CHEST:
 		moneyEffect = new MoneyEffect(MONEY_EFFECT_2000);
 		break;
+	case ITEM_DOUBLE_SHOT:
+		break;
+	case ITEM_SMALL_HEART:
+		break;
 	}
 
 }
@@ -129,9 +133,13 @@ void Item::RandomItem()
 	{
 		typeItem = ITEM_BONUSES;
 	}
+	else if (percent < 99)
+	{
+		typeItem = ITEM_CROWN;
+	}
 	else
 	{
-		typeItem = ITEM_MAGIC_CRYSTAL;
+		typeItem = ITEM_CHEST;
 	}
 }
 
@@ -165,10 +173,13 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (!isDeadth)
 	{
+		left = x;
+		top = y;
+		right = x + 0;
+		bottom = y + 0;
+
 		if (!isEnable)
 		{
-			left = x;
-			top = y;
 			right = x + width;
 			bottom = y + height;
 		}
@@ -176,19 +187,13 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 			switch (typeItem)
 			{
 			case ITEM_MORNINGSTAR:
-				left = x;
-				top = y;
 				right = x + 16;
 				bottom = y + 16;
 				break;
 			case ITEM_LARGE_HEART:
-				left = x;
-				top = y;
 				right = x + 12;
 				bottom = y + 10;
 			case ITEM_SMALL_HEART:
-				left = x;
-				top = y;
 				right = x + 8;
 				bottom = y + 8;
 				break;
@@ -196,69 +201,47 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 			case ITEM_MONEY_BAG_PURPLE:
 			case ITEM_MONEY_BAG_WHITE:
 			case ITEM_BONUSES:
-				left = x;
-				top = y;
 				right = x + 15;
 				bottom = y + 15;
 				break;
 			case ITEM_DAGGER:
-				left = x;
-				top = y;
 				right = x + 16;
 				bottom = y + 9;
 				break;
 			case ITEM_AXE:
-				left = x;
-				top = y;
 				right = x + 15;
 				bottom = y + 14;
 				break;
 			case ITEM_HOLY_WATER:
-				left = x;
-				top = y;
 				right = x + 16;
 				bottom = y + 16;
 				break;
 			case ITEM_BOOMERANG:
-				left = x;
-				top = y;
 				right = x + 15;
 				bottom = y + 14;
 				break;
 			case ITEM_STOP_WATCH:
-				left = x;
-				top = y;
 				right = x + 15;
 				bottom = y + 14;
 				break;
 			case ITEM_CROSS:
-				left = x;
-				top = y;
 				right = x + 16;
 				bottom = y + 16;
 				break;
 			case ITEM_INVISIBILITY_POTION:
-				left = x;
-				top = y;
 				right = x + 13;
 				bottom = y + 16;
 				break;
 			case ITEM_PORK_CHOP:
-				left = x;
-				top = y;
 				right = x + 15;
 				bottom = y + 14;
 				break;
 			case ITEM_DOUBLE_SHOT:
 			case ITEM_TRIPLE_SHOT:
-				left = x;
-				top = y;
 				right = x + 14;
 				bottom = y + 14;
 				break;
 			case ITEM_MAGIC_CRYSTAL:
-				left = x;
-				top = y;
 				right = x + 14;
 				bottom = y + 16;
 				break;
@@ -292,9 +275,6 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (!isGround) {
 				DWORD now = GetTickCount();
 				int temp = 300;
-				if (isFirstTime) {
-					//temp = temp / 2;
-				}
 
 				if (now - timeStartEnable >= temp) {
 					if (isFirstTime) {
@@ -332,13 +312,6 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		CalcPotentialCollisions(coObjects, coEvents);
 
-		/*if (this->state == ITEM_STATE_UP)
-		{
-			vy += -0.00100f;
-			if (vy <= -0.118f)
-				this->SetState(ITEM_STATE_IDLE);
-		}*/
-
 		if (coEvents.size() == 0)
 		{
 			x += dx;
@@ -352,24 +325,29 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			// TODO: This is a very ugly designed function!!!!
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			
+			bool isColisionGround = false;
 
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
-				if (dynamic_cast<BoundingMap*>(e->obj))
+				if (dynamic_cast<Ground*>(e->obj))
 				{
-					if (e->ny < 0)
-					{
-						x += min_tx * dx + nx * 0.4f;
-						y += min_ty * dy + ny * 0.4f;
+					x += min_tx * dx + nx * 0.4f;
+					y += min_ty * dy + ny * 0.4f;
 
-						if (nx != 0) vx = 0;
-						if (ny != 0) vy = 0;
-						isGround = true;
+					if (nx != 0) vx = 0;
+					if (ny != 0) vy = 0;
+					isGround = true;
 
-					}
+					isColisionGround = true;
 				}
 
+			}
+
+			if (!isColisionGround) {
+				x += dx;
+				y += dy;
 			}
 		}
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -378,10 +356,10 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (moneyEffect != nullptr) {
 		Simon* simon = Simon::GetInstance();
 		if (simon->nx > 0) {
-			moneyEffect->SetPosition(x + 10, y - 10);
+			moneyEffect->SetPosition(x + 15, y - 10);
 		}
 		else {
-			moneyEffect->SetPosition(x - 10, y - 10);
+			moneyEffect->SetPosition(x - 15, y - 10);
 		}
 
 		moneyEffect->Update(dt);

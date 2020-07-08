@@ -42,6 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	mapWidth = 0.0f;
 	simonX_backup = 0.0f;
 	simonY_backup = 0.0f;
+
 }
 
 /*
@@ -49,6 +50,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	See scene1.txt, scene2.txt for detail format specification
 */
 
+#pragma region Functions parseSection
 void CPlayScene::_ParseSection_SETTINGS(string line)
 {
 	vector<string> tokens = split(line);
@@ -208,9 +210,6 @@ void CPlayScene::_ParseSection_GRID(string line)
 	grid = new Grid(pathFile, &objects);
 }
 
-/*
-	Parse a line in section [OBJECTS]
-*/
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
@@ -247,8 +246,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			return;
 		}
 		simon = Simon::GetInstance();
+
 		simon->SetPosition(x, y);
 		simon->SetPositionBackup(simonX_backup, simonY_backup);
+
+		if (tokens.size() > 9) {
+			int direction = atoi(tokens[9].c_str());
+			simon->nx = direction;
+		}
+		else {
+			simon->nx = 1;
+		}
+
+
 		objects.push_back(obj);
 		return;
 	}
@@ -339,6 +349,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GHOST:
 		obj = new Ghost(x, y);
+
 		break;
 	case OBJECT_TYPE_HUNCHBACK:
 		obj = new Hunchback(x, y);
@@ -376,6 +387,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	objects.push_back(obj);
+}
+
+#pragma endregion
+
+
+#pragma region Functions proccess common
+
+bool CPlayScene::_checkInBoundMap()
+{
+	float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapWidth, l2, t2, r2, b2;
+	simon->GetBoundingBox(l2, t2, r2, b2);
+	return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2);
 }
 
 void CPlayScene::_Load_OBJECTS(string line)
@@ -510,8 +533,6 @@ void CPlayScene::Load()
 
 	f.close();
 
-	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\BBox\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-
 	scoreBoard = new ScoreBoard(simon, 16);
 
 	time = 0;
@@ -573,8 +594,9 @@ void CPlayScene::Update(DWORD dt)
 		{
 			TimeWaitedResetGame = 0;
 			simon->SetWaitingTimeToRevive(false);
-			simon->SetHP(SIMON_HP);
-			simon->SetPosition(simon->GetPositionXBackup(), simon->GetPositionYBackup());
+			simon->Reset();
+			//simon->SetHP(SIMON_HP);
+			//simon->SetPosition(simon->GetPositionXBackup(), simon->GetPositionYBackup());
 		}
 		else
 			return;
@@ -605,20 +627,21 @@ void CPlayScene::Update(DWORD dt)
 		{
 			coObjects[i]->SetDeadth(false);
 			int typeItem = coObjects[i]->GetTypeItem();
-			if (typeItem == -1)
+			if (typeItem >= -1)
 			{
 				Item* item = new Item();
+				if (typeItem == -1) {
+					item = new Item();
+				}
+				else {
+					item = new Item(typeItem);
+				}
+
 				item->SetEnable(true);
 				item->SetPosition(coObjects[i]->x, coObjects[i]->y - 3); // Why -3
 				listItems.push_back(item);
 			}
-			else if (typeItem > -1)
-			{
-				Item* item = new Item(typeItem);
-				item->SetEnable(true);
-				item->SetPosition(coObjects[i]->x, coObjects[i]->y - 3); // Why -3
-				listItems.push_back(item);
-			}
+		
 			coObjects[i]->SetEnable(false);
 		}
 	}
@@ -701,6 +724,12 @@ void CPlayScene::Update(DWORD dt)
 		simon->x = 0;
 	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
 		simon->x = mapWidth - SIMON_BBOX_WIDTH;
+
+	if (!_checkInBoundMap()) {
+		simon->Reset();
+		this->Unload();
+		this->Load();
+	}
 }
 
 void CPlayScene::Render()
@@ -730,9 +759,11 @@ void CPlayScene::Render()
 	scoreBoard->Render();
 }
 
-/*
-	Handle Keyboard
-*/
+#pragma endregion
+
+
+#pragma region Functions handle keyboard
+
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -938,3 +969,5 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		simon->SetState(SIMON_STATE_IDLE);
 	}
 }
+
+#pragma endregion

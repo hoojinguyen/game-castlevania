@@ -1,7 +1,8 @@
-#include "Zombie.h"
+﻿#include "Zombie.h"
 #include "Define.h"
 #include "Ground.h"
 #include "BoundingMap.h"
+#include "Simon.h"
 
 Zombie::Zombie(float startX, float startY)
 {
@@ -27,6 +28,12 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	Enemy::Update(dt, coObjects);
 	if (!isDeadth && isEnable) {
 
+		float simonX, simonY;
+
+		Simon::GetInstance()->GetPosition(simonX, simonY);
+
+		nx = this->x >= simonX ? -1 : 1;
+
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -42,6 +49,7 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		if (coEvents.size() == 0) {
+
 			x += dx;
 			y += dy;
 
@@ -70,13 +78,13 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isGrounded = true;
 					if (e->ny < 0)
 					{
-						x += dx;
+						x +=  dx;
 						y += min_ty * dy + ny * 0.1f;
 						if (ny != 0) vy = 0;
 					}
 					if (e->nx != 0)
 					{
-						x += dx;
+						x +=  dx;
 						y += 1;
 						if (ny != 0) vy = 0;
 					}
@@ -92,8 +100,8 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			delete coEvents[i];
 		}
-		if (!isGrounded)
-			vy += 0.001 * dt;
+		/*if (!isGrounded)
+			vy += 0.001 * dt;*/
 	}
 }
 

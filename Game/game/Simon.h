@@ -138,8 +138,7 @@ public:
 
 	void HandleCollisionSimonWithItem(Item* item);
 	void HandleCollisionSimonWithEnemy(Enemy* enemy);
-
-	void UpdateSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	void HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 
 };
 

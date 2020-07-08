@@ -120,8 +120,6 @@ public:
 	void SetEnable(bool e) { if (e) { isDeadth = false; } isEnable = e; }
 	bool GetEnable() { return isEnable; }
 
-	
-
 	void SetDeadth(bool dead) { isDeadth = dead; }
 	bool GetDeadth() { return isDeadth; }
 

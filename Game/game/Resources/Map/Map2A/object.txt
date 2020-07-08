@@ -1,11 +1,11 @@
 #id	type	name	x	y	width	height	ani_set_id
 0 1 Simon 24 135 16 32 1 -2
 1 17 Ground 0 176 224 16 -1 -2
-2 18 Wall 224 0 32 192 -1 -2
+2 13 Wall 224 0 32 192 -1 -2
 3 17 Ground 160 112 64 16 -1 -2
 4 17 Ground 32 80 128 16 -1 -2
-5 18 Wall 0 64 32 64 -1 -2
-6 18 Wall 0 0 16 64 -1 -2
+5 13 Wall 0 64 32 64 -1 -2
+6 13 Wall 0 0 16 64 -1 -2
 7 15 BottomStair 112 168 8 8 1 -2
 8 16 TopStair 160 76 32 8 1 -2
 9 11 Candle 198 121 8 16 31 2
