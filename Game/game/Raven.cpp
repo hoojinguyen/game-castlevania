@@ -1,185 +1,112 @@
 #include "Raven.h"
-#include "Ground.h"
-#include "Simon.h"
 #include "Define.h"
+#include "Simon.h"
 
 Raven::Raven(float startX, float startY)
 {
-	this->x = startX;
-	this->y = startY;
+	this->startX = startX;
+	this->startY = startY;
 
-	this->hp = RAVEN_HP;
+	this->hp = 1;
 	isEnable = true;
-
-	damage = RAVEN_DAMAGE;
+	damage = 1;
 
 	Enemy::Enemy();
 
 	SetState(RAVEN_STATE_IDLE);
-	
+
+	point = 200;
+	vy = 0;
 }
 
 Raven::~Raven()
 {
+
 }
-
-void Raven::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
-{
-	for (UINT i = 0; i < coObjects->size(); i++)
-	{
-		// Simon se khong va cham voi nhung vat sau:
-		if (dynamic_cast<Ground*>(coObjects->at(i)))
-		{
-			Ground* ground = dynamic_cast<Ground*>(coObjects->at(i));
-			float gl, gr, gt, gb;
-			ground->GetBoundingBox(gl, gt, gr, gb);
-
-			if (x < gr && x + RAVEN_BBOX_WIDTH > gl&&
-				y < gb && y + RAVEN_BBOX_HEIGHT > gt&&
-				vy > 0)
-			{
-				// Xét va chạm cứng
-				SetState(RAVEN_STATE_IDLE);
-				isStickToGround = true;
-				idleCast = GetTickCount();
-			}
-
-			LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
-
-			if (e->t > 0 && e->t <= 1.0f && vy > 0)
-				coEvents.push_back(e);
-			else
-				delete e;
-		}
-	}
-}
-
 
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-		Enemy::Update(dt, coObjects);
+	Enemy::Update(dt, coObjects);
+	if (!isDeadth && isEnable) {
 
-		vector<LPCOLLISIONEVENT> coEvents;
-		vector<LPCOLLISIONEVENT> coEventsResult;
+		float simonX, simonY;
 
-		CalcPotentialCollisions(coObjects, coEvents);
+		Simon::GetInstance()->GetPosition(simonX, simonY);
 
+		nx = this->x >= simonX ? -1 : 1;
+		ny = this->y >= simonY ? -1 : 1;
 
-		if (isIdle)
-		{
-			float simonX, simonY;
-
-			Simon::GetInstance()->GetPosition(simonX, simonY);
-
-			if (simonX < x + 100.0f) {
-				SetState(RAVEN_STATE_JUMP);
-			}
-
-			/*
-			if (GetTickCount() - idleCast > RAVEN_IDLE_TIME)
-			{
-				if (x < simonX)
-				{
-					nx = 1;
-				}
-				else
-				{
-					nx = -1;
-				}
-
-				SetState(RAVEN_STATE_JUMP);
-			}
-			*/
-			
-		}
-
-		if (!isStickToGround)
-			vy += SIMON_GRAVITY * dt;
-
-		// No collision occured, proceed normally
-		if (coEvents.size() == 0)
+		if (state == RAVEN_STATE_FLY)
 		{
 			x += dx;
 			y += dy;
-		}
-		else
-		{
-			float min_tx, min_ty, nx = 0, ny;
-			float rdx = 0;
-			float rdy = 0;
-
-			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-			x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-			y += min_ty * dy + ny * 0.4f;
-
-			for (int i = 0; i < coEventsResult.size(); i++)
+			if (this->y - simonY >= SIMON_BBOX_HEIGHT / 2 - 5)
 			{
-				LPCOLLISIONEVENT e = coEventsResult[i];
+				vy = 0;
+				y = simonY + SIMON_BBOX_HEIGHT / 2 - 5;
+			}
 
-				if (dynamic_cast<Ground*>(e->obj))
-				{
-					// Da cham dat
-					// Khong va cham theo phuong ngang
-					if (e->ny < 0 || e->nx != 0)
-					{
-						// Xét va chạm cứng
-						SetState(RAVEN_STATE_IDLE);
-						isStickToGround = true;
-						idleCast = GetTickCount();
-					}
+			if (nx > 0) {
+				if (abs(this->x - simonX) <= RAVEN_DISTANCE_WAITING_X + SIMON_BBOX_WIDTH && abs(this->y - simonY) < SIMON_BBOX_HEIGHT / 2) {
+					SetState(RAVEN_STATE_WAIT);
+				}
+			}
+			else {
+				if (abs(this->x - simonX) <= RAVEN_DISTANCE_WAITING_X && abs(this->y - simonY) < SIMON_BBOX_HEIGHT / 2) {
+					SetState(RAVEN_STATE_WAIT);
 				}
 			}
 		}
-
-		// clean up collision events
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	
+		else if (state == RAVEN_STATE_IDLE) {
+			if (abs(this->x - simonX) < RAVEN_DISTANCE_ATTACK_X) {
+				SetState(RAVEN_STATE_FLY);
+			}
+		}
+	}
 }
 
 void Raven::Render()
 {
 	if (!isDeadth && isEnable) {
-		int posX = x, posY = y;
 		int ani = 0;
-
 		switch (state)
 		{
 		case RAVEN_STATE_IDLE:
-			if (nx > 0)
-			{
+		{
+			if (nx > 0) {
 				ani = RAVEN_ANI_IDLE_RIGHT;
 			}
-			else
-			{
+			else {
 				ani = RAVEN_ANI_IDLE_LEFT;
 			}
-			break;
-		case RAVEN_STATE_JUMP:
-			if (nx > 0)
-			{
-				ani = RAVEN_ANI_JUMP_RIGHT;
-		
+		}
+		break;
+		case RAVEN_STATE_FLY:
+		case RAVEN_STATE_WAIT:
+		case RAVEN_STATE_ATTACK:
+		{
+			if (nx > 0) {
+				ani = RAVEN_ANI_FLY_RIGHT;
 			}
-			else
-			{
-				ani = RAVEN_ANI_JUMP_LEFT;
+			else {
+				ani = RAVEN_ANI_FLY_LEFT;
 			}
+		}
+		break;
+		default:
 			break;
 		}
 
-		animation_set->at(ani)->Render(posX, posY);
-		if (this->enableBoundingBox)
-		{
-			RenderBoundingBox();
-		}
+		animation_set->at(ani)->Render(x, y);
+		RenderBoundingBox();
 	}
+
 	Enemy::Render();
 }
 
 void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (isDeadth && isEnable) {
+	if (isDeadth) {
 		left = 0;
 		top = 0;
 		right = left + 0;
@@ -188,30 +115,57 @@ void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	else {
 		left = x;
 		top = y;
-		right = x + RAVEN_BBOX_WIDTH;
-		bottom = y + RAVEN_BBOX_HEIGHT;
+		if (state == RAVEN_STATE_IDLE) {
+			right = left + 16;
+			bottom = top + 12;
+		}
+		else {
+			if (animation_set->at(0)->GetCurrentFrame() == 0) {
+				right = left + 16;
+				bottom = top + 16;
+			}
+			else if (animation_set->at(0)->GetCurrentFrame() == 1) {
+				right = left + 15;
+				bottom = top + 15;
+			}
+			else {
+				right = left + 15;
+				bottom = top + 15;
+			}
+		}
 	}
 }
 
 void Raven::SetState(int state)
 {
 	Enemy::SetState(state);
-
 	switch (state)
 	{
+	case RAVEN_STATE_DIE:
+		isDeadth = true;
+		isEnable = false;
+		break;
 	case RAVEN_STATE_IDLE:
-		isIdle = true;
+		break;
+	case RAVEN_STATE_FLY:
+		if (nx > 0) {
+			vx = RAVEN_FLYING_SPEED_X;
+		}
+		else {
+			vx = -RAVEN_FLYING_SPEED_X;
+		}
+
+		if (ny > 0) {
+			vy = RAVEN_FLYING_SPEED_Y;
+		}
+		else {
+			vy = -RAVEN_FLYING_SPEED_Y;
+		}
+
+		break;
+	case RAVEN_STATE_WAIT:
 		vx = 0;
 		vy = 0;
-		break;
-	case RAVEN_STATE_JUMP:
-		vy = -(rand() % 1 + 2) * 0.1f;
-		//vy = -0.05f;
-
-		vx = (rand() % 1 + 1) * 0.1f;
-		if (nx < 0)
-			vx = -vx;
-
 		break;
 	}
 }

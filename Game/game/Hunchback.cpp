@@ -97,6 +97,11 @@ void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						SetState(HUNCHBACK_STATE_ATTACK);
 					}
 
+				/*	if (state == HUNCHBACK_STATE_ATTACK && GetTickCount() > timeJump + 200)
+					{
+						SetState(HUNCHBACK_STATE_IDLE);
+					}*/
+
 					isCollision = true;
 				}
 			}

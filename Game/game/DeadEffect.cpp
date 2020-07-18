@@ -35,3 +35,9 @@ void DeadEffect::Render(float posX, float posY)
 	if (isEnable)
 		animations[0]->Render(posX, posY);
 }
+
+void DeadEffect::SetPosition(float x, float y)
+{
+	this->x = x;
+	this->y = y;
+}

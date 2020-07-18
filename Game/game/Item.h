@@ -8,10 +8,10 @@ class Item : public CGameObject
 {
 	int typeItem;
 
-	DWORD timeStartEnable;
 	bool isGround;
 	bool isFirstTime;
 
+	DWORD timeStartEnable;
 	DWORD TimeDisplayMax; // thời gian tối đa cho phép hiển thị.
 	DWORD TimeDisplayed; // Thời gian đã hiển thị.
 

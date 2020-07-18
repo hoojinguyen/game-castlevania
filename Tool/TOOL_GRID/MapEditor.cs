@@ -1,13 +1,11 @@
-﻿using System;
+﻿using MapEditor.Objects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MapEditor
@@ -32,7 +30,7 @@ namespace MapEditor
 
         private int objectIndexInfo;
 
-        private const int CELL_SIZE = 136;
+        private const int CELL_SIZE = 128;
 
         private const int START_INDEX = 0;
 
@@ -160,13 +158,14 @@ namespace MapEditor
                 case "Zombie":
                 case "FishMan":
                 case "BlackKnight":
+                case "Skeleton":
                     imageCursor = Utilities.ResizeImage(imageCursor, 16, 32);
                     break;
                 case "Candle":
                     imageCursor = Utilities.ResizeImage(imageCursor, 8, 16);
                     break;
                 case "Gate":
-                    imageCursor = Utilities.ResizeImage(imageCursor, 24, 48);
+                    imageCursor = Utilities.ResizeImage(imageCursor, 8, 48);
                     break;
                 case "BoundingMap":
                 case "Portal":
@@ -175,6 +174,9 @@ namespace MapEditor
                 case "Money":
                 case "Ball":
                 case "SmallHeart":
+                case "Ghost":
+                case "Fleamen":
+                case "PhantomBat":
                     imageCursor = Utilities.ResizeImage(imageCursor, 16, 16);
                     break;
                 case "BottomStair":
@@ -196,7 +198,12 @@ namespace MapEditor
                 case "VampireBat":
                     imageCursor = Utilities.ResizeImage(imageCursor, 12, 14);
                     break;
-
+                case "MovingPlatform":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 32, 8);
+                    break;
+                case "Raven":
+                    imageCursor = Utilities.ResizeImage(imageCursor, 16, 12);
+                    break;
             }
             this.Cursor = new Cursor(((Bitmap)imageCursor).GetHicon());
             textBoxHeightOB.Text = imageCursor.Height.ToString();
@@ -252,7 +259,20 @@ namespace MapEditor
                     // them vao list  
                     string nameOb = textBoxNameOB.Text.Trim();
 
-                    Object ob = new Object(p, nameOb, Convert.ToInt32(textBoxX.Text.Trim()), Convert.ToInt32(textBoxY.Text.Trim()), p.Width, p.Height);
+                    Object ob;
+
+                    if (nameOb.Equals("Simon"))
+                    {
+                        ob = new Simon(0, 0, p, nameOb, Convert.ToInt32(textBoxX.Text.Trim()), Convert.ToInt32(textBoxY.Text.Trim()), p.Width, p.Height);
+                    }
+                    else if (nameOb.Equals("Portal"))
+                    {
+                        ob = new Portal(0, p, nameOb, Convert.ToInt32(textBoxX.Text.Trim()), Convert.ToInt32(textBoxY.Text.Trim()), p.Width, p.Height);
+                    }
+                    else
+                    {
+                        ob = new Object(p, nameOb, Convert.ToInt32(textBoxX.Text.Trim()), Convert.ToInt32(textBoxY.Text.Trim()), p.Width, p.Height);
+                    }
 
                     listObject.Add(ob);
                     listObject.ElementAt(listObject.Count - 1).Pic.Click += new System.EventHandler(PictureBoxes_Click);
@@ -342,18 +362,39 @@ namespace MapEditor
                         int w = listObject.ElementAt(i).Width;
                         int h = listObject.ElementAt(i).Height;
                         int sceneId = 0;
+                        int itemType = listObject.ElementAt(i).itemType;
 
                         if (listObject.ElementAt(i).Id == 14)
                         {
                             sceneId = listObject.ElementAt(i).AniSetId;
                             numObjDelay.Enabled = true;
+                            numPosition.Enabled = true;
+                            Portal portal = (Portal)listObject.ElementAt(i);
+                            setObjectPortal(portal.Position);
                         }
                         else
                         {
                             numObjDelay.Enabled = false;
+                            numPosition.Enabled = false;
                         }
 
-                        setOjectInfo(id, name, posX, posY, w, h, sceneId);
+                        if (listObject.ElementAt(i).Id == 1)
+                        {
+                            cboDirection.Enabled = true;
+                            cboState.Enabled = true;
+
+                            Simon simon = (Simon)listObject.ElementAt(i);
+
+                            setObjectSimon(simon.Direction, simon.State);
+                        }
+                        else
+                        {
+                            cboDirection.Enabled = false;
+                            cboState.Enabled = false;
+                            setObjectSimon(-1, -1);
+                        }
+
+                        setOjectInfo(id, name, posX, posY, w, h, sceneId, itemType);
 
                         break;
                     }
@@ -364,10 +405,21 @@ namespace MapEditor
         private void resetObjInfo()
         {
             objectIndexInfo = -1;
-            setOjectInfo("", "", 0, 0, 0, 0, 0);
+            setOjectInfo("", "", 0, 0, 0, 0, 0, -2);
         }
 
-        private void setOjectInfo(string id, string name, int posX, int posY, int w, int h, int sceneId)
+        public void setObjectSimon(int direction, int state)
+        {
+            cboDirection.SelectedIndex = direction;
+            cboState.SelectedIndex = state;
+        }
+
+        public void setObjectPortal(int position)
+        {
+            numPosition.Value = position;
+        }
+
+        private void setOjectInfo(string id, string name, int posX, int posY, int w, int h, int sceneId, int itemType)
         {
             tbObjId.Text = id;
             tbObjName.Text = name;
@@ -376,6 +428,7 @@ namespace MapEditor
             numWidth.Value = w;
             numHeight.Value = h;
             numObjDelay.Value = sceneId;
+            cboItemType.SelectedIndex = itemType + 2;
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -546,7 +599,7 @@ namespace MapEditor
                 string[] infos;
                 Object obj;
                 PictureBox p;
-                int posX, posY, width, height, sceneId;
+                int posX, posY, width, height, sceneId, itemType;
                 int id;
                 string name;
 
@@ -576,6 +629,15 @@ namespace MapEditor
                         sceneId = 0;
                     }
 
+                    if (infos.Length > 8)
+                    {
+                        itemType = int.Parse(infos[8]);
+                    }
+                    else
+                    {
+                        itemType = -2;
+                    }
+
                     if (int.TryParse(infos[1], out id))
                     {
                         p = new PictureBox();
@@ -584,7 +646,47 @@ namespace MapEditor
                         p.SizeMode = PictureBoxSizeMode.AutoSize;
                         p.BackColor = Color.Transparent;
 
-                        obj = new Object(p, name, posX, posY, width, height, sceneId);
+                        if (name.Equals("Simon"))
+                        {
+                            int direction;
+                            int state;
+                            if (infos.Length > 9)
+                            {
+                                direction = int.Parse(infos[9]);
+                                if (infos.Length > 10)
+                                {
+                                    state = int.Parse(infos[10]);
+                                }
+                                else
+                                {
+                                    state = 0;
+                                }
+                            }
+                            else
+                            {
+                                direction = 0;
+                                state = 0;
+                            }
+
+                            obj = new Simon(direction, state, p, name, posX, posY, width, height, sceneId, itemType);
+                        }
+                        else if (name.Equals("Portal"))
+                        {
+                            int position;
+                            if (infos.Length > 9)
+                            {
+                                position = int.Parse(infos[9]);
+                            }
+                            else
+                            {
+                                position = 0;
+                            }
+                            obj = new Portal(position, p, name, posX, posY, width, height, sceneId, itemType);
+                        }
+                        else
+                        {
+                            obj = new Object(p, name, posX, posY, width, height, sceneId, itemType);
+                        }
 
                         listObject.Add(obj);
                         listObject.ElementAt(listObject.Count - 1).Pic.Click += new System.EventHandler(PictureBoxes_Click);
@@ -638,6 +740,50 @@ namespace MapEditor
             if (objectIndexInfo != -1)
             {
                 listObject.ElementAt(objectIndexInfo).PosY = (int)numY.Value;
+            }
+        }
+
+        private void cboItemType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (objectIndexInfo != -1)
+            {
+                listObject.ElementAt(objectIndexInfo).itemType = (int)cboItemType.SelectedIndex - 2;
+            }
+        }
+
+        private void numPosition_ValueChanged(object sender, EventArgs e)
+        {
+            if (objectIndexInfo != -1)
+            {
+                if (listObject.ElementAt(objectIndexInfo).Id == 14)
+                {
+                    ((Portal)(listObject.ElementAt(objectIndexInfo))).Position = (int)numPosition.Value;
+                }
+
+            }
+        }
+
+        private void cboDirection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (objectIndexInfo != -1)
+            {
+                if (listObject.ElementAt(objectIndexInfo).Id == 1)
+                {
+                    ((Simon)(listObject.ElementAt(objectIndexInfo))).Direction = (int)cboDirection.SelectedIndex;
+                }
+
+            }
+        }
+
+        private void cboState_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (objectIndexInfo != -1)
+            {
+                if (listObject.ElementAt(objectIndexInfo).Id == 1)
+                {
+                    ((Simon)(listObject.ElementAt(objectIndexInfo))).State = (int)cboState.SelectedIndex;
+                }
+
             }
         }
 

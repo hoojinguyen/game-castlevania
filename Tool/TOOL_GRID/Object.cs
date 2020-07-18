@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace MapEditor
 {
@@ -26,12 +20,13 @@ namespace MapEditor
 
         public PictureBox Pic { get; set; }
 
-        public int delay { get; set; }
+        public int itemType { get; set; }
 
-        public Object(PictureBox Pic, string name, int PosX, int PosY, int Width = 0, int Height = 0, int sceneId = 1)
+        public Object(PictureBox Pic, string name, int PosX, int PosY, int Width = 0,
+            int Height = 0, int sceneId = 1, int itemType = -2)
         {
             this.Pic = Pic;
-            this.delay = delay;
+            this.itemType = itemType;
             this.Name = name;
             if (this.Name == "Simon")
             {
@@ -52,7 +47,7 @@ namespace MapEditor
             else if (this.Name == "Gate")
             {
                 Id = 12;
-                AniSetId = 31;
+                AniSetId = 32;
             }
             else if (this.Name == "BoundingMap")
             {
@@ -78,6 +73,11 @@ namespace MapEditor
             {
                 Id = 17;
                 AniSetId = -1;
+            }
+            else if (this.Name == "MovingPlatform")
+            {
+                Id = 18;
+                AniSetId = 33;
             }
             //item
             else if (this.Name == "Whip")
@@ -141,15 +141,42 @@ namespace MapEditor
                 Id = 204;
                 AniSetId = 74;
             }
+            else if (this.Name == "Ghost")
+            {
+                Id = 205;
+                AniSetId = 75;
+            }
+            else if (this.Name == "Fleamen")
+            {
+                Id = 206;
+                AniSetId = 76;
+            }
+            else if (this.Name == "Skeleton")
+            {
+                Id = 207;
+                AniSetId = 77;
+            }
+            else if (this.Name == "Raven")
+            {
+                Id = 208;
+                AniSetId = 78;
+            }
+            else if (this.Name == "PhantomBat")
+            {
+                Id = 300;
+                AniSetId = 80;
+            }
+
             this.PosX = PosX;
             this.PosY = PosY;
             this.Width = Width;
             this.Height = Height;
         }
 
-        public string toObjectStr()
+        public virtual string toObjectStr()
         {
-            string str = Id + " " + Name + " " + PosX + " " + PosY + " " + Width + " " + Height + " " + AniSetId;
+            string str = Id + " " + Name + " " + PosX + " " + PosY + " " + Width + " " + Height + " " + AniSetId + " " + itemType;
+
             return str;
         }
     }

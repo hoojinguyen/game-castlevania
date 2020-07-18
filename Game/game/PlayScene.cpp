@@ -34,6 +34,9 @@
 
 using namespace std;
 
+#define CROSS_COLOR_BACKGROUND D3DCOLOR_XRGB(188, 188, 188) // Màu xám 188, 188, 188
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
+
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
@@ -726,9 +729,9 @@ void CPlayScene::Update(DWORD dt)
 		simon->x = mapWidth - SIMON_BBOX_WIDTH;
 
 	if (!_checkInBoundMap()) {
-		simon->Reset();
 		this->Unload();
 		this->Load();
+		simon->Reset();
 	}
 }
 

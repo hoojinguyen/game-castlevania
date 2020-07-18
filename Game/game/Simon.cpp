@@ -445,36 +445,35 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 
 void Simon::HandleCollisionSimonWithEnemy(Enemy* enemy)
 {
-	if (enemy->vx != 0)
+	//if (enemy->vx != 0) {
+	if (untouchable == 0)
 	{
-		if (untouchable == 0)
+		if (enemy->isEnable)
 		{
-			if (enemy->isEnable != false)
+			if (hp > 0)
 			{
-				if (hp > 0)
+				hp -= enemy->GetDamage();
+				StartUntouchable();
+				SetState(SIMON_STATE_HURT);
+				StartHurting();
+				if (dynamic_cast<VampireBat*>(enemy))
 				{
-					hp -= enemy->GetDamage();
-					StartUntouchable();
-					SetState(SIMON_STATE_HURT);
-					StartHurting();
-					if (dynamic_cast<VampireBat*>(enemy))
-					{
-						enemy->SetDeadth(true);
-						enemy->SetEnable(false);
-						enemy->GetCollisionEffect()->SetEnable(true);
-					}
+					enemy->SetDeadth(true);
+					enemy->SetEnable(false);
+					enemy->GetCollisionEffect()->SetEnable(true);
 				}
-				else
-				{
-					SetState(SIMON_STATE_DIE);
-					return;
-					/*	SetWaitingTimeToRevive(true);
-					SetLife(-1);*/
-				}
-
 			}
+			else
+			{
+				SetState(SIMON_STATE_DIE);
+				return;
+				/*	SetWaitingTimeToRevive(true);
+				SetLife(-1);*/
+			}
+
 		}
 	}
+	//}
 }
 
 void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
@@ -598,10 +597,10 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 					this->HandleCollisionSimonWithItem(item);
 				}
 			}
-		/*	if ((dynamic_cast<Enemy*>(e->obj))) {
-				Enemy* enemy = dynamic_cast<Enemy*>(e->obj);
-				HandleCollisionSimonWithEnemy(enemy);
-			}*/
+			/*	if ((dynamic_cast<Enemy*>(e->obj))) {
+					Enemy* enemy = dynamic_cast<Enemy*>(e->obj);
+					HandleCollisionSimonWithEnemy(enemy);
+				}*/
 
 			else if (dynamic_cast<BrickMoving*>(e->obj)) {
 				if (e->ny < 0)
@@ -793,13 +792,15 @@ void Simon::Reset()
 
 	isKillAllEnemies = false;
 
+	this->ResetBackupSimon();
+
 }
 
 void Simon::ResetBackupSimon()
 {
 	this->x = xBackup;
 	this->y = yBackup;
-	this->hp = SIMON_MAX_HP;
+	//this->hp = SIMON_MAX_HP;
 }
 
 void Simon::ResetAnimationAttacking()

@@ -9,13 +9,16 @@ protected:
 	DWORD timeDelay;
 	bool isEnable;
 	vector<LPANIMATION> animations;
+
 public:
-	virtual void Render() {}
-	virtual void Update(DWORD dt) {}
-	void SetPosition(float X, float Y) { x = X, y = Y; }
-	void SetEnable(bool e) { isEnable = e; }
-	virtual void AddAnimation(int aniId);
 	Effect();
 	~Effect();
+
+	virtual void Update(DWORD dt) {}
+	virtual void Render() {}
+	virtual void AddAnimation(int aniId);
+	
+	void SetPosition(float X, float Y) { x = X, y = Y; }
+	void SetEnable(bool e) { this->isEnable = e; }
 };
 

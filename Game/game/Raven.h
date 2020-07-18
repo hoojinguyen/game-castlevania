@@ -5,9 +5,11 @@ class Raven : public Enemy
 {
 public:
 	float startX, startY;
-	bool isStickToGround;
-	bool isIdle;
-	DWORD idleCast;
+	int ny;
+
+	//bool isStickToGround;
+	//bool isIdle;
+	//DWORD idleCast;
 
 public:
 	Raven(float startX, float startY);
@@ -19,6 +21,6 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void SetState(int state);
 
-	virtual void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
+	//virtual void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
 };
 

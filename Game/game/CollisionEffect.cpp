@@ -1,9 +1,14 @@
 #include "CollisionEffect.h"
 
-void CollisionEffect::Render()
+CollisionEffect::CollisionEffect()
 {
-	if (isEnable)
-		animations[0]->Render(x, y);
+	AddAnimation(501);
+	timeDelay = 0.0f;
+	isEnable = false;
+}
+
+CollisionEffect::~CollisionEffect()
+{
 }
 
 void CollisionEffect::Update(DWORD dt)
@@ -19,13 +24,14 @@ void CollisionEffect::Update(DWORD dt)
 	}
 }
 
-CollisionEffect::CollisionEffect()
+void CollisionEffect::Render()
 {
-	AddAnimation(501);
-	timeDelay = 0.0f;
-	isEnable = false;
+	if (isEnable)
+		animations[0]->Render(x, y);
 }
 
-CollisionEffect::~CollisionEffect()
+void CollisionEffect::SetPosition(float x, float y)
 {
+	this->x = x;
+	this->y = y;
 }

@@ -1,9 +1,16 @@
 #include "MoneyEffect.h"
 
-void MoneyEffect::Render()
+MoneyEffect::MoneyEffect(int _moneyType)
 {
-	if (isEnable)
-		animations[0]->Render(x, y, 255, rand() % 256, rand() % 256, rand() % 256);
+	moneyType = _moneyType;
+
+	AddAnimation(moneyType);
+	timeDelay = 0.0f;
+	isEnable = false;
+}
+
+MoneyEffect::~MoneyEffect()
+{
 }
 
 void MoneyEffect::Update(DWORD dt)
@@ -19,16 +26,17 @@ void MoneyEffect::Update(DWORD dt)
 	}
 }
 
-MoneyEffect::MoneyEffect(int _moneyType)
+void MoneyEffect::Render()
 {
-	moneyType = _moneyType;
-
-	AddAnimation(moneyType);
-	timeDelay = 0.0f;
-	isEnable = false;
+	if (isEnable)
+		animations[0]->Render(x, y, 255, rand() % 256, rand() % 256, rand() % 256);
 }
 
-MoneyEffect::~MoneyEffect()
+void MoneyEffect::Enable()
 {
-
+	isEnable = true;
+	timeDelay = 0;
 }
+
+
+

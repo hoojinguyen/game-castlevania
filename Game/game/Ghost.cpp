@@ -22,12 +22,12 @@ Ghost::~Ghost()
 {
 }
 
-void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT> *coObject)
+void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	Enemy::Update(dt, coObject);
+
 	if (!isDeadth && isEnable)
 	{
-
 		float simonX, simonY;
 
 		Simon::GetInstance()->GetPosition(simonX, simonY);
@@ -98,9 +98,9 @@ void Ghost::Render()
 	Enemy::Render();
 }
 
-void Ghost::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void Ghost::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (isDeadth || state == GHOST_STATE_HIDE)
+	if (isDeadth && isEnable)
 	{
 		left = 0;
 		top = 0;
@@ -126,7 +126,6 @@ void Ghost::SetState(int state)
 		isEnable = false;
 		break;
 	case GHOST_STATE_HIDE:
-
 		break;
 	case GHOST_STATE_FLYING:
 		if (nx > 0)
