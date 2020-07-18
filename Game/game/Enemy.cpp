@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "define.h"
 
 int Enemy::score = 0;
 float Enemy::stopTime = 0;
@@ -62,8 +63,8 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				return;
 			}
 			if (isStop == true) {
-
-				if (GetTickCount() - timestop_start > 5000)
+				DWORD now = GetTickCount();
+				if (now - timestop_start > TIME_STOP_ENEMIES)
 				{
 					isStop = false;
 					timestop = 0;

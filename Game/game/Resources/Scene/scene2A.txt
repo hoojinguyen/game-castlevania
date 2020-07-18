@@ -1,9 +1,9 @@
 [TEXTURES]
 # id	file_path				                    r	    g	    b
-200 Resources\Textures\Items_Objects.png 116 116 116
-300 Resources\Textures\hp.png 255 0 255
+200 Resources\Textures\Items-Objects.png 116 116 116
+300 Resources\Textures\HP.png 255 0 255
 400 Resources\Textures\Enemies.png 116 116 116
-900 Resources\Textures\blackboard.png 116 116 116
+900 Resources\Textures\Black-Board.png 116 116 116
 1000 Resources\Map\Map2A\tilesheet.png 255 255 255
 
 [SPRITES]
@@ -182,6 +182,8 @@
 //Black Knight
 740 1 70400 100 70401 100 70402 100
 741 1 70410 100 70411 100 70412 100
+742 1 70400 100
+743 1 70410 100
 
 #
 # id	ani1	ani2	ani3
@@ -201,7 +203,7 @@
 
 # Enemies
 72 720 721 722 723 724
-74 740 741
+74 740 741 742 743
 
 [SETTINGS]
 stage 2

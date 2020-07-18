@@ -55,6 +55,7 @@ Simon::Simon()
 
 	isWaitingTimeToRevive = false;
 
+	subWeaponSwitch = ITEM_DAGGER;
 }
 
 Simon* Simon::GetInstance()
@@ -100,8 +101,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (hp <= 0)
 	{
 		SetWaitingTimeToRevive(true);
-		SetLife(-1);
 		CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetNumberScene());
+		//SetLife(-1);
 		//SetState(SIMON_STATE_DIE);
 	}
 
@@ -445,35 +446,35 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 
 void Simon::HandleCollisionSimonWithEnemy(Enemy* enemy)
 {
-	//if (enemy->vx != 0) {
-	if (untouchable == 0)
-	{
-		if (enemy->isEnable)
+	if (enemy->vx != 0) {
+		if (untouchable == 0)
 		{
-			if (hp > 0)
+			if (enemy->isEnable)
 			{
-				hp -= enemy->GetDamage();
-				StartUntouchable();
-				SetState(SIMON_STATE_HURT);
-				StartHurting();
-				if (dynamic_cast<VampireBat*>(enemy))
+				if (hp > 0)
 				{
-					enemy->SetDeadth(true);
-					enemy->SetEnable(false);
-					enemy->GetCollisionEffect()->SetEnable(true);
+					hp -= enemy->GetDamage();
+					StartUntouchable();
+					SetState(SIMON_STATE_HURT);
+					StartHurting();
+					if (dynamic_cast<VampireBat*>(enemy))
+					{
+						enemy->SetDeadth(true);
+						enemy->SetEnable(false);
+						enemy->GetCollisionEffect()->SetEnable(true);
+					}
 				}
-			}
-			else
-			{
-				SetState(SIMON_STATE_DIE);
-				return;
-				/*	SetWaitingTimeToRevive(true);
-				SetLife(-1);*/
-			}
+				else
+				{
+					SetState(SIMON_STATE_DIE);
+					return;
+					/*	SetWaitingTimeToRevive(true);
+					SetLife(-1);*/
+				}
 
+			}
 		}
 	}
-	//}
 }
 
 void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
@@ -792,8 +793,9 @@ void Simon::Reset()
 
 	isKillAllEnemies = false;
 
-	this->ResetBackupSimon();
+	subWeaponSwitch = ITEM_DAGGER;
 
+	this->ResetBackupSimon();
 }
 
 void Simon::ResetBackupSimon()
@@ -1012,6 +1014,7 @@ void Simon::SetState(int state)
 
 			}
 		}
+	
 		if (!isUseSubWeapons) {
 			morningStar->SetEnable(true);
 			morningStar->SetState(MORNINGSTAR_STATE_PREPARE);

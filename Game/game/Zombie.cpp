@@ -16,7 +16,7 @@ Zombie::Zombie(float startX, float startY)
 
 	Enemy::Enemy();
 
-	SetState(ZOOMBIE_STATE_IDLE);
+	SetState(ZOOMBIE_STATE_WALKING);
 }
 
 Zombie::~Zombie()
@@ -26,13 +26,20 @@ Zombie::~Zombie()
 void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Enemy::Update(dt, coObjects);
+
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
+
 	if (!isDeadth && isEnable) {
 
 		float simonX, simonY;
 
 		Simon::GetInstance()->GetPosition(simonX, simonY);
 
-		nx = this->x >= simonX ? -1 : 1;
+		nx = this->x >= simonX ? 1 : -1;
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -78,13 +85,13 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isGrounded = true;
 					if (e->ny < 0)
 					{
-						x +=  dx;
+						x += dx;
 						y += min_ty * dy + ny * 0.1f;
 						if (ny != 0) vy = 0;
 					}
 					if (e->nx != 0)
 					{
-						x +=  dx;
+						x += dx;
 						y += 1;
 						if (ny != 0) vy = 0;
 					}
@@ -120,10 +127,30 @@ void Zombie::Render()
 			else {
 				ani = ZOOMBIE_ANI_WALKING_LEFT;
 			}
+			break;
 		}
-		break;
+		case ZOOMBIE_STATE_IDLE:
+		{
+			if (nx > 0) {
+				ani = ZOOMBIE_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = ZOOMBIE_ANI_IDLE_LEFT;
+			}
+			break;
+		}
 		default:
 			break;
+		}
+
+		if (Enemy::isStop)
+		{
+			if (nx > 0) {
+				ani = ZOOMBIE_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = ZOOMBIE_ANI_IDLE_LEFT;
+			}
 		}
 
 		animation_set->at(ani)->Render(posX, posY);

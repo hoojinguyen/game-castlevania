@@ -41,7 +41,6 @@ class Simon : public CGameObject
 	int typeShotCollect;
 	int typeWeaponCollect;
 
-	void SetTypeOfWeapon(int item);
 
 	bool isKillAllEnemies;
 
@@ -84,11 +83,18 @@ public:
 	bool isKeyState_DIK_UP;
 	bool isUseSubWeapons;
 
+	int subWeaponSwitch; // Chuyển đổi qua lại giữa các vũ khí phụ để test 
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 
 	void Load(LPCWSTR simonFile);
+
+	void SetTypeOfWeapon(int item);
+
+	int GetSubWeaponSwitch() { return subWeaponSwitch; }
+	void SetSubWeaponSwitch(int item) { subWeaponSwitch = item; }
 
 	int GetTypeWeaponCollect() { return typeWeaponCollect; }
 	int GetTypeShotCollect() { return typeShotCollect; }
@@ -97,7 +103,7 @@ public:
 
 	void SetPosition(float x, float y);
 	void SetPositionBackup(float xBackup, float yBackup);
-	
+
 	float GetPositionXBackup() { return xBackup; }
 	float GetPositionYBackup() { return yBackup; }
 
@@ -114,10 +120,10 @@ public:
 	void SetAnimationSetMorningStar(LPANIMATION_SET ani_set);
 
 	int GetLife() { return life; }
-	void SetLife(int l) { life = life + l;  }
+	void SetLife(int l) { life = life + l; }
 
 	int GetScore() { return score; }
-	void SetScore(int sco) { score += sco;  }
+	void SetScore(int sco) { score += sco; }
 
 	bool GetKillAllEnemies() { return isKillAllEnemies; }
 	void SetKillAllEnemies(bool isKill) { this->isKillAllEnemies = isKill; }

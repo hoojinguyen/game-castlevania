@@ -36,6 +36,11 @@ protected:
 	bool isWaitResetGame;
 	DWORD TimeWaitedResetGame;
 
+	/* Xử lí gameover*/
+	bool isGameOver;
+	//Font Text;
+
+
 	int stage;
 	int defaultTimeGame;
 	int remainTime;
@@ -43,7 +48,7 @@ protected:
 	float mapWidth, mapHeight;
 	float simonX_backup, simonY_backup;
 
-	bool _checkInBoundMap();
+	bool CheckInBoundMap();
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);

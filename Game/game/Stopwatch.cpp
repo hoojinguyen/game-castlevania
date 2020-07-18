@@ -1,5 +1,6 @@
 #include "Stopwatch.h"
 #include "Enemy.h"
+#include "define.h"
 
 Stopwatch::Stopwatch()
 {
@@ -18,7 +19,7 @@ void Stopwatch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Enemy::isStop = true;
 	Enemy::StartTimeStop();
-	if (Enemy::timestop_start > 5000)
+	if (Enemy::timestop_start > TIME_STOP_ENEMIES)
 		isEnable = false;
 }
 

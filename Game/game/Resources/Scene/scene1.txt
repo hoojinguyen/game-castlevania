@@ -1,8 +1,8 @@
 [TEXTURES]
 # id	file_path				                    r	    g	    b
-200 Resources\Textures\Items_Objects.png 116 116 116
-300 Resources\Textures\hp.png 255 0 255
-900 Resources\Textures\blackboard.png 116 116 116
+200 Resources\Textures\Items-Objects.png 116 116 116
+300 Resources\Textures\HP.png 255 0 255
+900 Resources\Textures\Black-Board.png 116 116 116
 1000 Resources\Map\Map1\tilesheet.png 255 255 255
 
 [SPRITES]

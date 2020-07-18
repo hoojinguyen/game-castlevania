@@ -23,6 +23,12 @@ BlackKnight::~BlackKnight()
 void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	Enemy::Update(dt, coObject);
+
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
 	if (!isDeadth && isEnable) {
 		x += dx;
 		y += dy;
@@ -56,10 +62,30 @@ void BlackKnight::Render()
 			else {
 				ani = BLACK_KNIGHT_ANI_WALKING_LEFT;
 			}
+			break;
 		}
-		break;
+		case BLACK_KNIGHT_STATE_IDLE:
+		{
+			if (nx > 0) {
+				ani = BLACK_KNIGHT_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = BLACK_KNIGHT_ANI_IDLE_LEFT;
+			}
+			break;
+		}
 		default:
 			break;
+		}
+		
+		if (Enemy::isStop)
+		{
+			if (nx > 0) {
+				ani = BLACK_KNIGHT_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = BLACK_KNIGHT_ANI_IDLE_LEFT;
+			}
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
@@ -94,6 +120,8 @@ void BlackKnight::SetState(int state)
 	Enemy::SetState(state);
 	switch (state)
 	{
+	case BLACK_KNIGHT_STATE_IDLE:
+		break;
 	case BLACK_KNIGHT_STATE_DIE:
 		isDeadth = true;
 		isEnable = false;

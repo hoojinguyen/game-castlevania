@@ -1,10 +1,10 @@
 [TEXTURES]
 # id	file_path				                    r	    g	    b
-200 Resources\Textures\Items_Objects.png 116 116 116
-300 Resources\Textures\hp.png 255 0 255
+200 Resources\Textures\Items-Objects.png 116 116 116
+300 Resources\Textures\HP.png 255 0 255
 400 Resources\Textures\Enemies.png 116 116 116
 700 Resources\Textures\Gate.png 116 116 116
-900 Resources\Textures\blackboard.png 116 116 116
+900 Resources\Textures\Black-Board.png 116 116 116
 1000 Resources\Map\Map3B\tilesheet.png 255 255 255
 
 [SPRITES]
@@ -224,6 +224,8 @@
 //Black Knight
 740 1 70400 100 70401 100 70402 100
 741 1 70410 100 70411 100 70412 100
+742 1 70400 100
+743 1 70410 100
 
 //Ghost
 750 1 70500 100 70501 100
@@ -238,6 +240,8 @@
 //Skeleton
 770 1 70700 100 70701 100
 771 1 70710 100 70711 100
+775 1 70700 100
+776 1 70710 100
 
 //Skeleton bone
 772 1 70702 100 70703 100 70704 100
@@ -267,10 +271,10 @@
 
 # Enemies
 72 720 721 722 723 724
-74 740 741
+74 740 741 742 743
 75 750 751
 76 760 761 762 763
-77 770 771
+77 770 771 775 776
 771 772 773
 78 780 781 782 783
 

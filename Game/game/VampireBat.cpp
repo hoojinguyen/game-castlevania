@@ -41,6 +41,12 @@ void VampireBat::GetBoundingBox(float& left, float& top, float& right, float& bo
 void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	Enemy::Update(dt, coObject);
+
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
 	if (!isDeadth && isEnable) {
 		x += dx;
 		y += dy;
@@ -95,12 +101,18 @@ void VampireBat::Render()
 			break;
 		}
 
+		if (Enemy::isStop)
+		{
+			ani = VAMPIRE_BAT_ANI_IDLE;
+		}
+
 		animation_set->at(ani)->Render(posX, posY);
 		if (this->enableBoundingBox)
 		{
 			RenderBoundingBox();
 		}
 	}
+
 	Enemy::Render();
 }
 

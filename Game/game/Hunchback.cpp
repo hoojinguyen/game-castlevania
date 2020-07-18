@@ -28,6 +28,12 @@ Hunchback::~Hunchback()
 void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	Enemy::Update(dt, coObjects);
+
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
 	if (!isDeadth && isEnable)
 	{
 

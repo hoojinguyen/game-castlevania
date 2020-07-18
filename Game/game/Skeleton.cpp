@@ -24,9 +24,14 @@ Skeleton::~Skeleton()
 {
 }
 
-void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Enemy::Update(dt, coObjects);
+
+	if (Enemy::isStop)
+	{
+		return;
+	}
 
 	if (!isDeadth && isEnable)
 	{
@@ -65,7 +70,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (timeAttack == 0)
 			{
 				timeAttack = now;
-				Bone *bone = new Bone();
+				Bone* bone = new Bone();
 				bone->nx = nx;
 				if (nx > 0)
 				{
@@ -81,7 +86,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			else if (now - timeAttack >= 1000)
 			{
 				timeAttack = now;
-				Bone *bone = new Bone();
+				Bone* bone = new Bone();
 				if (nx > 0)
 				{
 					bone->SetPosition(x + SKELETON_BBOX_WIDTH, y);
@@ -139,7 +144,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
 
-				if (dynamic_cast<Ground *>(e->obj)) // if e->obj is Goomba
+				if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Goomba
 				{
 					x += min_tx * dx + nx * 0.7f;
 					y += min_ty * dy + ny * 0.7f;
@@ -168,6 +173,17 @@ void Skeleton::Render()
 		switch (state)
 		{
 		case SKELETON_STATE_IDLE:
+		{
+			if (nx > 0)
+			{
+				ani = SKELETON_ANI_IDLE_RIGHT;
+			}
+			else
+			{
+				ani = SKELETON_ANI_IDLE_LEFT;
+			}
+			break;
+		}
 		case SKELETON_STATE_ATTACK:
 		{
 			if (nx > 0)
@@ -178,10 +194,20 @@ void Skeleton::Render()
 			{
 				ani = SKELETON_ANI_ATTACK_LEFT;
 			}
+			break;
 		}
-		break;
 		default:
 			break;
+		}
+
+		if (Enemy::isStop)
+		{
+			if (nx > 0) {
+				ani = SKELETON_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = SKELETON_ANI_IDLE_LEFT;
+			}
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
@@ -193,13 +219,18 @@ void Skeleton::Render()
 
 	Enemy::Render();
 
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
 	for (int i = 0; i < bones.size(); i++)
 	{
 		bones[i]->Render();
 	}
 }
 
-void Skeleton::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void Skeleton::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (isDeadth)
 	{

@@ -17,6 +17,7 @@ Bone::~Bone()
 
 void Bone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
 	if (isEnable)
 	{
 		// Calculate dx, dy 

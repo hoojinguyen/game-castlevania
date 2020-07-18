@@ -26,6 +26,11 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	Enemy::Update(dt, coObject);
 
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
 	if (!isDeadth && isEnable)
 	{
 		float simonX, simonY;

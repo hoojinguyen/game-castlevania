@@ -1,7 +1,7 @@
 [TEXTURES]
 # id	file_path				                    r	    g	    b
 0 Resources\Textures\Simon.png 116 116 116
-800 Resources\Textures\MoneyEffect.png 116 116 116
+800 Resources\Textures\Money-Effect.png 116 116 116
 
 [SPRITES]
 # id	left    top     right   bottom  texture_id  dx      dy

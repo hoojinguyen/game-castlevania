@@ -50,7 +50,7 @@ void PhantomBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Enemy::Update(dt, coObjects);
 
-	if (isEnable == true)
+	if (isEnable)
 	{
 		if (Intro(dt) == true)
 			return;
@@ -75,12 +75,14 @@ void PhantomBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
 	if (!isEnable)
 	{
 		delayTime += dt;
 		if (delayTime > 1500)
 			bossDeadEffect->Update(dt);
 	}
+
 	collisionEffect->SetPosition(x, y + 10);
 	collisionEffect->Update(dt);
 }
@@ -219,7 +221,7 @@ bool PhantomBat::Intro(DWORD dt)
 		if (introTime > 1500)
 			SetState(PHANTOM_BAT_STATE_IDLE);
 		else
-			SetState(PHANTOM_BAT_STATE_FLYING);
+			SetState(PHANTOM_BAT_STATE_FLYING); 
 		introTime -= dt;
 		return true;
 	}

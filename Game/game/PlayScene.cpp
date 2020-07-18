@@ -34,9 +34,6 @@
 
 using namespace std;
 
-#define CROSS_COLOR_BACKGROUND D3DCOLOR_XRGB(188, 188, 188) // Màu xám 188, 188, 188
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
-
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
@@ -45,7 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	mapWidth = 0.0f;
 	simonX_backup = 0.0f;
 	simonY_backup = 0.0f;
-
+	isGameOver = false;
 }
 
 /*
@@ -397,7 +394,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 #pragma region Functions proccess common
 
-bool CPlayScene::_checkInBoundMap()
+bool CPlayScene::CheckInBoundMap()
 {
 	float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapWidth, l2, t2, r2, b2;
 	simon->GetBoundingBox(l2, t2, r2, b2);
@@ -579,6 +576,11 @@ void CPlayScene::Unload()
 
 void CPlayScene::Update(DWORD dt)
 {
+	if (isGameOver)
+	{
+		return;
+	}
+
 	if (isWaitResetGame)
 	{
 		TimeWaitedResetGame += dt;
@@ -598,18 +600,16 @@ void CPlayScene::Update(DWORD dt)
 			TimeWaitedResetGame = 0;
 			simon->SetWaitingTimeToRevive(false);
 			simon->Reset();
-			//simon->SetHP(SIMON_HP);
-			//simon->SetPosition(simon->GetPositionXBackup(), simon->GetPositionYBackup());
 		}
 		else
 			return;
 	}
 
 	if (simon->GetLife() == 0) {
-		// Hien Menu Countinue game ?
-		//return;
+		// Hien Menu game  over?
+		isGameOver = true;
+		return;
 	}
-
 
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -624,6 +624,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
+
 		coObjects[i]->Update(dt, &coObjects);
 
 		if (coObjects[i]->GetDeadth() && !dynamic_cast<Item*>(coObjects[i]))
@@ -644,7 +645,7 @@ void CPlayScene::Update(DWORD dt)
 				item->SetPosition(coObjects[i]->x, coObjects[i]->y - 3); // Why -3
 				listItems.push_back(item);
 			}
-		
+
 			coObjects[i]->SetEnable(false);
 		}
 	}
@@ -728,7 +729,7 @@ void CPlayScene::Update(DWORD dt)
 	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
 		simon->x = mapWidth - SIMON_BBOX_WIDTH;
 
-	if (!_checkInBoundMap()) {
+	if (!CheckInBoundMap()) {
 		this->Unload();
 		this->Load();
 		simon->Reset();
@@ -737,29 +738,39 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	if (isWaitResetGame) // màn đen trước khi bắt đầu game
-		return; // thoát và ko vẽ gì
 
-	if (simon->GetWaitingTimeToRevive() == true) 
-		return;
-
-	tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	for (size_t i = 0; i < listItems.size(); i++)
+	if (!isGameOver)
 	{
-		listItems.at(i)->Render();
-	}
+		if (isWaitResetGame) // màn đen trước khi bắt đầu game
+			return; // thoát và ko vẽ gì
 
-	for (int i = 0; i < coObjects.size(); i++)
+		if (simon->GetWaitingTimeToRevive() == true)
+			return;
+
+		tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		for (size_t i = 0; i < listItems.size(); i++)
+		{
+			listItems.at(i)->Render();
+		}
+
+		for (int i = 0; i < coObjects.size(); i++)
+		{
+			coObjects[i]->Render();
+		}
+
+		simon->Render();
+	}
+	else
 	{
-		coObjects[i]->Render();
+		// Hien Menu Game Over
+		//return;
 	}
-
-	simon->Render();
-
+	
 	scoreBoard->Render();
+
 }
 
 #pragma endregion
@@ -797,9 +808,26 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		//gameObject->SetEnableBoundingBox(!gameObject->enableBoundingBox);
 		break;
 	}
+	case DIK_C:
+	{
+		int subWeapon = simon->GetSubWeaponSwitch();
+		if (subWeapon > ITEM_STOP_WATCH)
+		{
+			subWeapon = ITEM_DAGGER;
+		}
+		simon->SetTypeOfWeapon(subWeapon);
+		simon->SetSubWeaponSwitch(subWeapon + 1);
+		break;
+	}
+	case DIK_V:
+	{
+		int heart = simon->GetHeart();
+		simon->SetHeart(heart + 5);
+		break;
+	}
 	case DIK_0:
 	{
-		simon->SetPosition(600.0f, 20.0f);
+		//simon->SetPosition(600.0f, 20.0f);
 		break;
 	}
 	case DIK_1:

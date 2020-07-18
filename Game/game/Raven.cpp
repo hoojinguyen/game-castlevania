@@ -27,6 +27,12 @@ Raven::~Raven()
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Enemy::Update(dt, coObjects);
+
+	if (Enemy::isStop)
+	{
+		return;
+	}
+
 	if (!isDeadth && isEnable) {
 
 		float simonX, simonY;
@@ -97,8 +103,22 @@ void Raven::Render()
 			break;
 		}
 
+		if (Enemy::isStop)
+		{
+			if (nx > 0) {
+				ani = RAVEN_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = RAVEN_ANI_IDLE_LEFT;
+			}
+		}
+
 		animation_set->at(ani)->Render(x, y);
-		RenderBoundingBox();
+
+		if (this->enableBoundingBox)
+		{
+			RenderBoundingBox();
+		}
 	}
 
 	Enemy::Render();
