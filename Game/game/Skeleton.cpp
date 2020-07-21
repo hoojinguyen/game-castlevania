@@ -3,21 +3,22 @@
 #include "Simon.h"
 #include "Ground.h"
 
-Skeleton::Skeleton(float startX, float startY)
+Skeleton::Skeleton(float startX, float startY, int hp, int damage, float distanceAttack, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
+	this->hp = hp;
+	this->damage = damage;
+	this->distanceAttack = distanceAttack;
+	this->point = point;
 
-	this->hp = 1;
 	isEnable = true;
-	damage = 1;
+	vy = 0;
 
-	Enemy::Enemy();
 
 	SetState(SKELETON_STATE_IDLE);
 
-	point = 300;
-	vy = 0;
+	Enemy::Enemy();
 }
 
 Skeleton::~Skeleton()
@@ -44,7 +45,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		nx = this->x >= simonX ? -1 : 1;
 
-		if (abs(this->x - simonX) <= SKELETON_DISTANCE_ATTACK_X && abs(this->y - simonY) <= SIMON_BBOX_HEIGHT * 2)
+		if (abs(this->x - simonX) <= this->distanceAttack && abs(this->y - simonY) <= SIMON_BBOX_HEIGHT * 2)
 		{
 
 			if (state == SKELETON_STATE_IDLE)

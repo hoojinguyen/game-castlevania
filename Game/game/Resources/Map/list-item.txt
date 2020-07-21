@@ -1,0 +1,23 @@
+Danh sach cac item trong file object:
+-2 : Khong co item di kem
+-1 : render ra item ngau nhien
+ 0 : morning star
+ 1 : small heart
+ 2 : large heart
+ 3 : money red
+ 4 : money purple
+ 5 : money white
+ 6 : dagger sub-weapon
+ 7 : axe sub-weapon
+ 8 : fire bomb sub-weapon
+ 9 : boomerang sub-weapon
+10 : stop watch sub-weapon
+11 : cross //all kill enemies
+12 : invisibility position
+13 : pork chop
+14 : double shot
+15 : triple shot
+16 : bonuses
+17 : magic crystal
+18 : crown
+19 : chest

@@ -3,10 +3,12 @@
 class Hunchback : public Enemy
 {
 	float startX, startY;
+	float distanceAttack;
+
 	DWORD timeJump;
 
 public:
-	Hunchback(float startX, float startY);
+	Hunchback(float startX, float startY, int hp, int damage, float distanceAttack, int point);
 	~Hunchback();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);

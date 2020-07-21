@@ -3,22 +3,21 @@
 #include "Simon.h"
 #include "Ground.h"
 
-Hunchback::Hunchback(float startX, float startY)
+Hunchback::Hunchback(float startX, float startY, int hp, int damage, float distanceAttack, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
+	this->hp = hp;
+	this->damage = damage;
+	this->distanceAttack = distanceAttack;
+	this->point = point;
 
-	this->hp = HUNCHBACK_HP;
 	isEnable = true;
-	damage = HUNCHBACK_DAMAGE;
-
-	Enemy::Enemy();
+	timeJump = 0;
 
 	SetState(HUNCHBACK_STATE_IDLE);
 
-	point = 500;
-
-	timeJump = 0;
+	Enemy::Enemy();
 }
 
 Hunchback::~Hunchback()
@@ -49,7 +48,7 @@ void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 		else if (state == HUNCHBACK_STATE_IDLE)
 		{
-			if (abs(this->x - simonX) <= HUNCHBACK_DISTANCE_ATTACK_X)
+			if (abs(this->x - simonX) <= this->distanceAttack)
 			{
 				SetState(HUNCHBACK_STATE_JUMP);
 			}

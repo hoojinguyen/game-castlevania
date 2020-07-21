@@ -80,7 +80,7 @@ public:
 	bool isFreeze; // Trạng thái đóng băng thay đổi màu liên tục
 	DWORD timeFreezeStart; // thời gian đã đóng băng
 
-	bool isKeyState_DIK_UP;
+	bool pressKeyDikUp;
 	bool isUseSubWeapons;
 
 	int subWeaponSwitch; // Chuyển đổi qua lại giữa các vũ khí phụ để test 

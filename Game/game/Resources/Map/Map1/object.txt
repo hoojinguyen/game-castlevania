@@ -1,5 +1,5 @@
-#id	type	name	x	y	width	height	ani_set_id
-0 1 Simon 40 120 16 30 1 -2
+#id|type|name|x|y|width|height|ani_set_id|type_item|hp/direction|damage/simonX|distance/simonY|point
+0 1 Simon 40 120 16 30 1 -2 1 40 120
 1 10 Torch 89 127 32 32 30 2
 2 10 Torch 224 127 32 32 30 0
 3 10 Torch 321 127 32 32 30 2

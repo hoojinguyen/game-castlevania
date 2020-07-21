@@ -12,7 +12,7 @@ public:
 	//DWORD idleCast;
 
 public:
-	Raven(float startX, float startY);
+	Raven(float startX, float startY, int hp, int damage, int point);
 	~Raven();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL);

@@ -1,19 +1,20 @@
 #include "BlackKnight.h"
 #include "Define.h"
 
-BlackKnight::BlackKnight(float startX, float startY)
+BlackKnight::BlackKnight(float startX, float startY, int hp, int damage, float distanceGoX, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
+	this->hp = hp;
+	this->damage = damage;
+	this->distanceGoX = distanceGoX;
+	this->point = point;
 
-	this->hp = BLACK_KNIGHT_HP;
 	isEnable = true;
 
-	damage = BLACK_KNIGHT_DAMAGE;
+	SetState(BLACK_KNIGHT_STATE_WALKING);
 
 	Enemy::Enemy();
-
-	SetState(BLACK_KNIGHT_STATE_WALKING);
 }
 
 BlackKnight::~BlackKnight()
@@ -33,14 +34,14 @@ void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		x += dx;
 		y += dy;
 
-		if (vx > 0 && abs(x - startX) > BLACK_KNIGHT_DISTANCE_X) {
-			x = startX + BLACK_KNIGHT_DISTANCE_X;
+		if (vx > 0 && abs(x - startX) > distanceGoX) {
+			x = startX + distanceGoX;
 			vx = -vx;
 			nx = -1;
 		}
 
-		if (vx < 0 && abs(startX - x) > BLACK_KNIGHT_DISTANCE_X) {
-			x = startX - BLACK_KNIGHT_DISTANCE_X;
+		if (vx < 0 && abs(startX - x) > distanceGoX) {
+			x = startX - distanceGoX;
 			vx = -vx;
 			nx = 1;
 		}
@@ -77,7 +78,7 @@ void BlackKnight::Render()
 		default:
 			break;
 		}
-		
+
 		if (Enemy::isStop)
 		{
 			if (nx > 0) {

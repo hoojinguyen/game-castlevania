@@ -40,8 +40,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	camera = CCamera::GetInstance();
 	mapHeight = 0.0f;
 	mapWidth = 0.0f;
-	simonX_backup = 0.0f;
-	simonY_backup = 0.0f;
 	isGameOver = false;
 }
 
@@ -74,11 +72,6 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 		mapWidth = atoi(tokens[1].c_str());
 	else if (tokens[0] == "map_height")
 		mapHeight = atoi(tokens[1].c_str());
-	else if (tokens[0] == "simonX_backup")
-		simonX_backup = atoi(tokens[1].c_str());
-	else if (tokens[0] == "simonY_backup")
-		simonY_backup = atoi(tokens[1].c_str());
-
 	else
 		DebugOut(L"[ERROR] Unknown scene setting %s\n", ToWSTR(tokens[0]).c_str());
 }
@@ -247,17 +240,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		simon = Simon::GetInstance();
 
+		int direction = atoi(tokens[9].c_str());
+		float simonBackupX = atoi(tokens[10].c_str());
+		float simonBackupY = atoi(tokens[11].c_str());
+
+		simon->nx = direction;
 		simon->SetPosition(x, y);
-		simon->SetPositionBackup(simonX_backup, simonY_backup);
-
-		if (tokens.size() > 9) {
-			int direction = atoi(tokens[9].c_str());
-			simon->nx = direction;
-		}
-		else {
-			simon->nx = 1;
-		}
-
+		simon->SetPositionBackup(simonBackupX, simonBackupY);
 
 		objects.push_back(obj);
 		return;
@@ -342,24 +331,61 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		// Object Enemy
 	case OBJECT_TYPE_VAMPIRE_BAT:
-		obj = new VampireBat(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		float distanceAttack = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new VampireBat(x, y, hp, damage, distanceAttack, point);
 		break;
+	}
 	case OBJECT_TYPE_BLACK_KNGHT:
-		obj = new BlackKnight(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		float distanceGoX = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new BlackKnight(x, y, hp, damage, distanceGoX, point);
 		break;
+	}
 	case OBJECT_TYPE_GHOST:
-		obj = new Ghost(x, y);
-
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		//float distanceGoX = atoi(tokens[11].c_str());
+		int point = atoi(tokens[11].c_str());
+		obj = new Ghost(x, y, hp, damage, point);
 		break;
+	}
 	case OBJECT_TYPE_HUNCHBACK:
-		obj = new Hunchback(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		float distanceGoX = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new Hunchback(x, y, hp, damage, distanceGoX, point);
 		break;
+	}
 	case OBJECT_TYPE_SKELETON:
-		obj = new Skeleton(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		float distanceGoX = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new Skeleton(x, y, hp, damage, distanceGoX, point);
 		break;
+	}
+		
 	case OBJECT_TYPE_RAVEN:
-		obj = new Raven(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		//float distanceGoX = atoi(tokens[11].c_str());
+		int point = atoi(tokens[11].c_str());
+		obj = new Raven(x, y, hp, damage, point);
 		break;
+	}
+	
 	case OBJECT_TYPE_ZOOMBIE:
 		obj = new Zombie(x, y);
 		break;
@@ -768,7 +794,7 @@ void CPlayScene::Render()
 		// Hien Menu Game Over
 		//return;
 	}
-	
+
 	scoreBoard->Render();
 
 }
@@ -916,7 +942,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 			simon->vx = 0;
 			simon->vy = 0;
 		}
-		simon->isKeyState_DIK_UP = false;
+		simon->pressKeyDikUp = false;
 		break;
 	}
 }
@@ -957,7 +983,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		{
 			simon->SetState(SIMON_STATE_CLIMB_STAIR_UP);
 		}
-		simon->isKeyState_DIK_UP = true;
+		simon->pressKeyDikUp = true;
 	}
 	else if (game->IsKeyDown(DIK_RIGHT))
 	{

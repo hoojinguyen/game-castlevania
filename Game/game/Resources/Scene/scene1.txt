@@ -141,8 +141,6 @@ stage 1
 time 300
 map_width 768.0f
 map_height 192.0f
-simonX_backup 40.0f
-simonY_backup 120.0f
 
 [TILEMAP]
 # fileMap	sprite_id	

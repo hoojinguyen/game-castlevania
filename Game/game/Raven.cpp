@@ -2,21 +2,20 @@
 #include "Define.h"
 #include "Simon.h"
 
-Raven::Raven(float startX, float startY)
+Raven::Raven(float startX, float startY, int hp, int damage, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
 
-	this->hp = 1;
+	this->hp = hp;
+	this->damage = damage;
+	this->point = point;
 	isEnable = true;
-	damage = 1;
-
-	Enemy::Enemy();
+	vy = 0;
 
 	SetState(RAVEN_STATE_IDLE);
-
-	point = 200;
-	vy = 0;
+	
+	Enemy::Enemy();
 }
 
 Raven::~Raven()

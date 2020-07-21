@@ -5,7 +5,7 @@ class Ghost : public Enemy
 	float startX, startY;
 
 public:
-	Ghost(float startX, float startY);
+	Ghost(float startX, float startY, int hp, int damage, int point);
 	~Ghost();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);

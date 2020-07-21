@@ -5,11 +5,12 @@
 class Skeleton : public Enemy
 {
 	float startX, startY;
+	float distanceAttack;
 	DWORD timeAttack;
 	vector<Bone *> bones;
 
 public:
-	Skeleton(float startX, float startY);
+	Skeleton(float startX, float startY, int hp, int damage, float distanceAttack, int point);
 	~Skeleton();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);

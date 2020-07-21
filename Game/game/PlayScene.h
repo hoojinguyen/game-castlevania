@@ -46,7 +46,6 @@ protected:
 	int remainTime;
 
 	float mapWidth, mapHeight;
-	float simonX_backup, simonY_backup;
 
 	bool CheckInBoundMap();
 

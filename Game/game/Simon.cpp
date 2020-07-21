@@ -969,7 +969,7 @@ void Simon::SetState(int state)
 		vx = 0;
 		isAttacking = true;
 		timeAttackStart = currentTime;
-		if (isKeyState_DIK_UP && typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect <= ITEM_STOP_WATCH && heart > 0 && !isUseSubWeapons) {
+		if (pressKeyDikUp && typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect <= ITEM_STOP_WATCH && heart > 0 && !isUseSubWeapons) {
 			for (int i = 0; i < numberSubWeaponAble; i++)
 			{
 				if (heart <= 0) {
