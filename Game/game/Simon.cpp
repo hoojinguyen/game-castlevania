@@ -414,7 +414,6 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 		}
 		case ITEM_DAGGER:
 		{
-
 			SetTypeOfWeapon(ITEM_DAGGER);
 			break;
 		}
@@ -525,10 +524,23 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<Enemy*>(coObjects->at(i)))
 		{
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
+
+			int scoreEnemy = enemy->GetScore(); // Set Score cho simon khi Kill enemy
+			if (scoreEnemy != 0 && !enemy->isEnable) {
+				score += scoreEnemy;
+				enemy->SetScore(0);
+			}
+
+			DWORD now = GetTickCount() - enemy->respawnTime;
+			if (enemy->respawnTime != 0 && now > 20000 && !enemy->isEnable) {
+				enemy->Respawn();
+			}
+
 			float l1, t1, r1, b1, l2, t2, r2, b2;
 			GetBoundingBox(l1, t1, r1, b1);
 			enemy->GetBoundingBox(l2, t2, r2, b2);
 			if ((CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))) {
+
 				HandleCollisionSimonWithEnemy(enemy);
 			}
 		}

@@ -16,8 +16,11 @@ protected:
 	int hpC;
 	int damage;
 	int point;
+	float xRespawn, yRespawn;
 	bool isGrounded;
+	
 	static int score;
+
 	void AddScore();
 
 public:
@@ -30,7 +33,7 @@ public:
 	static float stopTime;
 	static bool isStop;
 	DWORD respawnTime;
-	
+
 	static void StartTimeStop() { timestop = 1; timestop_start = GetTickCount(); }
 
 	virtual void Render();
@@ -42,6 +45,7 @@ public:
 
 	static void SetScore(int score);
 	static int GetScore();
+
 
 	int GetHP() { return this->hp; }
 	void SetHP(int hp) { this->hp = hp; }

@@ -7,7 +7,10 @@ Skeleton::Skeleton(float startX, float startY, int hp, int damage, float distanc
 {
 	this->startX = startX;
 	this->startY = startY;
+	this->xRespawn = startX;
+	this->yRespawn = startY;
 	this->hp = hp;
+	this->hpC = hp;
 	this->damage = damage;
 	this->distanceAttack = distanceAttack;
 	this->point = point;

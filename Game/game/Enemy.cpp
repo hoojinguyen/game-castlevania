@@ -7,18 +7,6 @@ int Enemy::timestop = 0;
 DWORD Enemy::timestop_start = 0;
 bool Enemy::isStop = false;
 
-
-void Enemy::AddScore()
-{
-	Enemy::score += point;
-}
-
-int Enemy::GetScore()
-{
-	return score;
-}
-
-
 Enemy::Enemy()
 {
 	collisionEffect = new CollisionEffect();
@@ -29,8 +17,11 @@ Enemy::Enemy()
 
 Enemy::Enemy(int hp)
 {
+	collisionEffect = new CollisionEffect();
+	deadEffect = new DeadEffect();
+
+	this->respawnTime = 0;
 	this->hp = hp;
-	this->respawnTime = 1000;
 	hpC = hp;
 	e_prevHP = hp;
 	isEnable = true;
@@ -43,8 +34,10 @@ Enemy::~Enemy()
 
 void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (!isStop)
+	if (!isStop) {
 		CGameObject::Update(dt, coObjects);
+	}
+
 	if (!isDeadth)
 	{
 		if (isEnable)
@@ -58,6 +51,7 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isDeadth = true;
 				isEnable = false;
+				respawnTime = GetTickCount();
 				GetDeadEffect()->SetEnable(true);
 				AddScore();
 				return;
@@ -76,8 +70,12 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 	}
+
+
 	if (!isEnable)
-		respawnTime += dt;
+	{
+		//respawnTime += dt;
+	}
 
 	collisionEffect->Update(dt);
 	deadEffect->Update(dt);
@@ -100,6 +98,7 @@ void Enemy::Reload()
 	isDeadth = true;
 	hp = hpC;
 	e_prevHP = hp;
+	respawnTime = 0;
 }
 
 void Enemy::Respawn()
@@ -108,11 +107,24 @@ void Enemy::Respawn()
 	isDeadth = false;
 	hp = hpC;
 	e_prevHP = hp;
+	respawnTime = 0;
+	x = xRespawn;
+	y = yRespawn;
+}
+
+void Enemy::AddScore()
+{
+	Enemy::score += point;
+}
+
+int Enemy::GetScore()
+{
+	return score;
 }
 
 void Enemy::SetScore(int score)
 {
-	Enemy::score += score;
+	Enemy::score = score;
 }
 
 

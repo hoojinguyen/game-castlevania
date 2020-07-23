@@ -102,15 +102,7 @@ bool checkContainId(vector<LPGAMEOBJECT>* list_object, LPGAMEOBJECT e)
 		if (obj->GetID() == e->GetID()) {
 			return true;
 		}
-		//else if (obj->GetID() >= OBJECT_TYPE_ZOOMBIE && obj->GetID() <= OBJECT_TYPE_PHANTOM_BAT) {
-		//	return true;
-		//}
-
 	}
-
-	//if (e->GetType() == 205) {
-	//	return false;
-	//}
 
 	return false;
 }
