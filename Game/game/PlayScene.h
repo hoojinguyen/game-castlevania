@@ -47,7 +47,7 @@ protected:
 
 	float mapWidth, mapHeight;
 
-	bool CheckInBoundMap();
+	bool CheckOutSideBoundingMap();
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);

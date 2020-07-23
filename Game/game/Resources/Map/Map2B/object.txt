@@ -1,6 +1,6 @@
 #id|type|name|x|y|width|height|ani_set_id|type_item|hp/direction|damage/simonX|distance/SimonY|point
 0 14 ObjectHidden 352 151 24 8 3 -2
-1 1 Simon 379 155 16 32 1 -2 1 455 70
+1 1 Simon 379 155 16 32 1 -2 -1 455 60
 2 16 TopStair 448 76 32 8 1 -2
 3 17 Ground 448 112 32 16 -1 -2
 4 17 Ground 353 79 96 16 -1 -2

@@ -2,19 +2,20 @@
 #include "Define.h"
 #include "Simon.h"
 
-Raven::Raven(float startX, float startY, int hp, int damage, int point)
+Raven::Raven(float startX, float startY, int hp, int damage,float distanceAttack, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
 
 	this->hp = hp;
 	this->damage = damage;
+	this->distanceAttack = distanceAttack;
 	this->point = point;
 	isEnable = true;
 	vy = 0;
 
 	SetState(RAVEN_STATE_IDLE);
-	
+
 	Enemy::Enemy();
 }
 
@@ -43,29 +44,46 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (state == RAVEN_STATE_FLY)
 		{
-			x += dx;
-			y += dy;
-			if (this->y - simonY >= SIMON_BBOX_HEIGHT / 2 - 5)
-			{
-				vy = 0;
-				y = simonY + SIMON_BBOX_HEIGHT / 2 - 5;
+			if (abs(this->x - simonX) >= SIMON_BBOX_WIDTH / 2) {
+				x += dx;
+			}
+			if (!(simonY <= this->y && this->y - simonY <= GHOST_BBOX_HEIGHT / 2 - 5)) {
+				y += dy;
 			}
 
+
 			if (nx > 0) {
-				if (abs(this->x - simonX) <= RAVEN_DISTANCE_WAITING_X + SIMON_BBOX_WIDTH && abs(this->y - simonY) < SIMON_BBOX_HEIGHT / 2) {
-					SetState(RAVEN_STATE_WAIT);
-				}
+				vx = RAVEN_FLYING_SPEED_X;
 			}
 			else {
-				if (abs(this->x - simonX) <= RAVEN_DISTANCE_WAITING_X && abs(this->y - simonY) < SIMON_BBOX_HEIGHT / 2) {
-					SetState(RAVEN_STATE_WAIT);
-				}
+				vx = -RAVEN_FLYING_SPEED_X;
+			}
+
+			if (ny > 0) {
+				vy = RAVEN_FLYING_SPEED_Y;
+			}
+			else {
+				vy = -RAVEN_FLYING_SPEED_Y;
+			}
+
+			DWORD now = GetTickCount();
+			if (now - timeWait >= 1500) {
+				SetState(RAVEN_STATE_WAIT);
 			}
 		}
 		else if (state == RAVEN_STATE_IDLE) {
-			if (abs(this->x - simonX) < RAVEN_DISTANCE_ATTACK_X) {
+			if (abs(this->x - simonX) < this->distanceAttack) {
 				SetState(RAVEN_STATE_FLY);
 			}
+		}
+		else if (state == RAVEN_STATE_WAIT) {
+			DWORD now = GetTickCount();
+			if (now - timeWait >= 500) {
+				if (abs(this->x - simonX) < this->distanceAttack) {
+					SetState(RAVEN_STATE_FLY);
+				}
+			}
+
 		}
 	}
 }
@@ -84,8 +102,8 @@ void Raven::Render()
 			else {
 				ani = RAVEN_ANI_IDLE_LEFT;
 			}
+			break;
 		}
-		break;
 		case RAVEN_STATE_FLY:
 		case RAVEN_STATE_WAIT:
 		case RAVEN_STATE_ATTACK:
@@ -96,8 +114,8 @@ void Raven::Render()
 			else {
 				ani = RAVEN_ANI_FLY_LEFT;
 			}
+			break;
 		}
-		break;
 		default:
 			break;
 		}
@@ -183,6 +201,7 @@ void Raven::SetState(int state)
 
 		break;
 	case RAVEN_STATE_WAIT:
+		timeWait = GetTickCount();
 		vx = 0;
 		vy = 0;
 		break;

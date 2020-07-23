@@ -60,6 +60,13 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 		if (state == VAMPIRE_BAT_STATE_FLYING)
 		{
+			if (nx > 0) {
+				vx = VAMPIRE_BAT_FLYING_SPEED_X;
+			}
+			else {
+				vx = -VAMPIRE_BAT_FLYING_SPEED_X;
+			}
+
 			x += dx;
 			y += dy;
 			if (this->y - simonY >= SIMON_BBOX_HEIGHT / 2 - 5)

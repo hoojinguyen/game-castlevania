@@ -2,12 +2,13 @@
 #include "Define.h"
 #include "Simon.h"
 
-Ghost::Ghost(float startX, float startY, int hp, int damage, int point)
+Ghost::Ghost(float startX, float startY, int hp, int damage, float distanceAttack, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
 	this->hp = hp;
 	this->damage = damage;
+	this->distanceAttack = distanceAttack;
 	this->point = point;
 	isEnable = true;
 
@@ -36,32 +37,42 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		Simon::GetInstance()->GetPosition(simonX, simonY);
 
 		nx = this->x >= simonX ? -1 : 1;
-
+		ny = this->y >= simonY ? -1 : 1;
 		if (state == GHOST_STATE_FLYING)
 		{
-			x += dx;
-			y += dy;
-
-			if (nx > 0)
-			{
-				if (abs(this->x - simonX) <= GHOST_DISTANCE_WAITING_X + SIMON_BBOX_WIDTH && abs(this->y - simonY) < SIMON_BBOX_HEIGHT)
-				{
-					SetState(GHOST_STATE_WAITTING);
-				}
+			if (nx > 0) {
+				vx = GHOST_FLYING_SPEED_X;
 			}
-			else
+			else {
+				vx = -GHOST_FLYING_SPEED_X;
+			}
+
+			if (ny > 0) {
+				vy = GHOST_FLYING_SPEED_X;
+			}
+			else {
+				vy = -GHOST_FLYING_SPEED_X;
+			}
+
+			if (abs(this->x - simonX) >= SIMON_BBOX_WIDTH / 2)
 			{
-				if (abs(this->x - simonX) <= GHOST_DISTANCE_WAITING_X && abs(this->y - simonY) < SIMON_BBOX_HEIGHT)
-				{
-					SetState(GHOST_STATE_WAITTING);
-				}
+				x += dx;
+			}
+
+			if (!(simonY <= this->y && this->y - simonY <= GHOST_BBOX_HEIGHT / 2)) {
+				y += dy;
 			}
 		}
-		else if (state == GHOST_STATE_HIDE)
-		{
-			if (abs(this->x - simonX) >= GHOST_DISTANCE_ATTACK_X && abs(this->y - simonY) < SIMON_BBOX_HEIGHT)
-			{
-				SetState(GHOST_STATE_FLYING);
+		else if (state == GHOST_STATE_HIDE) {
+			if (nx < 0) {
+				if (this->x - (simonX + SIMON_BBOX_WIDTH) >= this->distanceAttack) {
+					SetState(GHOST_STATE_FLYING);
+				}
+			}
+			else {
+				if (simonX - (this->x + GHOST_BBOX_WIDTH) >= this->distanceAttack) {
+					SetState(GHOST_STATE_FLYING);
+				}
 			}
 		}
 	}
@@ -69,20 +80,17 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 void Ghost::Render()
 {
-	if (!isDeadth && isEnable && state != GHOST_STATE_HIDE)
-	{
+	if (!isDeadth && isEnable && state != GHOST_STATE_HIDE) {
 		int ani = 0;
 		switch (state)
 		{
 		case GHOST_STATE_WAITTING:
 		case GHOST_STATE_FLYING:
 		{
-			if (nx > 0)
-			{
+			if (nx > 0) {
 				ani = GHOST_ANI_FLYING_RIGHT;
 			}
-			else
-			{
+			else {
 				ani = GHOST_ANI_FLYING_LEFT;
 			}
 		}
@@ -91,7 +99,18 @@ void Ghost::Render()
 			break;
 		}
 
+		if (Enemy::isStop)
+		{
+			if (nx > 0) {
+				ani = GHOST_ANI_IDLE_RIGHT;
+			}
+			else {
+				ani = GHOST_ANI_IDLE_LEFT;
+			}
+		}
+
 		animation_set->at(ani)->Render(x, y);
+
 		if (this->enableBoundingBox)
 		{
 			RenderBoundingBox();
@@ -103,15 +122,13 @@ void Ghost::Render()
 
 void Ghost::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (isDeadth && isEnable)
-	{
+	if (isDeadth || state == GHOST_STATE_HIDE) {
 		left = 0;
 		top = 0;
 		right = left + 0;
 		bottom = top + 0;
 	}
-	else
-	{
+	else {
 		left = x;
 		right = left + GHOST_BBOX_WIDTH;
 		top = y;
@@ -131,13 +148,18 @@ void Ghost::SetState(int state)
 	case GHOST_STATE_HIDE:
 		break;
 	case GHOST_STATE_FLYING:
-		if (nx > 0)
-		{
+		if (nx > 0) {
 			vx = GHOST_FLYING_SPEED_X;
 		}
-		else
-		{
+		else {
 			vx = -GHOST_FLYING_SPEED_X;
+		}
+
+		if (ny > 0) {
+			vy = GHOST_FLYING_SPEED_X;
+		}
+		else {
+			vy = -GHOST_FLYING_SPEED_X;
 		}
 		break;
 	case GHOST_STATE_WAITTING:

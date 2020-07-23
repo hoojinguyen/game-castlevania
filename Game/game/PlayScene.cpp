@@ -343,49 +343,49 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int hp = atoi(tokens[9].c_str());
 		int damage = atoi(tokens[10].c_str());
-		float distanceGoX = atoi(tokens[11].c_str());
+		float distanceAttack = atoi(tokens[11].c_str());
 		int point = atoi(tokens[12].c_str());
-		obj = new BlackKnight(x, y, hp, damage, distanceGoX, point);
+		obj = new BlackKnight(x, y, hp, damage, distanceAttack, point);
 		break;
 	}
 	case OBJECT_TYPE_GHOST:
 	{
 		int hp = atoi(tokens[9].c_str());
 		int damage = atoi(tokens[10].c_str());
-		//float distanceGoX = atoi(tokens[11].c_str());
-		int point = atoi(tokens[11].c_str());
-		obj = new Ghost(x, y, hp, damage, point);
+		float distanceAttack = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new Ghost(x, y, hp, damage, distanceAttack, point);
 		break;
 	}
 	case OBJECT_TYPE_HUNCHBACK:
 	{
 		int hp = atoi(tokens[9].c_str());
 		int damage = atoi(tokens[10].c_str());
-		float distanceGoX = atoi(tokens[11].c_str());
+		float distanceAttack = atoi(tokens[11].c_str());
 		int point = atoi(tokens[12].c_str());
-		obj = new Hunchback(x, y, hp, damage, distanceGoX, point);
+		obj = new Hunchback(x, y, hp, damage, distanceAttack, point);
 		break;
 	}
 	case OBJECT_TYPE_SKELETON:
 	{
 		int hp = atoi(tokens[9].c_str());
 		int damage = atoi(tokens[10].c_str());
-		float distanceGoX = atoi(tokens[11].c_str());
+		float distanceAttack = atoi(tokens[11].c_str());
 		int point = atoi(tokens[12].c_str());
-		obj = new Skeleton(x, y, hp, damage, distanceGoX, point);
+		obj = new Skeleton(x, y, hp, damage, distanceAttack, point);
 		break;
 	}
-		
+
 	case OBJECT_TYPE_RAVEN:
 	{
 		int hp = atoi(tokens[9].c_str());
 		int damage = atoi(tokens[10].c_str());
-		//float distanceGoX = atoi(tokens[11].c_str());
-		int point = atoi(tokens[11].c_str());
-		obj = new Raven(x, y, hp, damage, point);
+		float distanceAttack = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new Raven(x, y, hp, damage, distanceAttack, point);
 		break;
 	}
-	
+
 	case OBJECT_TYPE_ZOOMBIE:
 		obj = new Zombie(x, y);
 		break;
@@ -420,11 +420,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 #pragma region Functions proccess common
 
-bool CPlayScene::CheckInBoundMap()
+bool CPlayScene::CheckOutSideBoundingMap()
 {
-	float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapWidth, l2, t2, r2, b2;
+	//float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapWidth, l2, t2, r2, b2;
+	float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapHeight, l2, t2, r2, b2;
 	simon->GetBoundingBox(l2, t2, r2, b2);
-	return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2);
+	//return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2);
+	return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2) && t2 < b1;
 }
 
 void CPlayScene::_Load_OBJECTS(string line)
@@ -707,7 +709,6 @@ void CPlayScene::Update(DWORD dt)
 	//update scoreBoard
 	time += dt;
 	remainTime = defaultTimeGame - time * 0.001;
-	//scoreBoard->Update(16, 300 - time * 0.001, 3, 1);
 	scoreBoard->Update(16, remainTime, stage);
 
 	// Update camera to follow player
@@ -717,7 +718,6 @@ void CPlayScene::Update(DWORD dt)
 	simon->GetPosition(cx, cy);
 
 	boundHeight = mapHeight;
-
 
 	if (mapWidth > SCREEN_WIDTH - 15) {
 		if (cx < (SCREEN_WIDTH - 15) / 2) {
@@ -755,7 +755,7 @@ void CPlayScene::Update(DWORD dt)
 	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
 		simon->x = mapWidth - SIMON_BBOX_WIDTH;
 
-	if (!CheckInBoundMap()) {
+	if (!CheckOutSideBoundingMap()) {
 		this->Unload();
 		this->Load();
 		simon->Reset();
@@ -764,7 +764,6 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-
 	if (!isGameOver)
 	{
 		if (isWaitResetGame) // màn đen trước khi bắt đầu game
@@ -806,14 +805,12 @@ void CPlayScene::Render()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
 	Simon* simon = ((CPlayScene*)scence)->GetSimon();
-	//CGameObject* gameObject = ((CPlayScene*)scence)->GetGameObject();
+	CGame* game = CGame::GetInstance();
 
+	//CGameObject* gameObject = ((CPlayScene*)scence)->GetGameObject();
 	if (simon->isFreeze)
 		return;
-
 
 	if (KeyCode == DIK_1 || KeyCode == DIK_2 || KeyCode == DIK_3 || KeyCode == DIK_4)
 	{
@@ -858,22 +855,22 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	}
 	case DIK_1:
 	{
-		CGame::GetInstance()->SwitchScene(1);
+		game->SwitchScene(1);
 		break;
 	}
 	case DIK_2:
 	{
-		CGame::GetInstance()->SwitchScene(2);
+		game->SwitchScene(2);
 		break;
 	}
 	case DIK_3:
 	{
-		CGame::GetInstance()->SwitchScene(5);
+		game->SwitchScene(5);
 		break;
 	}
 	case DIK_4:
 	{
-		CGame::GetInstance()->SwitchScene(8);
+		game->SwitchScene(8);
 		break;
 	}
 	case DIK_Z:
@@ -900,7 +897,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	Simon* simon = ((CPlayScene*)scence)->GetSimon();
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+
 	if (simon->isFreeze)
 		return;
 

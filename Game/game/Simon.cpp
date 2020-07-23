@@ -375,6 +375,7 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 		switch (item->GetTypeItem())
 		{
 		case ITEM_MORNINGSTAR:
+		{
 			if (morningStar->GetLevel() < MORNINGSTAR_LEVEL_3)
 			{
 				morningStar->SetLevel(morningStar->GetLevel() + 1);
@@ -382,62 +383,102 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 				timeFreezeStart = now; // thời gian đã đóng băng
 			}
 			break;
+		}
 		case ITEM_SMALL_HEART:
+		{
 			heart += 1;
 			break;
+		}
 		case ITEM_LARGE_HEART:
+		{
 			heart += 5;
 			break;
+		}
 		case ITEM_MONEY_BAG_RED:
+		{
 			score += 100;
 			item->GetMoneyEffect()->SetEnable(true);
 			break;
+		}
 		case ITEM_MONEY_BAG_PURPLE:
+		{
 			score += 400;
 			item->GetMoneyEffect()->SetEnable(true);
 			break;
+		}
 		case ITEM_MONEY_BAG_WHITE:
+		{
 			score += 700;
 			item->GetMoneyEffect()->SetEnable(true);
 			break;
+		}
 		case ITEM_DAGGER:
+		{
+
 			SetTypeOfWeapon(ITEM_DAGGER);
 			break;
+		}
 		case ITEM_AXE:
+		{
 			SetTypeOfWeapon(ITEM_AXE);
 			break;
+		}
 		case ITEM_HOLY_WATER:
+		{
 			SetTypeOfWeapon(ITEM_HOLY_WATER);
 			break;
+		}
 		case ITEM_BOOMERANG:
+		{
 			SetTypeOfWeapon(ITEM_BOOMERANG);
 			break;
+		}
 		case ITEM_STOP_WATCH:
+		{
 			SetTypeOfWeapon(ITEM_STOP_WATCH);
 			break;
+		}
 		case ITEM_BONUSES:
+		{
 			score += 1000;
 			item->GetMoneyEffect()->SetEnable(true);
 			break;
+		}
 		case ITEM_CROWN:
 		case ITEM_CHEST:
+		{
 			score += 2000;
 			item->GetMoneyEffect()->SetEnable(true);
 			break;
+		}
+		case ITEM_MAGIC_CRYSTAL:
+		{
+			hp = SIMON_HP;
+			heart += 5;
+			break;
+		}
 		case ITEM_DOUBLE_SHOT:
+		{
 			numberSubWeaponAble = 2;
 			typeShotCollect = ITEM_DOUBLE_SHOT;
 			break;
+		}
 		case ITEM_TRIPLE_SHOT:
+		{
 			numberSubWeaponAble = 3;
 			typeShotCollect = ITEM_TRIPLE_SHOT;
 			break;
+		}
 		case ITEM_CROSS:
+		{
 			SetKillAllEnemies(true);
 			break;
+		}
 		case ITEM_INVISIBILITY_POTION:
+		{
 			StartUntouchable();
 			break;
+		}
 		}
 	}
 	item->SetDeadth(true);
@@ -776,6 +817,10 @@ void Simon::Reset()
 	isJumping = false;
 	isSitting = false;
 	isRunning = false;
+	isOnStair = false;
+	isUpStair = false;
+	isDownStair = false;
+	isHurt = false;
 
 	timeAttackStart = 0;
 
@@ -1014,7 +1059,7 @@ void Simon::SetState(int state)
 
 			}
 		}
-	
+
 		if (!isUseSubWeapons) {
 			morningStar->SetEnable(true);
 			morningStar->SetState(MORNINGSTAR_STATE_PREPARE);

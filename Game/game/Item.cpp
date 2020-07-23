@@ -135,11 +135,13 @@ void Item::RandomItem()
 	}
 	else if (percent < 99)
 	{
-		typeItem = ITEM_CROWN;
+		//typeItem = ITEM_CROWN;
+		typeItem = ITEM_MONEY_BAG_WHITE;
 	}
 	else
 	{
-		typeItem = ITEM_CHEST;
+		typeItem = ITEM_MONEY_BAG_PURPLE;
+		//typeItem = ITEM_CHEST;
 	}
 }
 
@@ -244,6 +246,11 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 			case ITEM_MAGIC_CRYSTAL:
 				right = x + 14;
 				bottom = y + 16;
+				break;
+			case ITEM_CHEST:
+			case ITEM_CROWN:
+				right = x + 18;
+				bottom = y + 18;
 				break;
 			default:
 				break;
@@ -368,7 +375,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Item::Render()
 {
-	if (isEnable) {
+	if (isEnable && animation_set->size()) {
 		animation_set->at(typeItem)->Render(x, y);
 		if (this->enableBoundingBox)
 		{

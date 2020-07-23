@@ -3,9 +3,11 @@
 class Ghost : public Enemy
 {
 	float startX, startY;
+	float distanceAttack;
+	int ny;
 
 public:
-	Ghost(float startX, float startY, int hp, int damage, int point);
+	Ghost(float startX, float startY, int hp, int damage, float distanceAttack, int point);
 	~Ghost();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
