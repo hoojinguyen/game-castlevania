@@ -32,9 +32,10 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (!isStop) {
+	if (!isStop)
+	{
 		CGameObject::Update(dt, coObjects);
 	}
 
@@ -43,7 +44,8 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (isEnable)
 		{
 			respawnTime = 0;
-			if (hp < e_prevHP) {
+			if (hp < e_prevHP)
+			{
 				e_prevHP = hp;
 			}
 
@@ -56,7 +58,8 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				AddScore();
 				return;
 			}
-			if (isStop == true) {
+			if (isStop == true)
+			{
 				DWORD now = GetTickCount();
 				if (now - timestop_start > TIME_STOP_ENEMIES)
 				{
@@ -68,9 +71,7 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			collisionEffect->SetPosition(x, y + 10);
 			deadEffect->SetPosition(x + 3, y - 3);
 		}
-
 	}
-
 
 	if (!isEnable)
 	{
@@ -87,10 +88,9 @@ void Enemy::Render()
 	deadEffect->Render();
 }
 
-void Enemy::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void Enemy::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 }
-
 
 void Enemy::Reload()
 {
@@ -126,6 +126,3 @@ void Enemy::SetScore(int score)
 {
 	Enemy::score = score;
 }
-
-
-

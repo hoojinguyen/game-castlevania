@@ -387,8 +387,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case OBJECT_TYPE_ZOOMBIE:
-		obj = new Zombie(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		float distanceAttack = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		int direction = atoi(tokens[13].c_str());
+		obj = new Zombie(x, y, hp, damage, distanceAttack, point, direction);
 		break;
+	}
 	case OBJECT_TYPE_PHANTOM_BAT:
 		obj = new PhantomBat(x, y);
 		break;

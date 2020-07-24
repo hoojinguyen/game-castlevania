@@ -44,15 +44,15 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i)))
-		{
-			float l1, t1, r1, b1, l2, t2, r2, b2;
-			GetBoundingBox(l1, t1, r1, b1);
-			coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
-				isEnable = false;
-			}
-		}
+		//if (dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i)))
+		//{
+		//	float l1, t1, r1, b1, l2, t2, r2, b2;
+		//	GetBoundingBox(l1, t1, r1, b1);
+		//	coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
+		//	if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
+		//		isEnable = false;
+		//	}
+		//}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
 			float l1, t1, r1, b1, l2, t2, r2, b2;

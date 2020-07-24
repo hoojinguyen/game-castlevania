@@ -4,19 +4,18 @@
 #include "BoundingMap.h"
 #include "Simon.h"
 
-Zombie::Zombie(float startX, float startY)
+Zombie::Zombie(float startX, float startY, int hp, int damage, float distanceAttack, int point, int direction)
 {
 	this->startX = startX;
 	this->startY = startY;
-
-	hp = 1;
-
-	damage = 2;
-	point = 100;
-
+	this->hp = hp;
+	this->damage = damage;
+	this->point = point;
+	this->direction = direction;
+	this->distanceAttack = distanceAttack;
 	Enemy::Enemy();
 
-	SetState(ZOOMBIE_STATE_WALKING);
+	SetState(ZOOMBIE_STATE_HIDE);
 }
 
 Zombie::~Zombie()
@@ -39,7 +38,28 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		Simon::GetInstance()->GetPosition(simonX, simonY);
 
-		nx = this->x >= simonX ? 1 : -1;
+		int t_nx = this->x >= simonX ? -1 : 1;
+
+		if (state == ZOOMBIE_STATE_HIDE) {
+			if (t_nx == direction) {
+				if (t_nx > 0) {
+					float d_x = simonX - this->x;
+					if (d_x >= this->distanceAttack) {
+						nx = direction;
+						SetState(ZOOMBIE_STATE_WALKING);
+					}
+				}
+				else {
+					float d_x = this->x - simonX;
+					if (d_x <= this->distanceAttack && d_x > 0) {
+						nx = direction;
+						SetState(ZOOMBIE_STATE_WALKING);
+					}
+				}
+
+			}
+		}
+
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -56,7 +76,6 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		if (coEvents.size() == 0) {
-
 			x += dx;
 			y += dy;
 
@@ -67,14 +86,7 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			float rdx = 0;
 			float rdy = 0;
 
-			// TODO: This is a very ugly designed function!!!!
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-			// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
-			//if (rdx != 0 && rdx!=dx)
-			//	x += nx*abs(rdx); 
-
-			// block every object first!
 
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
@@ -107,14 +119,14 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			delete coEvents[i];
 		}
-		/*if (!isGrounded)
-			vy += 0.001 * dt;*/
+		if (!isGrounded)
+			vy += 0.001 * dt;
 	}
 }
 
 void Zombie::Render()
 {
-	if (!isDeadth && isEnable) {
+	if (!isDeadth && isEnable && state != ZOOMBIE_STATE_HIDE) {
 		int posX = x, posY = y;
 		int ani = 0;
 		switch (state)
@@ -185,7 +197,16 @@ void Zombie::SetState(int state)
 	switch (state)
 	{
 	case ZOOMBIE_STATE_WALKING:
+	{
 		vx = nx * ZOOMBIE_WALKING_SPEED;
+		break;
+	}
+	case ZOOMBIE_STATE_DEAD:
+	{
+		isDeadth = true;
+		isEnable = false;
+		break;
+	}
 	case ZOOMBIE_STATE_IDLE:
 		vx = 0;
 		break;
