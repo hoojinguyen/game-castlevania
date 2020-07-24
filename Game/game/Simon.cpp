@@ -447,7 +447,7 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 		case ITEM_CHEST:
 		{
 			score += 2000;
-			item->GetMoneyEffect()->SetEnable(true);
+			//item->GetMoneyEffect()->SetEnable(true);
 			break;
 		}
 		case ITEM_MAGIC_CRYSTAL:
