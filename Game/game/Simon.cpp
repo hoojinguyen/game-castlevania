@@ -352,10 +352,10 @@ void Simon::Render()
 	if (untouchable) alpha = 128;
 	if (isFreeze)
 	{
-		animation_set->at(ani)->Render(posX, posY, alpha, rand() % 256, rand() % 256, rand() % 256);
+		animation_set->at(ani)->Render(posX, posY, isFreeze, alpha, rand() % 256, rand() % 256, rand() % 256);
 	}
 	else {
-		animation_set->at(ani)->Render(posX, posY, alpha);
+		animation_set->at(ani)->Render(posX, posY, isFreeze, alpha);
 	}
 
 	if (this->enableBoundingBox) {
@@ -811,11 +811,6 @@ void Simon::HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* co
 #pragma region Functions Reset
 void Simon::Reset()
 {
-	//SetState(SIMON_STATE_IDLE);
-	//SetPosition(xBackup, yBackup);
-	//SetSpeed(0, 0);
-	//SetHP(SIMON_HP);
-
 	level = 0;
 	hp = SIMON_HP;
 	heart = 5;

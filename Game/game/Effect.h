@@ -9,6 +9,7 @@ protected:
 	DWORD timeDelay;
 	bool isEnable;
 	vector<LPANIMATION> animations;
+	LPANIMATION_SET animation_set;
 
 public:
 	Effect();
@@ -20,5 +21,8 @@ public:
 	
 	void SetPosition(float X, float Y) { x = X, y = Y; }
 	void SetEnable(bool e) { this->isEnable = e; }
+
+	void SetAnimationSet(int ani_set_id);
+	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 };
 

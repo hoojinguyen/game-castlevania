@@ -11,10 +11,7 @@ CObjectHidden::CObjectHidden(float _x, float _y, int _with, int _height, int sce
 
 void CObjectHidden::Render()
 {
-	if (this->enableBoundingBox)
-	{
-		RenderBoundingBox();
-	}
+	RenderBoundingBox();
 }
 
 void CObjectHidden::GetBoundingBox(float& l, float& t, float& r, float& b)

@@ -6,10 +6,7 @@ Ground::Ground()
 
 void Ground::Render()
 {
-	if (this->enableBoundingBox)
-	{
-		RenderBoundingBox();
-	}
+	RenderBoundingBox();
 }
 
 void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)

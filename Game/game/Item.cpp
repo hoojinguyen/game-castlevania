@@ -335,7 +335,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			// TODO: This is a very ugly designed function!!!!
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-			
+
 			bool isColisionGround = false;
 
 			for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -380,10 +380,7 @@ void Item::Render()
 {
 	if (isEnable && animation_set->size()) {
 		animation_set->at(typeItem)->Render(x, y);
-		if (this->enableBoundingBox)
-		{
-			RenderBoundingBox();
-		}
+		RenderBoundingBox();
 	}
 
 	if (moneyEffect != nullptr) {

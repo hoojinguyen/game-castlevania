@@ -1,14 +1,15 @@
 #include <iostream>
 #include <fstream>
 
-#include "Game.h"
 #include "Utils.h"
-
-#include "Scene.h"
 #include "Textures.h"
 #include "Sprites.h"
 #include "Animations.h"
+
+#include "Game.h"
+#include "Scene.h"
 #include "PlayScene.h";
+#include "MenuStartGame.h"
 #include "Simon.h"
 
 CGame* CGame::__instance = NULL;
@@ -391,6 +392,13 @@ void CGame::_ParseSection_SCENES(string line)
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
 	LPSCENE scene = new CPlayScene(id, path);
+
+	if (id == -1) {
+		scene = new MenuStartGame(id, path);
+	}
+	else {
+		scene = new CPlayScene(id, path);
+	}
 	scenes[id] = scene;
 }
 
@@ -451,6 +459,12 @@ LPSCENE CGame::GetCurrentScene()
 void CGame::SwitchScene(int scene_id)
 {
 	DebugOut(L"[INFO] Switching to scene %d\n", scene_id);
+	if (scene_id > 0) {
+		CGame::GetInstance()->SetDeviationY(45);
+	}
+	else if (scene_id == -1) {
+		CGame::GetInstance()->SetDeviationY(0);
+	}
 
 	scenes[current_scene]->Unload();
 

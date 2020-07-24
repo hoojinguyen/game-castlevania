@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Axe.h" />
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="BlackKnight.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Boomerang.h" />
@@ -151,6 +152,8 @@
     <ClInclude Include="HP.h" />
     <ClInclude Include="Hunchback.h" />
     <ClInclude Include="ItemBoard.h" />
+    <ClInclude Include="MenuStartGame.h" />
+    <ClInclude Include="MenuText.h" />
     <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="PhantomBat.h" />
     <ClInclude Include="Raven.h" />
@@ -180,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Axe.cpp" />
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="BlackKnight.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="Boomerang.cpp" />
@@ -207,6 +211,8 @@
     <ClCompile Include="HP.cpp" />
     <ClCompile Include="Hunchback.cpp" />
     <ClCompile Include="ItemBoard.cpp" />
+    <ClCompile Include="MenuStartGame.cpp" />
+    <ClCompile Include="MenuText.cpp" />
     <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="PhantomBat.cpp" />
     <ClCompile Include="Raven.cpp" />

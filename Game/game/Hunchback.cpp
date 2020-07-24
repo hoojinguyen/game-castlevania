@@ -27,7 +27,7 @@ Hunchback::~Hunchback()
 {
 }
 
-void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Enemy::Update(dt, coObjects);
 
@@ -90,7 +90,7 @@ void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
 
-				if (dynamic_cast<Ground *>(e->obj)) // if e->obj is Goomba
+				if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Goomba
 				{
 					x += min_tx * dx + nx * 0.4f;
 					y += min_ty * dy + ny * 0.4f;
@@ -105,10 +105,10 @@ void Hunchback::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						SetState(HUNCHBACK_STATE_ATTACK);
 					}
 
-				/*	if (state == HUNCHBACK_STATE_ATTACK && GetTickCount() > timeJump + 200)
-					{
-						SetState(HUNCHBACK_STATE_IDLE);
-					}*/
+					/*	if (state == HUNCHBACK_STATE_ATTACK && GetTickCount() > timeJump + 200)
+						{
+							SetState(HUNCHBACK_STATE_IDLE);
+						}*/
 
 					isCollision = true;
 				}
@@ -161,16 +161,14 @@ void Hunchback::Render()
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
-		if (this->enableBoundingBox)
-		{
-			RenderBoundingBox();
-		}
+
+		RenderBoundingBox();
 	}
 
 	Enemy::Render();
 }
 
-void Hunchback::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void Hunchback::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (isDeadth)
 	{

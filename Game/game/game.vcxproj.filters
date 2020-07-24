@@ -163,6 +163,15 @@
     <ClCompile Include="BrickMoving.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="Bat.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuText.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuStartGame.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -326,6 +335,15 @@
     </ClInclude>
     <ClInclude Include="BrickMoving.h">
       <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Bat.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuText.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuStartGame.h">
+      <Filter>Framework\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

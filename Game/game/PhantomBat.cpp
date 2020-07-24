@@ -109,10 +109,7 @@ void PhantomBat::Render()
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
-		if (this->enableBoundingBox)
-		{
-			RenderBoundingBox();
-		}
+		RenderBoundingBox();
 	}
 	collisionEffect->Render();
 
@@ -221,7 +218,7 @@ bool PhantomBat::Intro(DWORD dt)
 		if (introTime > 1500)
 			SetState(PHANTOM_BAT_STATE_IDLE);
 		else
-			SetState(PHANTOM_BAT_STATE_FLYING); 
+			SetState(PHANTOM_BAT_STATE_FLYING);
 		introTime -= dt;
 		return true;
 	}

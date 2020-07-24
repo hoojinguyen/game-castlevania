@@ -215,10 +215,7 @@ void Skeleton::Render()
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
-		if (this->enableBoundingBox)
-		{
-			RenderBoundingBox();
-		}
+		RenderBoundingBox();
 	}
 
 	Enemy::Render();

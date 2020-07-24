@@ -44,8 +44,5 @@ void BrickMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void BrickMoving::Render()
 {
 	animation_set->at(0)->Render(x, y);
-	if (this->enableBoundingBox)
-	{
-		RenderBoundingBox();
-	}
+	RenderBoundingBox();
 }

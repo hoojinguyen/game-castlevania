@@ -2,7 +2,7 @@
 #include "Define.h"
 #include "Simon.h"
 
-Raven::Raven(float startX, float startY, int hp, int damage,float distanceAttack, int point)
+Raven::Raven(float startX, float startY, int hp, int damage, float distanceAttack, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
@@ -134,10 +134,7 @@ void Raven::Render()
 
 		animation_set->at(ani)->Render(x, y);
 
-		if (this->enableBoundingBox)
-		{
-			RenderBoundingBox();
-		}
+		RenderBoundingBox();
 	}
 
 	Enemy::Render();

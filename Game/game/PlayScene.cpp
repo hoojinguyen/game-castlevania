@@ -834,8 +834,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	}
 	case DIK_B:
 	{
-		//bool isBoundingBox = gameObject->GetEnableBoundingBox();
-		//gameObject->SetEnableBoundingBox(!gameObject->enableBoundingBox);
+		CGameObject::enableBoundingBox = !CGameObject::enableBoundingBox;
 		break;
 	}
 	case DIK_C:

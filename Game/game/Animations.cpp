@@ -20,7 +20,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 }
 
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
-void CAnimation::Render(float x, float y, int alpha, int r, int g, int b, bool isFollowCamera)
+void CAnimation::Render(float x, float y, bool isStop, int alpha, int r, int g, int b)
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
@@ -30,32 +30,62 @@ void CAnimation::Render(float x, float y, int alpha, int r, int g, int b, bool i
 	}
 	else
 	{
-		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t)
-		{
-			currentFrame++;
-			lastFrameTime = now;
-			if (currentFrame == frames.size())
+		if (!isStop) {
+			DWORD t = frames[currentFrame]->GetTime();
+			if (now - lastFrameTime > t)
+			{
+				currentFrame++;
+				lastFrameTime = now;
 				if (currentFrame == frames.size())
-				{
-					if (isLoop) {
-						currentFrame = 0;
-					}
-					else
+					if (currentFrame == frames.size())
 					{
-						currentFrame = frames.size() - 1;
+						if (isLoop) {
+							currentFrame = 0;
+						}
+						else
+						{
+							currentFrame = frames.size() - 1;
+						}
 					}
-				}
+			}
 		}
 	}
 
-	if (isFollowCamera)
+	frames[currentFrame]->GetSprite()->Draw(x, y, alpha, r, g, b);
+}
+
+void CAnimation::RenderWithoutCamera(float x, float y, bool isStop, int alpha, int r, int g, int b)
+{
+	DWORD now = GetTickCount();
+	if (currentFrame == -1)
 	{
-		frames[currentFrame]->GetSprite()->Draw(x, y, alpha, r, g, b);
+		currentFrame = 0;
+		lastFrameTime = now;
 	}
-	else {
-		frames[currentFrame]->GetSprite()->DrawWithoutCamera(x, y, alpha, r, g, b);
+	else
+	{
+		if (!isStop) {
+			DWORD t = frames[currentFrame]->GetTime();
+			if (now - lastFrameTime > t)
+			{
+				currentFrame++;
+				lastFrameTime = now;
+				if (currentFrame == frames.size())
+					if (currentFrame == frames.size())
+					{
+						if (isLoop) {
+							currentFrame = 0;
+						}
+						else
+						{
+							currentFrame = frames.size() - 1;
+						}
+					}
+			}
+		}
 	}
+
+	frames[currentFrame]->GetSprite()->DrawWithoutCamera(x, y, alpha, r, g, b);
 }
 
 CAnimations* CAnimations::__instance = NULL;
