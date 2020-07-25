@@ -29,10 +29,13 @@
 #include "Skeleton.h"
 #include "Ghost.h"
 #include "Zombie.h"
+#include "GameOver.h"
 
 #include "PhantomBat.h"
 
 using namespace std;
+
+
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
@@ -570,6 +573,8 @@ void CPlayScene::Load()
 
 	scoreBoard = new ScoreBoard(simon, 16);
 
+	gameOver = new GameOver();
+
 	time = 0;
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
@@ -771,38 +776,33 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	if (!isGameOver)
-	{
-		if (isWaitResetGame) // màn đen trước khi bắt đầu game
-			return; // thoát và ko vẽ gì
-
-		if (simon->GetWaitingTimeToRevive() == true)
-			return;
-
-		tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-		grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-		for (size_t i = 0; i < listItems.size(); i++)
-		{
-			listItems.at(i)->Render();
-		}
-
-		for (int i = 0; i < coObjects.size(); i++)
-		{
-			coObjects[i]->Render();
-		}
-
-		simon->Render();
-	}
-	else
-	{
-		// Hien Menu Game Over
-		//return;
+	if (isGameOver) {
+		gameOver->Render();
+		return;
 	}
 
+	if (isWaitResetGame) // màn đen trước khi bắt đầu game
+		return; // thoát và ko vẽ gì
+
+	if (simon->GetWaitingTimeToRevive() == true)
+		return;
+
+	tileMap->Render(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	for (size_t i = 0; i < listItems.size(); i++)
+	{
+		listItems.at(i)->Render();
+	}
+
+	for (int i = 0; i < coObjects.size(); i++)
+	{
+		coObjects[i]->Render();
+	}
+
+	simon->Render();
 	scoreBoard->Render();
-
 }
 
 #pragma endregion
@@ -815,7 +815,39 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Simon* simon = ((CPlayScene*)scence)->GetSimon();
 	CGame* game = CGame::GetInstance();
 
-	//CGameObject* gameObject = ((CPlayScene*)scence)->GetGameObject();
+	bool isGameOver = ((CPlayScene*)scence)->isGameOver;
+	if (isGameOver) {
+		switch (KeyCode)
+		{
+		case DIK_DOWN:
+		{
+			GameOver::selected = GAMEOVER_SELECT_END;
+			break;
+		}
+		case DIK_UP:
+		{
+			GameOver::selected = GAMEOVER_SELECT_CONTINUE;
+			break;
+
+		}
+		case DIK_RETURN:
+		{
+			if (GameOver::selected == GAMEOVER_SELECT_CONTINUE) {
+				((CPlayScene*)scence)->isGameOver = false;
+				simon->SetLife(3);
+				game->SwitchScene(1);
+			}
+			else {
+				DestroyWindow(CGame::GetInstance()->GetHWND());
+			}
+			break;
+		}
+		default:
+			break;
+		}
+		return;
+	}
+
 	if (simon->isFreeze)
 		return;
 
@@ -831,6 +863,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R:
 	{
 		simon->SetHP(SIMON_HP);
+		break;
 	}
 	case DIK_B:
 	{

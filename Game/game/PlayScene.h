@@ -3,6 +3,7 @@
 #include "Grid.h"
 #include "TileMap.h"
 #include "ScoreBoard.h"
+#include "GameOver.h"
 #include "Enemy.h"
 
 #include "GameObject.h"
@@ -28,6 +29,7 @@ protected:
 	CCamera *camera;
 
 	ScoreBoard *scoreBoard;
+	GameOver *gameOver;
 
 	DWORD time;
 	DWORD timeKillAll;
@@ -38,8 +40,6 @@ protected:
 
 	/* Xử lí gameover*/
 	bool isGameOver;
-	//Font Text;
-
 
 	int stage;
 	int defaultTimeGame;

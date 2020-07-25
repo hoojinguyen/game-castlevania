@@ -24,7 +24,7 @@
 40000 1 1 16 16 200 0 0
 // Small Heart
 40001 18 1 8 8 200 0 0
-Large Heart
+// Large Heart
 40002 29 6 12 10 200 0 0
 // Red Money
 40003 45 1 15 15 200 0 0

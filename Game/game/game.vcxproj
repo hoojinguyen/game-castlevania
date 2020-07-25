@@ -145,6 +145,7 @@
     <ClInclude Include="FireBomb.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="Gate.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Grid.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="FireBomb.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Gate.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Grid.cpp" />

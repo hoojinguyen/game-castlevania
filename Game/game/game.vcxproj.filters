@@ -172,6 +172,9 @@
     <ClCompile Include="MenuStartGame.cpp">
       <Filter>Framework\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -343,6 +346,9 @@
       <Filter>Object\Ground</Filter>
     </ClInclude>
     <ClInclude Include="MenuStartGame.h">
+      <Filter>Framework\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
       <Filter>Framework\Scene</Filter>
     </ClInclude>
   </ItemGroup>

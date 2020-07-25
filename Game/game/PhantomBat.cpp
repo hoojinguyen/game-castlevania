@@ -10,23 +10,20 @@ PhantomBat::PhantomBat(float startX, float startY)
 	this->startY = startY;
 
 	this->hp = PHANTOM_BAT_HP;
-	isEnable = true;
+	this->point = 3000;
+
+	isEnable = false;
 
 	damage = PHANTOM_BAT_DAMAGE;
 
-	Enemy::Enemy();
 
 	SetState(PHANTOM_BAT_STATE_IDLE);
 
-	point = 200;
-
 	bossDeadEffect = new BossDeadEffect(1);
-	point = 3000;
 	srand(time(0));
 	isFlyToRandomPos = true;
 	isFlyToSimonPos = true;
 
-	point = 3000;
 	waitTime = 0;
 	hurtTime = PHANTOM_BAT_HURT_TIME;
 	isHurted = false;
@@ -39,6 +36,8 @@ PhantomBat::PhantomBat(float startX, float startY)
 	introTime = 2000;
 	simonPos.x = -1;
 	distance = -1;
+
+	Enemy::Enemy();
 }
 
 PhantomBat::~PhantomBat()
@@ -52,27 +51,36 @@ void PhantomBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isEnable)
 	{
+		CalculateSimonPos(dt);
+		CheckHPChange();
+
 		if (Intro(dt) == true)
 			return;
-		CheckHPChange();
+
 		if (isHurted == true)
 			CheckHurtTime(dt);
 		else
 		{
-			if (isFlyToRandomPos == true) {
+			if (isFlyToSimonPos) {
 				if (waitTime > 0)
 					waitTime -= dt;
-				else
-				{
+				else {
 					Fly(dt);
 				}
 			}
-			else if (isFlyToSimonPos == false) {
+			else {
 				if (isFlyToRandomPos == false)
 					FlyToRandomPos(dt);
 				else if (isFlyToRandomPos == true)
 					RandomPos();
 			}
+		}
+	}
+	else {
+		float simonX, simonY;
+		Simon::GetInstance()->GetPosition(simonX, simonY);
+		if (simonX > 600) {
+			isEnable = true;
 		}
 	}
 
@@ -97,13 +105,13 @@ void PhantomBat::Render()
 		case PHANTOM_BAT_STATE_IDLE:
 		{
 			ani = PHANTOM_BAT_ANI_IDLE;
+			break;
 		}
-		break;
 		case PHANTOM_BAT_STATE_FLYING:
 		{
 			ani = PHANTOM_BAT_ANI_FLYING;
+			break;
 		}
-		break;
 		default:
 			break;
 		}
@@ -130,12 +138,12 @@ void PhantomBat::GetBoundingBox(float& left, float& top, float& right, float& bo
 			left = x;
 			top = y;
 			if (animation_set->at(0)->GetCurrentFrame() == 0) {
-				right = left + 48;
-				bottom = top + 22;
+				right = left + 24;
+				bottom = top + 21;
 			}
 			else if (animation_set->at(0)->GetCurrentFrame() == 1) {
-				right = left + 32;
-				bottom = top + 23;
+				right = left + 16;
+				bottom = top + 11;
 			}
 		}
 		else {
@@ -183,10 +191,10 @@ void PhantomBat::CalculateSimonPos(DWORD dt)
 
 void PhantomBat::Fly(DWORD dt)
 {
-	if (abs(batPos.x - simonPos.x) > 200)
+	if (abs(batPos.x - simonPos.x) > 10)
 	{
-		vx = 0.23;
-		vy = 0.18;
+		vx = 0.10;
+		vy = 0.09;
 	}
 	x += nx * vx * dt;
 	y += ny * vy * dt;
@@ -203,12 +211,12 @@ void PhantomBat::Fly(DWORD dt)
 
 void PhantomBat::RandomPos()
 {
-	random.x = rand() % (400) + 5100;
-	random.y = rand() % (50) + 120;
+	random.x = rand() % (200) + 510;
+	random.y = rand() % (25) + 60;
 	isFlyToRandomPos = false;
 	waitTime = PHANTOM_BAT_WAIT_TIME;
-	vx = 0.125;
-	vy = 0.12;
+	vx = 0.065;
+	vy = 0.06;
 }
 
 bool PhantomBat::Intro(DWORD dt)
@@ -269,8 +277,8 @@ void PhantomBat::FlyToRandomPos(DWORD dt)
 	y += ny * vy * dt;;
 	if (sqrt(pow(x - random.x, 2) + pow(y - random.y, 2)) >= distance)
 	{
-		vx = 0.17;
-		vy = 0.17;
+		vx = 0.085;
+		vy = 0.085;
 		chaseTime = PHANTOM_BAT_CHASE_TIME;
 
 		isFlyToSimonPos = true;
