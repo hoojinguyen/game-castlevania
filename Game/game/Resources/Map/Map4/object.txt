@@ -1,4 +1,4 @@
-#id|type|name|x|y|width|height|ani_set_id|type_item|hp/direction|damage/simonX|distance/simonY|point/directionEnemy
+#id|type|name|x|y|width|height|ani_set_id|type_item|hp/direction|damage/simonX|distance/simonY|point|directionEnemy
 0 1 Simon 38 46 16 32 1 -2 1 38 46
 1 11 Candle 92 48 8 16 31 -1
 2 11 Candle 159 82 8 16 31 -1
@@ -18,7 +18,7 @@
 16 15 BottomStair 136 104 8 8 -1 -2
 17 16 TopStair 712 76 16 8 1 -2
 18 15 BottomStair 688 136 8 8 1 -2
-19 300 PhantomBat 615 24 16 16 80 17
+19 300 PhantomBat 615 24 16 16 80 17 16 2 100 1000
 20 17 Ground 0 80 112 16 -1 -2
 21 17 Ground 0 176 768 16 -1 -2
 22 17 Ground 128 112 176 16 -1 -2

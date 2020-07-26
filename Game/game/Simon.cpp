@@ -847,6 +847,8 @@ void Simon::Reset()
 
 	subWeaponSwitch = ITEM_DAGGER;
 
+	CCamera::GetInstance()->SetIsLock(false);
+
 	this->ResetBackupSimon();
 }
 

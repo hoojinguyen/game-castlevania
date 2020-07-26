@@ -86,7 +86,7 @@
       <Filter>Framework\Board</Filter>
     </ClCompile>
     <ClCompile Include="ScoreBoard.cpp">
-      <Filter>ScoreBoard</Filter>
+      <Filter>Text</Filter>
     </ClCompile>
     <ClCompile Include="HP.cpp">
       <Filter>Framework\Board</Filter>
@@ -173,7 +173,7 @@
       <Filter>Framework\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameOver.cpp">
-      <Filter>Framework\Scene</Filter>
+      <Filter>Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,7 +262,7 @@
       <Filter>Framework\Board</Filter>
     </ClInclude>
     <ClInclude Include="ScoreBoard.h">
-      <Filter>ScoreBoard</Filter>
+      <Filter>Text</Filter>
     </ClInclude>
     <ClInclude Include="HP.h">
       <Filter>Framework\Board</Filter>
@@ -349,7 +349,7 @@
       <Filter>Framework\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameOver.h">
-      <Filter>Framework\Scene</Filter>
+      <Filter>Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -404,9 +404,6 @@
     <Filter Include="Framework\Board">
       <UniqueIdentifier>{1488bf1b-81d3-4d85-a6c8-8ed9457f716a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ScoreBoard">
-      <UniqueIdentifier>{7a0aca95-420e-4e9d-a479-ffaa45421ade}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\UI">
       <UniqueIdentifier>{860a8b8a-e5f8-409f-ba75-74bfa582b643}</UniqueIdentifier>
     </Filter>
@@ -418,6 +415,9 @@
     </Filter>
     <Filter Include="Object\Enemy\Boss">
       <UniqueIdentifier>{2c44823b-6dec-44a4-acf7-7b9a9c842935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{7a0aca95-420e-4e9d-a479-ffaa45421ade}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

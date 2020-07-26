@@ -13,6 +13,7 @@ Enemy::Enemy()
 	deadEffect = new DeadEffect();
 	isEnable = true;
 	isDeadth = false;
+	isBoss = false;
 }
 
 Enemy::Enemy(int hp)

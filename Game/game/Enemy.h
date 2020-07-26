@@ -18,6 +18,7 @@ protected:
 	int point;
 	float xRespawn, yRespawn;
 	bool isGrounded;
+	bool isBoss;
 	
 	static int score;
 
@@ -54,6 +55,8 @@ public:
 	void SetDamage(int damage) { this->damage = damage; }
 
 	int GetPoint() { return point; }
+
+	bool GetIsBoss() { return isBoss; }
 
 	void Reload();
 

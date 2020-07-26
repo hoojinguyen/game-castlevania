@@ -4,23 +4,18 @@
 #include "PhantomBat.h"
 #include "Simon.h"
 
-PhantomBat::PhantomBat(float startX, float startY)
+PhantomBat::PhantomBat(float startX, float startY, int hp, int damage, float distanceAttack, int point)
 {
 	this->startX = startX;
 	this->startY = startY;
+	this->hp = hp;
+	this->damage = damage;
+	this->point = point;
+	this->isEnable = false;
+	this->isBoss = true;
 
-	this->hp = PHANTOM_BAT_HP;
-	this->point = 3000;
-
-	isEnable = false;
-
-	damage = PHANTOM_BAT_DAMAGE;
-
-
-	SetState(PHANTOM_BAT_STATE_IDLE);
-
-	bossDeadEffect = new BossDeadEffect(1);
 	srand(time(0));
+	bossDeadEffect = new BossDeadEffect(1);
 	isFlyToRandomPos = true;
 	isFlyToSimonPos = true;
 
@@ -37,6 +32,7 @@ PhantomBat::PhantomBat(float startX, float startY)
 	simonPos.x = -1;
 	distance = -1;
 
+	SetState(PHANTOM_BAT_STATE_IDLE);
 	Enemy::Enemy();
 }
 
@@ -80,6 +76,7 @@ void PhantomBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float simonX, simonY;
 		Simon::GetInstance()->GetPosition(simonX, simonY);
 		if (simonX > 600) {
+			CCamera::GetInstance()->SetIsLock(true);
 			isEnable = true;
 		}
 	}

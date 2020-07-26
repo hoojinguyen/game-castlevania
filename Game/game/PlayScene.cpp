@@ -46,11 +46,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	isGameOver = false;
 }
 
-/*
-	Load scene resources from scene file (textures, sprites, animations and objects)
-	See scene1.txt, scene2.txt for detail format specification
-*/
-
 #pragma region Functions parseSection
 void CPlayScene::_ParseSection_SETTINGS(string line)
 {
@@ -400,13 +395,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_PHANTOM_BAT:
-		obj = new PhantomBat(x, y);
+	{
+		int hp = atoi(tokens[9].c_str());
+		int damage = atoi(tokens[10].c_str());
+		float distanceAttack = atoi(tokens[11].c_str());
+		int point = atoi(tokens[12].c_str());
+		obj = new PhantomBat(x, y, hp, damage, distanceAttack, point);
 		break;
-
-
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
+	}
+
+	// Genearal object Boss
+	if (dynamic_cast<Enemy*>(obj)) {
+		Enemy* enemy = dynamic_cast<Enemy*>(obj);
+		if (enemy->GetIsBoss()) {
+			boss = enemy;
+		}
 	}
 
 	// General object setup
@@ -432,10 +439,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 bool CPlayScene::CheckOutSideBoundingMap()
 {
-	//float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapWidth, l2, t2, r2, b2;
 	float l1 = 0, t1 = 0, r1 = mapWidth, b1 = mapHeight, l2, t2, r2, b2;
 	simon->GetBoundingBox(l2, t2, r2, b2);
-	//return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2);
 	return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2) && t2 < b1;
 }
 
@@ -473,13 +478,10 @@ void CPlayScene::Load()
 	isWaitResetGame = true;
 	TimeWaitedResetGame = 0;
 
-	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
-
 	ifstream f;
 	f.open(sceneFilePath);
 
-	// current resource section flag
-	int section = SCENE_SECTION_UNKNOWN;
+	int section = SCENE_SECTION_UNKNOWN; // current resource section flag
 
 	char str[MAX_SCENE_LINE];
 	while (f.getline(str, MAX_SCENE_LINE))
@@ -536,10 +538,7 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_UNKNOWN;
 			continue;
 		}
-
-		//
 		// data section
-		//
 		switch (section)
 		{
 		case SCENE_SECTION_SETTINGS:
@@ -616,10 +615,7 @@ void CPlayScene::Unload()
 
 void CPlayScene::Update(DWORD dt)
 {
-	if (isGameOver)
-	{
-		return;
-	}
+	if (isGameOver) { return; }
 
 	if (isWaitResetGame)
 	{
@@ -646,7 +642,6 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	if (simon->GetLife() == 0) {
-		// Hien Menu game  over?
 		isGameOver = true;
 		return;
 	}
@@ -690,15 +685,17 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 
-
+	// Set All Kill when simon collision with item CROSS
 	if (simon->GetKillAllEnemies())
 	{
 		for (int i = 0; i < coObjects.size(); i++)
 		{
 			if (dynamic_cast<Enemy*>(coObjects[i])) {
 				Enemy* enemy = dynamic_cast<Enemy*>(coObjects[i]);
-				enemy->SetHP(0);
-				enemy->SetTypeItem(-2);
+				if (!enemy->GetIsBoss()) {
+					enemy->SetHP(0);
+					enemy->SetTypeItem(-2);
+				}
 			}
 		}
 		timeKillAll += dt;
@@ -721,7 +718,8 @@ void CPlayScene::Update(DWORD dt)
 	//update scoreBoard
 	time += dt;
 	remainTime = defaultTimeGame - time * 0.001;
-	scoreBoard->Update(16, remainTime, stage);
+	int hpBoss = boss ? boss->GetHP() : 16;
+	scoreBoard->Update(hpBoss, remainTime, stage);
 
 	// Update camera to follow player
 	D3DXVECTOR3 pos = camera->GetCameraPosition();
@@ -759,7 +757,20 @@ void CPlayScene::Update(DWORD dt)
 		cy = mapHeight > SCREEN_HEIGHT;
 	}
 
-	camera->SetCameraPosition((int)cx, (int)cy);
+	if (camera->GetIsLock()) {
+		// set position when simon hit boss
+		camera->SetCameraPosition(510, (int)cy);
+		if (simon->x <= camera->GetCameraPosition().x) {
+			simon->x = camera->GetCameraPosition().x;
+		}
+		if (simon->x >= camera->GetCameraPosition().x + SCREEN_WIDTH - simon->GetWidth() - 1) {
+			simon->x = mapWidth - SIMON_BBOX_WIDTH;
+		}
+	}
+	else {
+		camera->SetCameraPosition((int)cx, (int)cy);
+	}
+
 
 	// Không cho simon lọt khỏi map
 	if (simon->x < 0)
@@ -885,11 +896,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		int heart = simon->GetHeart();
 		simon->SetHeart(heart + 5);
-		break;
-	}
-	case DIK_0:
-	{
-		//simon->SetPosition(600.0f, 20.0f);
 		break;
 	}
 	case DIK_1:

@@ -12,6 +12,8 @@ class CPlayScene : public CScene
 {
 protected:
 	Simon *simon; 
+	Enemy* boss;
+
 	CGameObject *gameObject;
 
 	vector<LPGAMEOBJECT> objects;
