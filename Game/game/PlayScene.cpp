@@ -444,33 +444,17 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_UNKNOWN;
 			continue;
 		}
-		// data section
+
 		switch (section)
 		{
-		case SCENE_SECTION_SETTINGS:
-			_ParseSection_SETTINGS(line);
-			break;
-		case SCENE_SECTION_TEXTURES:
-			_ParseSection_TEXTURES(line);
-			break;
-		case SCENE_SECTION_SPRITES:
-			_ParseSection_SPRITES(line);
-			break;
-		case SCENE_SECTION_ANIMATIONS:
-			_ParseSection_ANIMATIONS(line);
-			break;
-		case SCENE_SECTION_ANIMATION_SETS:
-			_ParseSection_ANIMATION_SETS(line);
-			break;
-		case SCENE_SECTION_OBJECTS:
-			_Load_OBJECTS(line);
-			break;
-		case SCENE_SECTION_TILEMAP:
-			_ParseSection_TILEMAP(line);
-			break;
-		case SCENE_SECTION_GRID:
-			_ParseSection_GRID(line);
-			break;
+		case SCENE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
+		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
+		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+		case SCENE_SECTION_OBJECTS: _Load_OBJECTS(line); break;
+		case SCENE_SECTION_TILEMAP: _ParseSection_TILEMAP(line); break;
+		case SCENE_SECTION_GRID: _ParseSection_GRID(line); break;
 		}
 	}
 

@@ -4,22 +4,6 @@
 #include "define.h"
 #include "StartScene.h"
 
-void StartSceneKeyHandler::KeyState(BYTE* states)
-{
-}
-
-void StartSceneKeyHandler::OnKeyDown(int KeyCode)
-{
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-	StartScene* s = dynamic_cast<StartScene*>(scence);
-	s->SwitchScene();
-}
-
-void StartSceneKeyHandler::OnKeyUp(int KeyCode)
-{
-}
-
-
 void StartScene::_ParseSection_SETTINGS(string line)
 {
 	vector<string> tokens = split(line);
@@ -123,4 +107,19 @@ void StartScene::Unload()
 	//SAFE_DELETE(textMenu);
 	//SAFE_DELETE(batLarge);
 	CScene::Unload();
+}
+
+void StartSceneKeyHandler::KeyState(BYTE* states)
+{
+}
+
+void StartSceneKeyHandler::OnKeyDown(int KeyCode)
+{
+	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	StartScene* s = dynamic_cast<StartScene*>(scence);
+	s->SwitchScene();
+}
+
+void StartSceneKeyHandler::OnKeyUp(int KeyCode)
+{
 }
