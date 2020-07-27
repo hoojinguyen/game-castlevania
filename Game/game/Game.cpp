@@ -9,7 +9,8 @@
 #include "Game.h"
 #include "Scene.h"
 #include "PlayScene.h";
-#include "MenuStartGame.h"
+#include "StartScene.h"
+#include "IntroScene.h"
 #include "Simon.h"
 
 CGame* CGame::__instance = NULL;
@@ -394,7 +395,10 @@ void CGame::_ParseSection_SCENES(string line)
 	LPSCENE scene = new CPlayScene(id, path);
 
 	if (id == -1) {
-		scene = new MenuStartGame(id, path);
+		scene = new StartScene(id, path);
+	}
+	else if (id == 0) {
+		scene = new IntroScene(id, path);
 	}
 	else {
 		scene = new CPlayScene(id, path);

@@ -1,7 +1,11 @@
 #pragma once
-
 #include <d3dx9.h>
 #include "KeyEventHandler.h"
+#include <Windows.h>
+#include <unordered_map>
+
+#include <stdlib.h>
+using namespace std;
 
 class CScene
 {
@@ -9,6 +13,16 @@ protected:
 	CKeyEventHandler* key_handler;
 	int id;
 	LPCWSTR sceneFilePath;
+
+	vector<int> arrTexturesID;
+	vector<int> arrSpritesID;
+	vector<int> arrAnimationsID;
+	vector<int> arrAnimationSetsID;
+
+	void _ParseSection_TEXTURES(string line);
+	void _ParseSection_SPRITES(string line);
+	void _ParseSection_ANIMATIONS(string line);
+	void _ParseSection_ANIMATION_SETS(string line);
 
 public:
 	CScene(int id, LPCWSTR filePath);

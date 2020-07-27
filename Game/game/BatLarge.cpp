@@ -1,29 +1,29 @@
-#include "Bat.h"
+#include "BatLarge.h"
 
-void Bat::Update(DWORD dt)
+void BatLarge::Update(DWORD dt)
 {
 	if (GetTickCount() - timeStart > 3990) {
 		ani = 1;
 	}
 }
 
-void Bat::Render()
+void BatLarge::Render()
 {
 	animation_set->at(ani)->RenderWithoutCamera(184, 104, isPauseAnimation);
 }
 
-Bat::Bat()
+BatLarge::BatLarge()
 {
 	timeStart = GetTickCount();
 	ani = 0;
 	isPauseAnimation = false;
 }
 
-Bat::~Bat()
+BatLarge::~BatLarge()
 {
 }
 
-void Bat::ReStart()
+void BatLarge::ReStart()
 {
 	ani = 0;
 }

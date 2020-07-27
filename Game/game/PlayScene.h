@@ -21,11 +21,6 @@ protected:
 	vector<LPGAMEOBJECT> listItems;
 	vector<Enemy*> listEnemies;
 
-	vector<int> arrTexturesID;
-	vector<int> arrSpritesID;
-	vector<int> arrAnimationsID;
-	vector<int> arrAnimationSetsID;
-
 	TileMap *tileMap = NULL;
 	Grid *grid = NULL;
 	CCamera *camera;
@@ -52,10 +47,6 @@ protected:
 	bool CheckOutSideBoundingMap();
 
 	void _ParseSection_SETTINGS(string line);
-	void _ParseSection_TEXTURES(string line);
-	void _ParseSection_SPRITES(string line);
-	void _ParseSection_ANIMATIONS(string line);
-	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEMAP(string line);
 	void _ParseSection_GRID(string line);

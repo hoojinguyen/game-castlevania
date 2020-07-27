@@ -109,8 +109,8 @@
 #define SIMON_STATE_CLIMB_STAIR_UP 600
 #define SIMON_STATE_CLIMB_STAIR_DOWN 700
 #define SIMON_STATE_ATTACKING 800
-#define SIMON_STATE_INTRO 900
 #define SIMON_STATE_HURT 900
+#define SIMON_STATE_INTRO 1000
 #define SIMON_STATE_DIE 10000
 
 //simon ani
@@ -415,3 +415,13 @@
 #define PHANTOM_BAT_HURT_TIME	10
 #define PHANTOM_BAT_WAIT_TIME	750
 #define PHANTOM_BAT_CHASE_TIME	50
+
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(ptr) \
+if(ptr) \
+{\
+	delete (ptr); \
+	ptr = nullptr; \
+} \
+
+#endif

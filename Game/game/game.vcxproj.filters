@@ -41,10 +41,10 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Framework\Scene</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
-      <Filter>Framework\Scene</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Framework\Utils</Filter>
@@ -83,13 +83,13 @@
       <Filter>Object\Ground</Filter>
     </ClCompile>
     <ClCompile Include="ItemBoard.cpp">
-      <Filter>Framework\Board</Filter>
+      <Filter>Object\Board</Filter>
     </ClCompile>
     <ClCompile Include="ScoreBoard.cpp">
       <Filter>Text</Filter>
     </ClCompile>
     <ClCompile Include="HP.cpp">
-      <Filter>Framework\Board</Filter>
+      <Filter>Object\Board</Filter>
     </ClCompile>
     <ClCompile Include="StairBottom.cpp">
       <Filter>Object\Ground</Filter>
@@ -163,17 +163,26 @@
     <ClCompile Include="BrickMoving.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
-    <ClCompile Include="Bat.cpp">
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="HeliCopter.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BatLarge.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
     <ClCompile Include="MenuText.cpp">
-      <Filter>Object\Ground</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuStartGame.cpp">
-      <Filter>Framework\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
       <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="BatSmall.cpp">
+      <Filter>Object\Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,10 +220,10 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Framework\Scene</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>Framework\Scene</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Framework\Utils</Filter>
@@ -259,13 +268,13 @@
       <Filter>Object\Ground</Filter>
     </ClInclude>
     <ClInclude Include="ItemBoard.h">
-      <Filter>Framework\Board</Filter>
+      <Filter>Object\Board</Filter>
     </ClInclude>
     <ClInclude Include="ScoreBoard.h">
       <Filter>Text</Filter>
     </ClInclude>
     <ClInclude Include="HP.h">
-      <Filter>Framework\Board</Filter>
+      <Filter>Object\Board</Filter>
     </ClInclude>
     <ClInclude Include="StairBottom.h">
       <Filter>Object\Ground</Filter>
@@ -339,17 +348,26 @@
     <ClInclude Include="BrickMoving.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
-    <ClInclude Include="Bat.h">
+    <ClInclude Include="GameOver.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="HeliCopter.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BatLarge.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
     <ClInclude Include="MenuText.h">
-      <Filter>Object\Ground</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuStartGame.h">
-      <Filter>Framework\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOver.h">
       <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="BatSmall.h">
+      <Filter>Object\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -386,9 +404,6 @@
     <Filter Include="Object\Item">
       <UniqueIdentifier>{5c6daaa9-a099-4a7c-ab4d-2ff70a828313}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Scene">
-      <UniqueIdentifier>{d520f41d-ba63-47a6-9a37-05c672886d19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Utils">
       <UniqueIdentifier>{93ea65d1-95fe-4f20-b6a2-c8bc21e9a2c5}</UniqueIdentifier>
     </Filter>
@@ -400,9 +415,6 @@
     </Filter>
     <Filter Include="Object\Effect">
       <UniqueIdentifier>{822bb622-1cc2-4a02-9494-03199d53842c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Board">
-      <UniqueIdentifier>{1488bf1b-81d3-4d85-a6c8-8ed9457f716a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Framework\UI">
       <UniqueIdentifier>{860a8b8a-e5f8-409f-ba75-74bfa582b643}</UniqueIdentifier>
@@ -418,6 +430,12 @@
     </Filter>
     <Filter Include="Text">
       <UniqueIdentifier>{7a0aca95-420e-4e9d-a479-ffaa45421ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{d520f41d-ba63-47a6-9a37-05c672886d19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Board">
+      <UniqueIdentifier>{1488bf1b-81d3-4d85-a6c8-8ed9457f716a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

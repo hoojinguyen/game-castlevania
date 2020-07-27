@@ -1,15 +1,15 @@
 #pragma once
 #include "Effect.h"
 
-class Bat : public Effect
+class BatLarge : public Effect
 {
 	DWORD timeStart;
 	int ani;
 	bool isPauseAnimation;
 
 public:
-	Bat();
-	~Bat();
+	BatLarge();
+	~BatLarge();
 
 	void Update(DWORD dt);
 	void Render();
