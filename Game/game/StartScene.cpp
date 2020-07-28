@@ -9,11 +9,11 @@ void StartScene::_ParseSection_SETTINGS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
-	if (tokens[0] == "background")
+	if (tokens[0] == "BACKGROUND")
 		background = CSprites::GetInstance()->Get(atoi(tokens[1].c_str()));
-	else if (tokens[0] == "bat_ani_set_id")
+	else if (tokens[0] == "BATLARGE")
 		batLarge->SetAnimationSet(atoi(tokens[1].c_str()));
-	else if (tokens[0] == "text_ani_set_id")
+	else if (tokens[0] == "TEXT")
 		textMenu->SetAnimationSet(atoi(tokens[1].c_str()));
 }
 

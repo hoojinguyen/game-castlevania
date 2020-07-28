@@ -12,12 +12,12 @@ void IntroScene::_ParseSection_SETTINGS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
-	if (tokens[0] == "background") {
+	if (tokens[0] == "BACKGROUND") {
 		background = CSprites::GetInstance()->Get(atoi(tokens[1].c_str()));
 		bgX = atof(tokens[2].c_str());
 		bgY = atof(tokens[3].c_str());
 	}
-	else if (tokens[0] == "bat_ani_set_id")
+	else if (tokens[0] == "BATSMALL")
 	{
 		bat1 = new BatSmall();
 		bat1->SetPosition(atof(tokens[2].c_str()), atof(tokens[3].c_str()));
@@ -30,13 +30,13 @@ void IntroScene::_ParseSection_SETTINGS(string line)
 		bat1->SetAnimationSet(atoi(tokens[1].c_str()));
 		bat2->SetAnimationSet(atoi(tokens[1].c_str()));
 	}
-	else if (tokens[0] == "helicopter_ani_set_id")
+	else if (tokens[0] == "HELICOPTER")
 	{
 		helicopter = new Helicopter();
 		helicopter->SetPosition(atof(tokens[2].c_str()), atof(tokens[3].c_str()));
 		helicopter->SetAnimationSet(atoi(tokens[1].c_str()));
 	}
-	else if (tokens[0] == "ground")
+	else if (tokens[0] == "GROUND")
 	{
 		Ground* ground = new Ground();
 		ground->SetPosition(atof(tokens[1].c_str()), atof(tokens[2].c_str()));
@@ -44,7 +44,7 @@ void IntroScene::_ParseSection_SETTINGS(string line)
 		ground->SetHeight(atoi(tokens[4].c_str()));
 		objects.push_back(ground);
 	}
-	else if (tokens[0] == "player")
+	else if (tokens[0] == "SIMON")
 	{
 		simon = Simon::GetInstance();
 		simon->SetPosition(atof(tokens[1].c_str()), atof(tokens[2].c_str()));

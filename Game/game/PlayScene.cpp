@@ -538,11 +538,10 @@ void CPlayScene::Update(DWORD dt)
 
 	if (simon == NULL) return;
 
+	// update item
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
-
 		coObjects[i]->Update(dt, &coObjects);
-
 		if (coObjects[i]->GetDeadth() && !dynamic_cast<Item*>(coObjects[i]))
 		{
 			coObjects[i]->SetDeadth(false);
@@ -605,11 +604,8 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow player
 	D3DXVECTOR3 pos = camera->GetCameraPosition();
 	float cx, cy, boundHeight;
-
 	simon->GetPosition(cx, cy);
-
 	boundHeight = mapHeight;
-
 	if (mapWidth > SCREEN_WIDTH - 15) {
 		if (cx < (SCREEN_WIDTH - 15) / 2) {
 			cx = 0;
@@ -621,25 +617,20 @@ void CPlayScene::Update(DWORD dt)
 			cx = cx + (SCREEN_WIDTH - 15) / 2 - (SCREEN_WIDTH - 15);
 		}
 	}
-	else {
-		cx = 0;
-	}
+	else { cx = 0; }
 
 	if (mapHeight > SCREEN_HEIGHT)
 	{
 		if (cy + simon->GetHeight() / 2 < mapHeight - SCREEN_HEIGHT / 2) {
 			cy = cy + simon->GetHeight() / 2 - SCREEN_HEIGHT / 2;
 		}
-		else {
-			cy = mapHeight - SCREEN_HEIGHT;
-		}
+		else { cy = mapHeight - SCREEN_HEIGHT; }
 	}
-	else {
-		cy = mapHeight > SCREEN_HEIGHT;
-	}
+	else { cy = mapHeight > SCREEN_HEIGHT; }
 
+
+	// set position when simon hit boss
 	if (camera->GetIsLock()) {
-		// set position when simon hit boss
 		camera->SetCameraPosition(510, (int)cy);
 		if (simon->x <= camera->GetCameraPosition().x) {
 			simon->x = camera->GetCameraPosition().x;
@@ -799,13 +790,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		game->SwitchScene(8);
 		break;
 	}
-	case DIK_Z:
+	case DIK_A:
 		if (!simon->isAttacking)
 		{
 			simon->SetState(SIMON_STATE_ATTACKING);
 		}
 		break;
-	case DIK_X:
+	case DIK_S:
 		if (!simon->isJumping && !simon->isAttacking && !simon->isSitting && !simon->isOnStair)
 		{
 			simon->SetState(SIMON_STATE_JUMP);

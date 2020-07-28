@@ -2,7 +2,7 @@
 Resources\Scene\simon.txt
 
 [SETTINGS]
-start 7
+start -1
 
 #scene list
 [SCENES]

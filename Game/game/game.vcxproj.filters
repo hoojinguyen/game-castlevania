@@ -67,9 +67,6 @@
     <ClCompile Include="Cell.cpp">
       <Filter>Framework\Grid</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingMap.cpp">
-      <Filter>Object\BoundingMap</Filter>
-    </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Object\Effect</Filter>
     </ClCompile>
@@ -184,6 +181,9 @@
     <ClCompile Include="BatSmall.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="BoundingMap.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -251,9 +251,6 @@
     </ClInclude>
     <ClInclude Include="Cell.h">
       <Filter>Framework\Grid</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundingMap.h">
-      <Filter>Object\BoundingMap</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Object\Effect</Filter>
@@ -369,6 +366,9 @@
     <ClInclude Include="BatSmall.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
+    <ClInclude Include="BoundingMap.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">
@@ -409,9 +409,6 @@
     </Filter>
     <Filter Include="Framework\Keyboard">
       <UniqueIdentifier>{c1017810-030b-4baf-9de4-9d7b5d8face3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\BoundingMap">
-      <UniqueIdentifier>{a38588d4-28db-4321-b757-700416e42ae3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object\Effect">
       <UniqueIdentifier>{822bb622-1cc2-4a02-9494-03199d53842c}</UniqueIdentifier>
