@@ -241,11 +241,24 @@ void Simon::Render()
 	else if (state == SIMON_STATE_INTRO) {
 		ani = SIMON_ANI_INTRO;
 	}
+	else if (state == SIMON_STATE_HURT || isHurt)
+	{
+		if (nx > 0) {
+			ani = SIMON_ANI_HURT_RIGHT;
+		}
+		else {
+			ani = SIMON_ANI_HURT_LEFT;
+		}
+	}
 	else
 	{
 		if (isHurt) {
-			if (nx > 0) ani = SIMON_ANI_HURT_RIGHT;
-			else ani = SIMON_ANI_HURT_LEFT;
+			if (nx > 0) {
+				ani = SIMON_ANI_HURT_RIGHT;
+			}
+			else {
+				ani = SIMON_ANI_HURT_LEFT;
+			}
 		}
 		if (isSitting) {
 			if (isAttacking)
@@ -575,10 +588,10 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
 				GetBoundingBox(l1, t1, r1, b1);
 				stairTop->GetBoundingBox(l2, t2, r2, b2);
 
-				if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
+				if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2) && (t1 >= t2))
 				{
 					canClimbDownStair = true;
-					xStair = stairTop->x;
+					xStair = stairTop->x + 2;
 					yStair = stairTop->y;
 					directionStair = stairTop->nx;
 				}
@@ -817,7 +830,7 @@ void Simon::Reset()
 	level = 0;
 	hp = SIMON_HP;
 	heart = 5;
-	score = 0;
+	//score = 0;
 	life = life - 1;
 
 	untouchable = 0;
@@ -939,16 +952,9 @@ void Simon::SetState(int state)
 	case SIMON_STATE_IDLE:
 		isSitting = false;
 		isRunning = false;
-		//isJumping = false;
 		vx = 0;
 		break;
 	case SIMON_STATE_DIE:
-		//isDeadth = true;
-	/*	vx = 0;
-		vy -= SIMON_DIE_DEFLECT_SPEED;*/
-		//vy = 0;
-		//vy = -SIMON_DIE_DEFLECT_SPEED;
-		//vx = 0;
 		vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
 	case SIMON_STATE_SIT_DOWN:
@@ -962,7 +968,6 @@ void Simon::SetState(int state)
 			}
 			else {
 				x = xStair + SIMON_X_ON_STAIR_ALPHA;
-				//y = yStair + 8 - SIMON_BBOX_HEIGHT;
 			}
 			isOnStair = true;
 			isUpStair = true;
@@ -1204,7 +1209,7 @@ void Simon::Load(LPCWSTR simonFile)
 
 	f.close();
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 0));
 
 	DebugOut(L"[INFO] Done loading simon resources %s\n", simonFile);
 }

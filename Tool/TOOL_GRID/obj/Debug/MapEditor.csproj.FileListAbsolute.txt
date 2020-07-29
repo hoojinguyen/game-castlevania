@@ -7,3 +7,12 @@ D:\School_Project\Game\DirectXGame\MapObjectEditor\obj\Debug\MapEditor.Propertie
 D:\School_Project\Game\DirectXGame\MapObjectEditor\obj\Debug\MapEditor.csproj.GenerateResource.cache
 D:\School_Project\Game\DirectXGame\MapObjectEditor\obj\Debug\MapEditor.exe
 D:\School_Project\Game\DirectXGame\MapObjectEditor\obj\Debug\MapEditor.pdb
+D:\School_Project\Game Project\Tool\TOOL_GRID\bin\Debug\MapEditor.exe.config
+D:\School_Project\Game Project\Tool\TOOL_GRID\bin\Debug\MapEditor.exe
+D:\School_Project\Game Project\Tool\TOOL_GRID\bin\Debug\MapEditor.pdb
+D:\School_Project\Game Project\Tool\TOOL_GRID\obj\Debug\MapEditor.csprojAssemblyReference.cache
+D:\School_Project\Game Project\Tool\TOOL_GRID\obj\Debug\MapEditor.MapEditor.resources
+D:\School_Project\Game Project\Tool\TOOL_GRID\obj\Debug\MapEditor.Properties.Resources.resources
+D:\School_Project\Game Project\Tool\TOOL_GRID\obj\Debug\MapEditor.csproj.GenerateResource.cache
+D:\School_Project\Game Project\Tool\TOOL_GRID\obj\Debug\MapEditor.exe
+D:\School_Project\Game Project\Tool\TOOL_GRID\obj\Debug\MapEditor.pdb

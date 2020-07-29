@@ -734,6 +734,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	if (simon->isFreeze)
 		return;
 
+	if (simon->isHurt)
+		return;
+
 	if (KeyCode == DIK_1 || KeyCode == DIK_2 || KeyCode == DIK_3 || KeyCode == DIK_4)
 	{
 		simon->isOnStair = false;
@@ -818,6 +821,9 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	if (simon->isFreeze)
 		return;
 
+	if (simon->isHurt)
+		return;
+
 	switch (KeyCode)
 	{
 	case DIK_LEFT:
@@ -869,6 +875,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	// disable control key when Simon die
 	if (simon->isFreeze)
 		return;
+
+	if (simon->isHurt)
+		return;
+
 	if (simon->GetState() == SIMON_STATE_DIE)
 		return;
 

@@ -41,7 +41,6 @@ class Simon : public CGameObject
 	int typeShotCollect;
 	int typeWeaponCollect;
 
-
 	bool isKillAllEnemies;
 
 	bool isWaitingTimeToRevive; // Thời gian chờ hồi sinh
