@@ -123,7 +123,7 @@ void Item::RandomItem()
 	}
 	else if (percent < 90)
 	{
-		typeItem = ITEM_INVISIBILITY_POTION;
+		typeItem = ITEM_MONEY_BAG_WHITE;
 	}
 	else if (percent < 92)
 	{
@@ -136,7 +136,7 @@ void Item::RandomItem()
 	else if (percent < 99)
 	{
 		//typeItem = ITEM_CROWN;
-		typeItem = ITEM_MONEY_BAG_WHITE;
+		typeItem = ITEM_INVISIBILITY_POTION;
 	}
 	else
 	{
@@ -266,13 +266,15 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!isDeadth && isEnable)
 	{
-		TimeDisplayed += dt;
-		if (TimeDisplayed >= TimeDisplayMax)
-		{
-			this->isDeadth = true;
-			this->isEnable = false;
-			TimeDisplayed = 0;
-			return;
+		if (typeItem != ITEM_MAGIC_CRYSTAL) {
+			TimeDisplayed += dt;
+			if (TimeDisplayed >= TimeDisplayMax)
+			{
+				this->isDeadth = true;
+				this->isEnable = false;
+				TimeDisplayed = 0;
+				return;
+			}
 		}
 
 		CGameObject::Update(dt, coObjects);

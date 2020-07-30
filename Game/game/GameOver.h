@@ -6,10 +6,12 @@ class GameOver
 {
 	ID3DXFont* font;
 	RECT rectLineTitle;
+	RECT rectLineScore;
 	RECT rectLineOne;
 	RECT rectLineTwo;
 	LPDIRECT3DDEVICE9 d3ddv;
 	wstring lineTitle;
+	wstring lineScore;
 	wstring lineOne;
 	wstring lineTwo;
 	CSprite* sprite;
@@ -21,6 +23,6 @@ public:
 
 	GameOver();
 	~GameOver();
-	void Render();
+	void Render(int score);
 };
 

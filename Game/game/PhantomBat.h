@@ -12,15 +12,20 @@ class PhantomBat : public Enemy
 	float ny;
 	float nx;
 	float distance;
+
 	bool isFlyToRandomPos;
 	bool isFlyToSimonPos;
+
 	float waitTime;
 	float hurtTime;
+
+	bool isHurted;
+	
 	DWORD delayTime;
+	DWORD chaseTime;
+
 	int previousHP;
 	float introTime;
-	DWORD chaseTime;
-	bool isHurted;
 	float distanceAttack;
 
 public:

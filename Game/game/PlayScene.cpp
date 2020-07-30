@@ -522,7 +522,7 @@ void CPlayScene::Update(DWORD dt)
 			return;
 	}
 
-	if (simon->GetLife() == 0) {
+	if (simon->GetLife() == 0 || simon->GetIsWinnerBoss()) {
 		isGameOver = true;
 		return;
 	}
@@ -660,7 +660,7 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	if (isGameOver) {
-		gameOver->Render();
+		gameOver->Render(simon->GetScore());
 		return;
 	}
 
@@ -717,7 +717,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{
 			if (GameOver::selected == GAMEOVER_SELECT_CONTINUE) {
 				((CPlayScene*)scence)->isGameOver = false;
-				simon->SetLife(3);
+				CCamera::GetInstance()->SetIsLock(false);
+				simon->SetLife(3, true);
+				simon->SetIsWinnerBoss(false);
 				game->SwitchScene(1);
 			}
 			else {

@@ -14,6 +14,7 @@
 #include "StairTop.h"
 #include "Enemy.h"
 #include "VampireBat.h"
+#include "Zombie.h"
 
 using namespace std;
 
@@ -54,6 +55,8 @@ Simon::Simon()
 	isKillAllEnemies = false;
 
 	isWaitingTimeToRevive = false;
+
+	isWinnerBoss = false;
 
 	subWeaponSwitch = ITEM_DAGGER;
 }
@@ -470,6 +473,7 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 		{
 			hp = SIMON_HP;
 			heart += 5;
+			SetIsWinnerBoss(true);
 			break;
 		}
 		case ITEM_DOUBLE_SHOT:
@@ -548,10 +552,12 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
 			}
 
 			DWORD now = GetTickCount() - enemy->respawnTime;
-			if (enemy->respawnTime != 0 && now > 20000 && !enemy->isEnable) {
-				enemy->Respawn();
+			if (!dynamic_cast<Zombie*>(enemy)) {
+				if (enemy->respawnTime != 0 && now > 20000 && !enemy->isEnable) {
+					enemy->Respawn();
+				}
 			}
-
+			
 			float l1, t1, r1, b1, l2, t2, r2, b2;
 			GetBoundingBox(l1, t1, r1, b1);
 			enemy->GetBoundingBox(l2, t2, r2, b2);
@@ -861,10 +867,13 @@ void Simon::Reset()
 
 	isKillAllEnemies = false;
 
+	isWinnerBoss = false;
+
 	subWeaponSwitch = ITEM_DAGGER;
 
 	CCamera::GetInstance()->SetIsLock(false);
 
+	this->SetIsWinnerBoss(false);
 	this->ResetBackupSimon();
 }
 

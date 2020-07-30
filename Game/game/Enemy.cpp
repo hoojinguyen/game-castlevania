@@ -104,13 +104,15 @@ void Enemy::Reload()
 
 void Enemy::Respawn()
 {
-	isEnable = true;
-	isDeadth = false;
-	hp = hpC;
-	e_prevHP = hp;
-	respawnTime = 0;
-	x = xRespawn;
-	y = yRespawn;
+	if (!isBoss) {
+		isEnable = true;
+		isDeadth = false;
+		hp = hpC;
+		e_prevHP = hp;
+		respawnTime = 0;
+		x = xRespawn;
+		y = yRespawn;
+	}
 }
 
 void Enemy::AddScore()

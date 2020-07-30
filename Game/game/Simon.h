@@ -44,6 +44,7 @@ class Simon : public CGameObject
 	bool isKillAllEnemies;
 
 	bool isWaitingTimeToRevive; // Thời gian chờ hồi sinh
+	bool isWinnerBoss;
 
 	Simon();
 
@@ -92,6 +93,9 @@ public:
 
 	void SetTypeOfWeapon(int item);
 
+	bool GetIsWinnerBoss() { return isWinnerBoss; }
+	void SetIsWinnerBoss(bool win) { isWinnerBoss = win; }
+
 	int GetSubWeaponSwitch() { return subWeaponSwitch; }
 	void SetSubWeaponSwitch(int item) { subWeaponSwitch = item; }
 
@@ -119,7 +123,7 @@ public:
 	void SetAnimationSetMorningStar(LPANIMATION_SET ani_set);
 
 	int GetLife() { return life; }
-	void SetLife(int l) { life = life + l; }
+	void SetLife(int l, bool reset) { if (reset) { life = l; return; } life = life + l; return; }
 
 	int GetScore() { return score; }
 	void SetScore(int sco) { score += sco; }

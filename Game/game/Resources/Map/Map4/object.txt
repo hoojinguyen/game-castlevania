@@ -1,24 +1,24 @@
 #id|type|name|x|y|width|height|ani_set_id|type_item|hp/direction|damage/simonX|distance/simonY|point|directionEnemy
 0 1 Simon 38 46 16 32 1 -2 1 38 46
-1 11 Candle 92 48 8 16 31 18
-2 11 Candle 159 82 8 16 31 19
-3 11 Candle 24 121 8 16 31 -1
-4 11 Candle 221 64 8 16 31 6
-5 11 Candle 286 145 8 16 31 -1
-6 11 Candle 344 111 8 16 31 -1
-7 16 TopStair 296 76 16 8 -1 -1
-8 15 BottomStair 360 168 8 8 -1 -1
+1 11 Candle 92 48 8 16 31 17
+2 11 Candle 159 82 8 16 31 1
+3 11 Candle 24 121 8 16 31 2
+4 11 Candle 221 64 8 16 31 5
+5 11 Candle 286 145 8 16 31 6
+6 11 Candle 344 111 8 16 31 2
+7 16 TopStair 296 76 16 8 -1 -2
+8 15 BottomStair 360 168 8 8 -1 -2
 9 11 Candle 412 144 8 16 31 8
-10 11 Candle 475 145 8 16 31 -1
-11 11 Candle 539 124 8 16 31 -1
-12 11 Candle 603 145 8 16 31 -1
-13 11 Candle 665 118 8 16 31 -1
-14 11 Candle 730 114 8 16 31 -1
+10 11 Candle 475 145 8 16 31 2
+11 11 Candle 539 124 8 16 31 3
+12 11 Candle 603 145 8 16 31 5
+13 11 Candle 665 118 8 16 31 9
+14 11 Candle 730 114 8 16 31 1
 15 16 TopStair 104 44 16 8 -1 -2
 16 15 BottomStair 136 104 8 8 -1 -2
 17 16 TopStair 712 76 16 8 1 -2
 18 15 BottomStair 688 136 8 8 1 -2
-19 300 PhantomBat 615 24 16 16 80 17 16 2 100 1000
+19 300 PhantomBat 615 24 16 16 80 17 16 2 600 1000
 20 17 Ground 0 80 112 16 -1 -2
 21 17 Ground 0 176 768 16 -1 -2
 22 17 Ground 128 112 176 16 -1 -2
