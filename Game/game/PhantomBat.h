@@ -9,8 +9,9 @@ class PhantomBat : public Enemy
 	D3DXVECTOR2 random;
 	D3DXVECTOR2 simonPos;
 	D3DXVECTOR2 batPos;
-	float ny;
+
 	float nx;
+	float ny;
 	float distance;
 
 	bool isFlyToRandomPos;
@@ -41,7 +42,6 @@ public:
 	void CalculateSimonPos(DWORD dt);
 	void Fly(DWORD dt);
 	void RandomPos();
-	bool Intro(DWORD dt);
 	void CheckHPChange();
 	void CheckHurtTime(DWORD dt);
 	void FlyToRandomPos(DWORD dt);

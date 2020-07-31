@@ -12,7 +12,7 @@ PhantomBat::PhantomBat(float startX, float startY, int hp, int damage, float dis
 	this->damage = damage;
 	this->point = point;
 	this->distanceAttack = distanceAttack;
-	this->isEnable = false;
+	this->isEnable = true;
 	this->isBoss = true;
 
 	srand(time(0));
@@ -47,57 +47,63 @@ PhantomBat::~PhantomBat()
 
 void PhantomBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	Enemy::Update(dt, coObjects);
-
-	if (isEnable)
+	//Enemy::Update(dt, coObjects);
+	if (!isDeadth && isEnable)
 	{
-		CalculateSimonPos(dt);
+		if (state != PHANTOM_BAT_STATE_IDLE) {
+			if (state == PHANTOM_BAT_STATE_INTRO)
+			{
+				if (introTime > 0) {
+					if (GetTickCount() - introTime >= 1500)
+						SetState(PHANTOM_BAT_STATE_FLYING);
+				}
+				return;
+			}
+			CalculateSimonPos(dt);
 
-		if (Intro(dt) == true)
-			return;
-
-		//CheckHPChange();
-
-		if (isHurted) {
-			CheckHurtTime(dt);
-		}
-		else {
-			if (isFlyToSimonPos) {
-				if (waitTime > 0)
-					waitTime -= dt;
+			CheckHPChange();
+			if (isHurted == true)
+				CheckHurtTime(dt);
+			else
+			{
+				if (isFlyToSimonPos) {
+					if (waitTime > 0)
+						waitTime -= dt;
+					else
+					{
+						Fly(dt);
+					}
+				}
 				else {
-					Fly(dt);
+					if (isFlyToRandomPos == false)
+						FlyToRandomPos(dt);
+					else if (isFlyToRandomPos == true)
+						RandomPos();
 				}
 			}
-			else {
-				if (!isFlyToRandomPos) FlyToRandomPos(dt);
-				else if (isFlyToRandomPos) RandomPos();
+		}
+		else {
+			float simonX, simonY;
+			Simon::GetInstance()->GetPosition(simonX, simonY);
+			if (simonX >= this->distanceAttack) {
+				SetState(PHANTOM_BAT_STATE_INTRO);
 			}
 		}
-	}
-	else if( !isEnable && isDeadth == false){
-		float simonX, simonY;
-		Simon::GetInstance()->GetPosition(simonX, simonY);
-		if (simonX > distanceAttack) {
-			isEnable = true;
-			CCamera::GetInstance()->SetIsLock(true);
-		}
-	}
 
-	if (!isEnable) {
+	}
+	if (!isEnable)
+	{
 		delayTime += dt;
-		if (delayTime > 1500) {
-			//bossDeadEffect->Update(dt);
-		}
+		if (delayTime > 1500)
+			bossDeadEffect->Update(dt);
 	}
-
 	collisionEffect->SetPosition(x, y + 10);
 	collisionEffect->Update(dt);
 }
 
 void PhantomBat::Render()
 {
-	if (!isDeadth) {
+	if (!isDeadth && isEnable) {
 		int posX = x, posY = y;
 		int ani = 0;
 		switch (state)
@@ -105,24 +111,18 @@ void PhantomBat::Render()
 		case PHANTOM_BAT_STATE_IDLE:
 		{
 			ani = PHANTOM_BAT_ANI_IDLE;
-			break;
 		}
-		case PHANTOM_BAT_STATE_FLYING:
-		{
-			ani = PHANTOM_BAT_ANI_FLYING;
-			break;
-		}
+		break;
 		default:
+			ani = PHANTOM_BAT_ANI_FLYING;
 			break;
 		}
 
 		animation_set->at(ani)->Render(posX, posY);
 		RenderBoundingBox();
 	}
-	//collisionEffect->Render();
 
-	Enemy::Render();
-
+	collisionEffect->Render();
 }
 
 void PhantomBat::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -158,11 +158,20 @@ void PhantomBat::GetBoundingBox(float& left, float& top, float& right, float& bo
 void PhantomBat::SetState(int state)
 {
 	Enemy::SetState(state);
+	switch (state)
+	{
+	case PHANTOM_BAT_STATE_INTRO:
+		CCamera::GetInstance()->SetIsLock(true);
+		introTime = GetTickCount();
+	default:
+		break;
+	}
 }
 
 void PhantomBat::CalculateSimonPos(DWORD dt)
 {
 	float simonX, simonY;
+
 	Simon::GetInstance()->GetPosition(simonX, simonY);
 
 	if (simonPos.x < 0) {
@@ -173,7 +182,7 @@ void PhantomBat::CalculateSimonPos(DWORD dt)
 		simonPos = D3DXVECTOR2(simonX, simonY);
 	}
 
-	if (isFlyToSimonPos)
+	if (isFlyToSimonPos == true)
 	{
 		distance = sqrt(
 			pow(simonPos.x - x, 2) +
@@ -190,11 +199,12 @@ void PhantomBat::CalculateSimonPos(DWORD dt)
 
 void PhantomBat::Fly(DWORD dt)
 {
-	if (abs(batPos.x - simonPos.x) > 10)
+	if (abs(batPos.x - simonPos.x) > 100)
 	{
 		vx = 0.11;
 		vy = 0.09;
 	}
+
 	x += nx * vx * dt;
 	y += ny * vy * dt;
 
@@ -218,30 +228,16 @@ void PhantomBat::RandomPos()
 	vy = 0.06;
 }
 
-bool PhantomBat::Intro(DWORD dt)
-{
-	if (introTime > 0)
-	{
-		if (introTime > 1500)
-			SetState(PHANTOM_BAT_STATE_IDLE);
-		else
-			SetState(PHANTOM_BAT_STATE_FLYING);
-		introTime -= dt;
-		return true;
-	}
-	else
-		return false;
-}
-
 void PhantomBat::CheckHPChange()
 {
 	if (previousHP != hp)
 	{
 		if (hp <= 0)
 		{
+
 			isEnable = false;
 			isDeadth = true;
-			//bossDeadEffect->Enable();
+			bossDeadEffect->Enable();
 			return;
 		}
 		else
@@ -273,6 +269,7 @@ void PhantomBat::FlyToRandomPos(DWORD dt)
 	ny = (random.y - y) / distance;
 	x += nx * vx * dt;
 	y += ny * vy * dt;;
+
 	if (sqrt(pow(x - random.x, 2) + pow(y - random.y, 2)) >= distance)
 	{
 		vx = 0.085;
@@ -281,7 +278,6 @@ void PhantomBat::FlyToRandomPos(DWORD dt)
 
 		isFlyToSimonPos = true;
 		isFlyToRandomPos = true;
-
 		x = random.x;
 		y = random.y;
 

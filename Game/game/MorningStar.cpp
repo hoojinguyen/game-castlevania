@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Define.h"
 
+#include "BrickHidden.h"
 #include "Torch.h"
 #include "Candle.h"
 #include "Item.h"
@@ -29,7 +30,7 @@ void MorningStar::SetPosition(float x, float y, bool isSitting)
 {
 	if (isSitting)
 	{
-		y += MORNINGSTAR_DELTA_POSITION_Y;
+		y += MORNINGSTAR_DELTA_POSITION_Y + 1;
 	}
 	CGameObject::SetPosition(x, y);
 }
@@ -40,13 +41,13 @@ void MorningStar::GetBoundingBox(float& left, float& top, float& right, float& b
 	{
 	case MORNINGSTAR_LEVEL_1_ANI_LEFT:
 		left = x - MORNINGSTAR_DELTA_X_LEFT - MORNINGSTAR_LEVEL_1_BBOX_WIDTH;
-		top = y + MORNINGSTAR_DELTA_POSITION_BOX_HEIGHT;
+		top = y + MORNINGSTAR_DELTA_POSITION_BOX_HEIGHT - 2;
 		right = left + MORNINGSTAR_LEVEL_1_BBOX_WIDTH;
 		bottom = top + MORNINGSTAR_LEVEL_1_BBOX_HEIGHT;
 		break;
 	case MORNINGSTAR_LEVEL_1_ANI_RIGHT:
 		left = x + SIMON_BBOX_WIDTH + MORNINGSTAR_DELTA_X_RIGHT;
-		top = y + MORNINGSTAR_DELTA_POSITION_BOX_HEIGHT;
+		top = y + MORNINGSTAR_DELTA_POSITION_BOX_HEIGHT - 3;
 		right = left + MORNINGSTAR_LEVEL_1_BBOX_WIDTH;
 		bottom = top + MORNINGSTAR_LEVEL_1_BBOX_HEIGHT;
 		break;
@@ -115,7 +116,7 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							item->TurnOnTimeStartEnable();
 						}
 					}
-					
+
 				}
 				else if (dynamic_cast<Torch*>(coObjects->at(i))) {
 					Torch* torch = dynamic_cast<Torch*>(coObjects->at(i));
@@ -133,6 +134,13 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						candle->GetDeadEffect()->SetEnable(true);
 						candle->isEnable = false;
 						candle->isDeadth = true;
+					}
+				}
+				else if (dynamic_cast<BrickHidden*>(coObjects->at(i))) {
+					BrickHidden* brick = dynamic_cast<BrickHidden*>(coObjects->at(i));
+					if (brick->isEnable) {
+						brick->SetState(BRICK_STATE_BROKEN);
+						brick->isEnable = false;
 					}
 				}
 			}

@@ -1,7 +1,7 @@
-﻿#include "Brick.h"
+#include "BrickHidden.h"
 #include "Define.h"
 
-Brick::Brick()
+BrickHidden::BrickHidden()
 {
 	isEnable = true;
 	for (int i = 0; i < 4; i++) {
@@ -9,7 +9,7 @@ Brick::Brick()
 	}
 }
 
-void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void BrickHidden::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	if (state == BRICK_STATE_BROKEN)
 	{
@@ -21,7 +21,7 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	}
 }
 
-void Brick::Render()
+void BrickHidden::Render()
 {
 	if (state == BRICK_STATE_BROKEN) {
 		animation_set->at(0)->Render(x, y);
@@ -36,7 +36,7 @@ void Brick::Render()
 	RenderBoundingBox();
 }
 
-void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
+void BrickHidden::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	if (state == BRICK_STATE_NORMAL) {
 		l = x;
@@ -50,13 +50,12 @@ void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 }
 
-void Brick::SetState(int state)
+void BrickHidden::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
 	{
 	case BRICK_STATE_NORMAL:
-
 		break;
 	case  BRICK_STATE_BROKEN:
 	{

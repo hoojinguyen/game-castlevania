@@ -184,6 +184,12 @@
     <ClCompile Include="BoundingMap.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="BrokenBrickEffect.cpp">
+      <Filter>Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickHidden.cpp">
+      <Filter>Object\Ground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -367,6 +373,12 @@
       <Filter>Object\Ground</Filter>
     </ClInclude>
     <ClInclude Include="BoundingMap.h">
+      <Filter>Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="BrokenBrickEffect.h">
+      <Filter>Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickHidden.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
   </ItemGroup>

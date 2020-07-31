@@ -195,6 +195,7 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 			case ITEM_LARGE_HEART:
 				right = x + 12;
 				bottom = y + 10;
+				break;
 			case ITEM_SMALL_HEART:
 				right = x + 8;
 				bottom = y + 8;

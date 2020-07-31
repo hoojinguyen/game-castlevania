@@ -13,6 +13,7 @@
 #include "Ground.h"
 
 #include "Brick.h"
+#include "BrickHidden.h"
 #include "BrickMoving.h"
 #include "Torch.h"
 #include "Candle.h"
@@ -139,7 +140,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		if (simon != NULL)
 		{
-			DebugOut(L"[ERROR] MARIO object was created before! ");
 			return;
 		}
 		simon = Simon::GetInstance();
@@ -166,10 +166,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GATE:
 		obj = new Gate();
 		break;
+	case OBJECT_TYPE_BRICK_HIDDEN:
+		obj = new  BrickHidden(); 
+		break;
 	case OBJECT_TYPE_BRICK_MOVING:
 		obj = new BrickMoving();
 		break;
-	case OBJECT_TYPE_BOUNGDING_MAP:
+	case OBJECT_TYPE_BOUNDING_MAP:
 		obj = new BoundingMap();
 		break;
 	case OBJECT_TYPE_WALL:
