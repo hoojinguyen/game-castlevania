@@ -20,7 +20,7 @@
 using namespace std;
 
 #pragma region Functions Process Common
-Simon *Simon::__instance = NULL;
+Simon* Simon::__instance = NULL;
 
 Simon::Simon()
 {
@@ -62,14 +62,14 @@ Simon::Simon()
 	subWeaponSwitch = ITEM_DAGGER;
 }
 
-Simon *Simon::GetInstance()
+Simon* Simon::GetInstance()
 {
 	if (__instance == NULL)
 		__instance = new Simon();
 	return __instance;
 }
 
-void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (isDeadth)
 	{
@@ -100,7 +100,7 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 	}
 }
 
-void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	DWORD now = GetTickCount();
 	CGameObject::Update(dt);
@@ -442,7 +442,7 @@ void Simon::Render()
 #pragma endregion
 
 #pragma region Functions Handle Collision
-void Simon::HandleCollisionSimonWithItem(Item *item)
+void Simon::HandleCollisionSimonWithItem(Item* item)
 {
 	DWORD now = GetTickCount();
 
@@ -561,7 +561,7 @@ void Simon::HandleCollisionSimonWithItem(Item *item)
 	item->SetEnable(false);
 }
 
-void Simon::HandleCollisionSimonWithEnemy(Enemy *enemy)
+void Simon::HandleCollisionSimonWithEnemy(Enemy* enemy)
 {
 	if (enemy->vx != 0)
 	{
@@ -575,7 +575,7 @@ void Simon::HandleCollisionSimonWithEnemy(Enemy *enemy)
 					StartUntouchable();
 					SetState(SIMON_STATE_HURT);
 					StartHurting();
-					if (dynamic_cast<VampireBat *>(enemy))
+					if (dynamic_cast<VampireBat*>(enemy))
 					{
 						enemy->SetDeadth(true);
 						enemy->SetEnable(false);
@@ -594,13 +594,13 @@ void Simon::HandleCollisionSimonWithEnemy(Enemy *enemy)
 	}
 }
 
-void Simon::CheckAABB(vector<LPGAMEOBJECT> *coObjects)
+void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<Enemy *>(coObjects->at(i)))
+		if (dynamic_cast<Enemy*>(coObjects->at(i)))
 		{
-			Enemy *enemy = dynamic_cast<Enemy *>(coObjects->at(i));
+			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
 
 			int scoreEnemy = enemy->GetScore(); // Set Score cho simon khi Kill enemy
 			if (scoreEnemy != 0 && !enemy->isEnable)
@@ -610,7 +610,7 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT> *coObjects)
 			}
 
 			DWORD now = GetTickCount() - enemy->respawnTime;
-			if (!dynamic_cast<Zombie *>(enemy))
+			if (!dynamic_cast<Zombie*>(enemy))
 			{
 				if (enemy->respawnTime != 0 && now > 20000 && !enemy->isEnable)
 				{
@@ -627,11 +627,11 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT> *coObjects)
 				HandleCollisionSimonWithEnemy(enemy);
 			}
 		}
-		else if (dynamic_cast<StairBottom *>(coObjects->at(i)))
+		else if (dynamic_cast<StairBottom*>(coObjects->at(i)))
 		{
 			if (!isJumping)
 			{
-				StairBottom *stairBottom = dynamic_cast<StairBottom *>(coObjects->at(i));
+				StairBottom* stairBottom = dynamic_cast<StairBottom*>(coObjects->at(i));
 
 				float l1, t1, r1, b1, l2, t2, r2, b2;
 				GetBoundingBox(l1, t1, r1, b1);
@@ -649,12 +649,12 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT> *coObjects)
 				}
 			}
 		}
-		else if (dynamic_cast<StairTop *>(coObjects->at(i)))
+		else if (dynamic_cast<StairTop*>(coObjects->at(i)))
 		{
 			if (!isJumping)
 			{
 
-				StairTop *stairTop = dynamic_cast<StairTop *>(coObjects->at(i));
+				StairTop* stairTop = dynamic_cast<StairTop*>(coObjects->at(i));
 
 				float l1, t1, r1, b1, l2, t2, r2, b2;
 				GetBoundingBox(l1, t1, r1, b1);
@@ -669,9 +669,9 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT> *coObjects)
 				}
 			}
 		}
-		else if (dynamic_cast<Item *>(coObjects->at(i)))
+		else if (dynamic_cast<Item*>(coObjects->at(i)))
 		{
-			Item *item = dynamic_cast<Item *>(coObjects->at(i));
+			Item* item = dynamic_cast<Item*>(coObjects->at(i));
 
 			float l1, t1, r1, b1, l2, t2, r2, b2;
 			GetBoundingBox(l1, t1, r1, b1);
@@ -685,7 +685,7 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT> *coObjects)
 	}
 }
 
-void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
+void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 {
 	DWORD now = GetTickCount();
 
@@ -701,7 +701,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
-		if (dynamic_cast<Torch *>(e->obj) || dynamic_cast<Candle *>(e->obj))
+		if (dynamic_cast<Torch*>(e->obj) || dynamic_cast<Candle*>(e->obj))
 		{
 			coEvents.erase(coEvents.begin() + i);
 		}
@@ -732,9 +732,9 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<Item *>(e->obj))
+			if (dynamic_cast<Item*>(e->obj))
 			{
-				Item *item = dynamic_cast<Item *>(e->obj);
+				Item* item = dynamic_cast<Item*>(e->obj);
 				if (!item->GetDeadth() && item->GetEnable())
 				{
 					this->HandleCollisionSimonWithItem(item);
@@ -746,7 +746,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 				}*/
 			else if (dynamic_cast<BrickHidden*>(e->obj))
 			{
-				BrickHidden *brick = dynamic_cast<BrickHidden *>(e->obj);
+				BrickHidden* brick = dynamic_cast<BrickHidden*>(e->obj);
 				if (brick->GetState() == BRICK_STATE_BROKEN)
 				{
 					x += dx;
@@ -763,7 +763,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 						vy = 0;
 				}
 			}
-			else if (dynamic_cast<BrickMoving *>(e->obj))
+			else if (dynamic_cast<BrickMoving*>(e->obj))
 			{
 				if (e->ny < 0)
 				{
@@ -780,7 +780,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 					isJumping = false;
 				}
 			}
-			else if (dynamic_cast<Ground *>(e->obj))
+			else if (dynamic_cast<Ground*>(e->obj))
 			{
 
 				if (isOnStair)
@@ -817,7 +817,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 				}
 				else
 				{
-					Ground *ground = dynamic_cast<Ground *>(e->obj);
+					Ground* ground = dynamic_cast<Ground*>(e->obj);
 					// block
 
 					x += min_tx * dx + nx * 0.4f;
@@ -846,7 +846,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-			else if (dynamic_cast<BoundingMap *>(e->obj) || dynamic_cast<Wall *>(e->obj))
+			else if (dynamic_cast<BoundingMap*>(e->obj) || dynamic_cast<Wall*>(e->obj))
 			{
 				x += min_tx * dx + nx * 0.4f;
 				y += min_ty * dy + ny * 0.4f;
@@ -856,7 +856,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 				if (ny != 0)
 					vy = 0;
 			}
-			else if (dynamic_cast<StairBottom *>(e->obj))
+			else if (dynamic_cast<StairBottom*>(e->obj))
 			{
 				x += dx;
 				if (e->ny < 0)
@@ -871,9 +871,9 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 						y += dy + ny * -0.7f;
 				}
 			}
-			else if (dynamic_cast<CObjectHidden *>(e->obj))
+			else if (dynamic_cast<CObjectHidden*>(e->obj))
 			{
-				CObjectHidden *p = dynamic_cast<CObjectHidden *>(e->obj);
+				CObjectHidden* p = dynamic_cast<CObjectHidden*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 				return;
 			}
@@ -893,7 +893,7 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT> *coObjects)
 		delete coEvents[i];
 }
 
-void Simon::HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void Simon::HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (typeWeaponCollect >= ITEM_DAGGER && typeWeaponCollect <= ITEM_STOP_WATCH)
 	{
@@ -908,9 +908,9 @@ void Simon::HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT> *co
 	{
 		if (weapons[i]->GetEnable())
 		{
-			if (dynamic_cast<Boomerang *>(weapons[i]))
+			if (dynamic_cast<Boomerang*>(weapons[i]))
 			{
-				Boomerang *weapon = dynamic_cast<Boomerang *>(weapons[i]);
+				Boomerang* weapon = dynamic_cast<Boomerang*>(weapons[i]);
 
 				if (weapon->countReturn == 0)
 				{
@@ -1170,7 +1170,7 @@ void Simon::SetState(int state)
 					break;
 				}
 
-				Weapon *weapon = nullptr;
+				Weapon* weapon = nullptr;
 				switch (typeWeaponCollect)
 				{
 				case ITEM_HOLY_WATER:
@@ -1447,7 +1447,7 @@ void Simon::_ParseSection_ANIMATION_SETS(string line)
 
 	LPANIMATION_SET s = new CAnimationSet();
 
-	CAnimations *animations = CAnimations::GetInstance();
+	CAnimations* animations = CAnimations::GetInstance();
 
 	for (int i = 1; i < tokens.size(); i++)
 	{
@@ -1468,7 +1468,7 @@ void Simon::_ParseSection_SETTINGS(string line)
 		return;
 
 	int id = atoi(tokens[0].c_str());
-	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(id);
 
 	if (tokens[1] == "SIMON")

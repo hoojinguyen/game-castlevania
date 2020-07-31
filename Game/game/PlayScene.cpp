@@ -167,7 +167,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Gate();
 		break;
 	case OBJECT_TYPE_BRICK_HIDDEN:
-		obj = new  BrickHidden(); 
+		obj = new  BrickHidden();
 		break;
 	case OBJECT_TYPE_BRICK_MOVING:
 		obj = new BrickMoving();
@@ -739,7 +739,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	if (simon->isFreeze)
 		return;
 
-	if (simon->isHurt)
+	if (simon->isHurt && !simon->isOnStair)
 		return;
 
 	if (KeyCode == DIK_1 || KeyCode == DIK_2 || KeyCode == DIK_3 || KeyCode == DIK_4)
@@ -826,7 +826,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	if (simon->isFreeze)
 		return;
 
-	if (simon->isHurt)
+	if (simon->isHurt && !simon->isOnStair)
 		return;
 
 	switch (KeyCode)
@@ -881,7 +881,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	if (simon->isFreeze)
 		return;
 
-	if (simon->isHurt)
+	if (simon->isHurt && !simon->isOnStair)
 		return;
 
 	if (simon->GetState() == SIMON_STATE_DIE)

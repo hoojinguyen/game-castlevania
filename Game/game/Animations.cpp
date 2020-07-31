@@ -30,7 +30,7 @@ void CAnimation::Render(float x, float y, bool isStop, int alpha, int r, int g, 
 	}
 	else
 	{
-		if (!isStop) {
+		//if (!isStop) {
 			DWORD t = frames[currentFrame]->GetTime();
 			if (now - lastFrameTime > t)
 			{
@@ -47,7 +47,7 @@ void CAnimation::Render(float x, float y, bool isStop, int alpha, int r, int g, 
 							currentFrame = frames.size() - 1;
 						}
 					}
-			}
+			//}
 		}
 	}
 
