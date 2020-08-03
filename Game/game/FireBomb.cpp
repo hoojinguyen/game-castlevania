@@ -45,18 +45,9 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isEnable == true)
 		vy += FIRE_BOMB_SPEED_Y * dt;
 
+	// Check AABB
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		//if (dynamic_cast<Ground*>(coObjects->at(i)))
-		//{
-		//	float l1, t1, r1, b1, l2, t2, r2, b2;
-		//	GetBoundingBox(l1, t1, r1, b1);
-		//	coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-
-		//	if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
-		//		isFiring = true;
-		//	}
-		//}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
 			float l1, t1, r1, b1, l2, t2, r2, b2;
@@ -119,7 +110,7 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			timefiring = 0;
 		}
 	}
-	if (isEnable == false)
+	if (!isEnable)
 		isFiring = false;
 }
 

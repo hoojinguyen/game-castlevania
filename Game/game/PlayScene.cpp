@@ -751,6 +751,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_N:
+	{
+		simon->SetPosition(700,46);
+;		break;
+	}
 	case DIK_R:
 	{
 		simon->SetHP(SIMON_HP);
