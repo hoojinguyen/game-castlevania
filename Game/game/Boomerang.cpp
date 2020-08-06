@@ -1,5 +1,5 @@
 #include "Define.h"
-
+#include "Sound.h"
 #include "Boomerang.h"
 #include "Enemy.h"
 #include "Torch.h"
@@ -8,12 +8,13 @@
 #define DELTA_X 10
 #define BOOMERANG_DAMAGE 2
 #define BOOMERANG_USE_HEART 1
+#define BOOMERANG_ATTACK_SPEED 0.15f
 
 Boomerang::Boomerang(float _startX)
 {
 	useHeart = BOOMERANG_USE_HEART;
 	damage = BOOMERANG_DAMAGE;
-
+	speed = BOOMERANG_ATTACK_SPEED;
 	countReturn = 0;
 	startX = _startX;
 
@@ -36,6 +37,15 @@ void Boomerang::GetBoundingBox(float& left, float& top, float& right, float& bot
 void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
+	bool runHit = false;
+
+	Sound::GetInstance()->Play(SOUND_BOOMERANG);
+
+	//if (!CCamera::GetInstance()->CheckPositionInboundCamera(x, y))
+	//{
+	//	isEnable = false;
+	//	Sound::GetInstance()->Stop(SOUND_BOOMERANG);
+	//}
 
 	if (vx > 0 && abs(x - startX) >= SCREEN_WIDTH / 2 - DELTA_X) {
 		x = startX + SCREEN_WIDTH / 2 - DELTA_X;
@@ -67,6 +77,7 @@ void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if ((coObjects->at(i))->nx != 0)
 				{
 					if (enemy->isEnable != false) {
+						runHit = true;
 						enemy->SetHP(enemy->GetHP() - damage);
 						enemy->GetCollisionEffect()->SetEnable(true);
 						isEnable = false;
@@ -81,6 +92,7 @@ void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			candle->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (candle->isEnable) {
+					runHit = true;
 					candle->GetCollisionEffect()->SetEnable(true);
 					candle->GetDeadEffect()->SetEnable(true);
 					candle->isEnable = false;
@@ -96,6 +108,7 @@ void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			torch->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (torch->isEnable) {
+					runHit = true;
 					torch->GetCollisionEffect()->SetEnable(true);
 					torch->GetDeadEffect()->SetEnable(true);
 					torch->isEnable = false;
@@ -104,6 +117,10 @@ void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
+	}
+
+	if (runHit) {
+		Sound::GetInstance()->Play(SOUND_HIT);
 	}
 }
 

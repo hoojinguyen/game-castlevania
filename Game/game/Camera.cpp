@@ -1,4 +1,5 @@
 ﻿#include "Camera.h"
+#include "define.h"
 
 CCamera* CCamera::__instance = NULL;
 
@@ -39,4 +40,14 @@ void CCamera::SetCameraPosition(float x, float y)
 D3DXVECTOR3 CCamera::GetCameraPosition()
 {
 	return this->cameraPosition;
+}
+
+
+bool CCamera::CheckPositionInboundCamera(float x, float y)
+{
+	if (x > cameraPosition.x + SCREEN_WIDTH || x < cameraPosition.x)
+		return false;
+	if (y > cameraPosition.y + SCREEN_HEIGHT || y < cameraPosition.y)
+		return false;
+	return true;
 }

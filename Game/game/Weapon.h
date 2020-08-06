@@ -6,6 +6,7 @@ protected:
 	int useHeart;
 	int damage;
 	int count;
+	float speed;
 
 public:
 	Weapon();

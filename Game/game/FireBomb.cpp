@@ -1,5 +1,6 @@
-#include "FireBomb.h"
+﻿#include "FireBomb.h"
 #include "Ground.h"
+#include "Sound.h"
 #include "BoundingMap.h"
 #include "Enemy.h"
 #include "Candle.h"
@@ -37,6 +38,10 @@ void FireBomb::GetBoundingBox(float& left, float& top, float& right, float& bott
 void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
+	bool runHit = false;
+
+	//Sound::GetInstance()->Play(SOUND_FIREBOMB); // chạm đất thì mới playsound
+
 	if (isFiring == true)
 	{
 		vy = 0;
@@ -57,6 +62,7 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if ((coObjects->at(i))->nx != 0)
 				{
 					if (enemy->isEnable != false) {
+						runHit = true;
 						vx = 0;
 						enemy->SetHP(enemy->GetHP() - this->damage);
 						enemy->GetCollisionEffect()->SetEnable(true);
@@ -74,6 +80,7 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			candle->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (candle->isEnable) {
+					runHit = true;
 					candle->GetCollisionEffect()->SetEnable(true);
 					candle->GetDeadEffect()->SetEnable(true);
 					candle->isEnable = false;
@@ -89,6 +96,7 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			torch->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (torch->isEnable) {
+					runHit = true;
 					torch->GetCollisionEffect()->SetEnable(true);
 					torch->GetDeadEffect()->SetEnable(true);
 					torch->isEnable = false;
@@ -112,6 +120,10 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (!isEnable)
 		isFiring = false;
+
+	if (runHit) {
+		Sound::GetInstance()->Play(SOUND_HIT);
+	}
 }
 
 void FireBomb::Render()

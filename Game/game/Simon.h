@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "Sound.h"
 #include "Item.h"
 #include "Enemy.h"
 
@@ -11,9 +12,11 @@
 #include "FireBomb.h"
 #include "Stopwatch.h"
 
+
 class Simon : public CGameObject
 {
 	static Simon* __instance;
+	Sound* sound;
 	int level;
 	int hp;
 	int score;

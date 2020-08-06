@@ -49,6 +49,7 @@ Simon::Simon()
 	isFirstOnStair = false;
 
 	morningStar = new MorningStar();
+	sound = Sound::GetInstance();
 
 	isUseSubWeapons = false;
 	numberSubWeaponAble = 1;
@@ -169,7 +170,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			morningStar->SetPosition(x, y, isSitting);
 			morningStar->Update(dt, coObjects);
-
 			if (now - timeAttackStart > (SIMON_ATTACK_TIME - 150))
 			{
 				morningStar->SetState(MORNINGSTAR_STATE_HIT);
@@ -397,66 +397,78 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 				morningStar->SetLevel(morningStar->GetLevel() + 1);
 				isFreeze = true;
 				timeFreezeStart = now; // thời gian đã đóng băng
+				sound->Play(SOUND_COLLECT_WEAPON);
 			}
 			break;
 		}
 		case ITEM_SMALL_HEART:
 		{
 			heart += 1;
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_LARGE_HEART:
 		{
 			heart += 5;
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_MONEY_BAG_RED:
 		{
 			score += 100;
 			item->GetMoneyEffect()->SetEnable(true);
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_MONEY_BAG_PURPLE:
 		{
 			score += 400;
 			item->GetMoneyEffect()->SetEnable(true);
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_MONEY_BAG_WHITE:
 		{
 			score += 700;
 			item->GetMoneyEffect()->SetEnable(true);
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_DAGGER:
 		{
 			SetTypeOfWeapon(ITEM_DAGGER);
+			sound->Play(SOUND_COLLECT_WEAPON);
 			break;
 		}
 		case ITEM_AXE:
 		{
 			SetTypeOfWeapon(ITEM_AXE);
+			sound->Play(SOUND_COLLECT_WEAPON);
 			break;
 		}
 		case ITEM_HOLY_WATER:
 		{
 			SetTypeOfWeapon(ITEM_HOLY_WATER);
+			sound->Play(SOUND_COLLECT_WEAPON);
 			break;
 		}
 		case ITEM_BOOMERANG:
 		{
 			SetTypeOfWeapon(ITEM_BOOMERANG);
+			sound->Play(SOUND_COLLECT_WEAPON);
 			break;
 		}
 		case ITEM_STOP_WATCH:
 		{
 			SetTypeOfWeapon(ITEM_STOP_WATCH);
+			sound->Play(SOUND_COLLECT_WEAPON);
 			break;
 		}
 		case ITEM_BONUSES:
 		{
 			score += 1000;
 			item->GetMoneyEffect()->SetEnable(true);
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_CROWN:
@@ -464,12 +476,14 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 		{
 			score += 2000;
 			//item->GetMoneyEffect()->SetEnable(true);
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_MAGIC_CRYSTAL:
 		{
 			hp = SIMON_HP;
 			heart += 5;
+			sound->Play(SOUND_COLLECT_ITEM);
 			SetIsWinnerBoss(true);
 			break;
 		}
@@ -477,22 +491,26 @@ void Simon::HandleCollisionSimonWithItem(Item* item)
 		{
 			numberSubWeaponAble = 2;
 			typeShotCollect = ITEM_DOUBLE_SHOT;
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_TRIPLE_SHOT:
 		{
 			numberSubWeaponAble = 3;
 			typeShotCollect = ITEM_TRIPLE_SHOT;
+			sound->Play(SOUND_COLLECT_ITEM);
 			break;
 		}
 		case ITEM_CROSS:
 		{
 			SetKillAllEnemies(true);
+			sound->Play(SOUND_ITEM_ALLKILL);
 			break;
 		}
 		case ITEM_INVISIBILITY_POTION:
 		{
 			StartUntouchable();
+			sound->Play(SOUND_ITEM_INVISIBILITYPOTION);
 			break;
 		}
 		}
@@ -511,6 +529,7 @@ void Simon::HandleCollisionSimonWithEnemy(Enemy* enemy)
 			{
 				if (hp > 0)
 				{
+					sound->Play(SOUND_HURT);
 					hp -= enemy->GetDamage();
 					StartUntouchable();
 					SetState(SIMON_STATE_HURT);
@@ -593,7 +612,6 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (!isJumping)
 			{
-
 				StairTop* stairTop = dynamic_cast<StairTop*>(coObjects->at(i));
 
 				float l1, t1, r1, b1, l2, t2, r2, b2;
@@ -821,6 +839,7 @@ void Simon::HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* co
 				{
 					continue;
 				}
+			
 				float l1, t1, r1, b1, l2, t2, r2, b2;
 				GetBoundingBox(l1, t1, r1, b1);
 				weapons[i]->GetBoundingBox(l2, t2, r2, b2);
@@ -969,7 +988,7 @@ void Simon::SetState(int state)
 		vx = 0;
 		break;
 	case SIMON_STATE_DIE:
-		vy = -SIMON_DIE_DEFLECT_SPEED;
+		//vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
 	case SIMON_STATE_SIT_DOWN:
 		vx = 0;

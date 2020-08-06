@@ -17,5 +17,6 @@ public:
 
 	bool GetIsLock() { return isLock; }
 	void SetIsLock(bool lock) { isLock = lock; }
+	bool CheckPositionInboundCamera(float x, float y);
 };
 

@@ -8,6 +8,8 @@
 
 #include "GameObject.h"
 #include "Simon.h"
+#include "Sound.h"
+
 class CPlayScene : public CScene
 {
 protected:
@@ -24,6 +26,7 @@ protected:
 	TileMap *tileMap = NULL;
 	Grid *grid = NULL;
 	CCamera *camera;
+	Sound* sound;
 
 	ScoreBoard *scoreBoard;
 	GameOver *gameOver;
@@ -69,6 +72,8 @@ public:
 
 	float GetMapWidth() { return mapWidth; }
 	float GetMapHeight() { return mapHeight; }
+
+	void ReplayMusicGame();
 
 	friend class CPlayScenceKeyHandler;
 };

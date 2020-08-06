@@ -180,7 +180,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	CGame::GetInstance()->Load(L"Resources\\Scene\\main.txt");
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2.5, SCREEN_HEIGHT * 2.5, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	int width = 528;
+	int height = 480;
+	SetWindowPos(hWnd, 0, 0, 0, width, height, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

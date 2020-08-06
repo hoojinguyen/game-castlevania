@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "define.h"
+#include "Sound.h"
 
 int Enemy::score = 0;
 float Enemy::stopTime = 0;
@@ -62,8 +63,10 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (isStop == true)
 			{
 				DWORD now = GetTickCount();
+				Sound::GetInstance()->Play(SOUND_STOPWATCH, true, 100);
 				if (now - timestop_start > TIME_STOP_ENEMIES)
 				{
+					Sound::GetInstance()->Stop(SOUND_STOPWATCH);
 					isStop = false;
 					timestop = 0;
 					timestop_start = 0;

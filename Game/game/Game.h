@@ -51,6 +51,7 @@ class CGame
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 	void _ParseSection_PLAYER(string line);
+	void _ParseSection_SOUND(string line);
 
 public:
 	static CGame* GetInstance();

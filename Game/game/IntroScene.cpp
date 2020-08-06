@@ -100,6 +100,8 @@ void IntroScene::Load()
 
 	scoreBoard = new ScoreBoard(simon, 16);
 
+	sound = Sound::GetInstance();
+
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -110,8 +112,10 @@ void IntroScene::Update(DWORD dt)
 	helicopter->Update(dt);
 	scoreBoard->Update(16, 1000, 0);
 
+
 	if (simon->x > SCREEN_WIDTH / 2 - SIMON_BBOX_WIDTH / 2)
 	{
+		sound->Play(MUSIC_INTRO);
 		simon->SetState(SIMON_STATE_WALK_LEFT);
 	}
 	simon->Update(dt, &objects);
@@ -121,11 +125,16 @@ void IntroScene::Update(DWORD dt)
 		simon->SetPosition(simon->x, simon->y);
 		simon->SetState(SIMON_STATE_INTRO);
 		timeDelay += dt;
-		if (timeDelay >= SCENE_INTRO_LIVE_TIME)
+		//if (timeDelay >= SCENE_INTRO_LIVE_TIME)
+		//{
+		//	CGame::GetInstance()->SwitchScene(1);
+		//}
+		if (sound->isPlaying(MUSIC_INTRO) == false)
 		{
 			CGame::GetInstance()->SwitchScene(1);
 		}
 	}
+
 }
 
 void IntroScene::Render()

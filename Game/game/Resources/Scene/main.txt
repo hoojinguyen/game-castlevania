@@ -1,3 +1,6 @@
+[SOUND]
+Resources\Scene\sound.txt
+
 [PLAYER]
 Resources\Scene\simon.txt
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "Sound.h"
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
@@ -372,6 +373,7 @@ CGame* CGame::GetInstance()
 #define GAME_FILE_SECTION_PLAYER 0
 #define GAME_FILE_SECTION_SETTINGS 1
 #define GAME_FILE_SECTION_SCENES 2
+#define GAME_FILE_SECTION_SOUND 3
 
 void CGame::_ParseSection_SETTINGS(string line)
 {
@@ -409,18 +411,22 @@ void CGame::_ParseSection_SCENES(string line)
 void CGame::_ParseSection_PLAYER(string line)
 {
 	vector<string> tokens = split(line);
-
 	if (tokens.size() < 1) return;
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
-
 	Simon::GetInstance()->Load(path);
 }
 
+void CGame::_ParseSection_SOUND(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 1) return;
+	LPCWSTR path = ToLPCWSTR(tokens[0]);
+	Sound::GetInstance()->Load(path);
+}
 
 void CGame::Load(LPCWSTR gameFile)
 {
 	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
-
 	ifstream f;
 	f.open(gameFile);
 	char str[MAX_GAME_LINE];
@@ -435,11 +441,14 @@ void CGame::Load(LPCWSTR gameFile)
 		if (line[0] == '#') continue;	// skip comment lines	
 
 		if (line == "[PLAYER]") { section = GAME_FILE_SECTION_PLAYER; continue; }
+		if (line == "[SOUND]") { section = GAME_FILE_SECTION_SOUND; continue; }
 		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
 		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
 
+
 		switch (section)
 		{
+		case GAME_FILE_SECTION_SOUND: _ParseSection_SOUND(line); break;
 		case GAME_FILE_SECTION_PLAYER: _ParseSection_PLAYER(line); break;
 		case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 		case GAME_FILE_SECTION_SCENES: _ParseSection_SCENES(line); break;

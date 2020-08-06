@@ -1,5 +1,6 @@
 #include "BrickHidden.h"
 #include "Define.h"
+#include "Sound.h"
 
 BrickHidden::BrickHidden()
 {

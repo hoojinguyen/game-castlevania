@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Utils.h"
 #include "Define.h"
-
+#include "Sound.h"
 #include "BrickHidden.h"
 #include "Torch.h"
 #include "Candle.h"
@@ -82,9 +82,14 @@ void MorningStar::GetBoundingBox(float& left, float& top, float& right, float& b
 
 void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	bool runHit = false;
+	bool soundBrickBroken = false;
+
 	if (state == MORNINGSTAR_STATE_HIT && isEnable)
 	{
 		CGameObject::Update(dt);
+
+		Sound::GetInstance()->Play(SOUND_MORNINGSTAR);
 
 		for (UINT i = 0; i < coObjects->size(); i++)
 		{
@@ -101,6 +106,7 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if ((coObjects->at(i))->nx != 0)
 					{
 						if (enemy->isEnable != false) {
+							runHit = true;
 							enemy->GetCollisionEffect()->SetEnable(true);
 							enemy->SetHP(enemy->GetHP() - this->damage);
 							this->isEnable = false;
@@ -116,11 +122,11 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							item->TurnOnTimeStartEnable();
 						}
 					}
-
 				}
 				else if (dynamic_cast<Torch*>(coObjects->at(i))) {
 					Torch* torch = dynamic_cast<Torch*>(coObjects->at(i));
 					if (torch->isEnable) {
+						runHit = true;
 						torch->GetCollisionEffect()->SetEnable(true);
 						torch->GetDeadEffect()->SetEnable(true);
 						torch->isEnable = false;
@@ -130,6 +136,7 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else if (dynamic_cast<Candle*>(coObjects->at(i))) {
 					Candle* candle = dynamic_cast<Candle*>(coObjects->at(i));
 					if (candle->isEnable) {
+						runHit = true;
 						candle->GetCollisionEffect()->SetEnable(true);
 						candle->GetDeadEffect()->SetEnable(true);
 						candle->isEnable = false;
@@ -139,12 +146,24 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else if (dynamic_cast<BrickHidden*>(coObjects->at(i))) {
 					BrickHidden* brick = dynamic_cast<BrickHidden*>(coObjects->at(i));
 					if (brick->isEnable) {
+						soundBrickBroken = true;
 						brick->SetState(BRICK_STATE_BROKEN);
 						brick->isEnable = false;
 					}
 				}
 			}
 		}
+	}
+
+	if (soundBrickBroken) {
+		Sound::GetInstance()->Stop(SOUND_MORNINGSTAR);
+		Sound::GetInstance()->Play(SOUND_BROKENBRICK);
+		return;
+	}
+
+	if (runHit) {
+		Sound::GetInstance()->Stop(SOUND_MORNINGSTAR);
+		Sound::GetInstance()->Play(SOUND_HIT);
 	}
 }
 

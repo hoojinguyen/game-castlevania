@@ -4,12 +4,15 @@
 #include "ScoreBoard.h"
 #include "BatSmall.h"
 #include "Helicopter.h"
+#include "Sound.h"
 
-#define SCENE_INTRO_LIVE_TIME	1500
+#define SCENE_INTRO_LIVE_TIME	3000
 
 class IntroScene : public CScene
 {
 protected:
+	Sound* sound;
+
 	Simon* simon;
 	ScoreBoard* scoreBoard;
 	LPSPRITE background;

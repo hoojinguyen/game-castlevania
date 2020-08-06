@@ -353,6 +353,12 @@ bool CPlayScene::CheckOutSideBoundingMap()
 	return CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2) && t2 < b1;
 }
 
+void CPlayScene::ReplayMusicGame()
+{
+	sound->StopAll();// tắt hết nhạc
+	sound->Play(MUSIC_SCENE, true); // mở lại nhạc nền
+}
+
 void CPlayScene::_Load_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
@@ -467,7 +473,11 @@ void CPlayScene::Load()
 
 	gameOver = new GameOver();
 
+	sound = Sound::GetInstance();
+
 	time = 0;
+
+	ReplayMusicGame();
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
@@ -499,7 +509,16 @@ void CPlayScene::Unload()
 
 void CPlayScene::Update(DWORD dt)
 {
-	if (isGameOver) { return; }
+	if (isGameOver) {
+		sound->Stop(MUSIC_SCENE);
+		sound->StopAll();// tắt hết nhạc
+		return;
+	}
+
+	if (simon->GetLife() == 0 || simon->GetIsWinnerBoss()) {
+		isGameOver = true;
+		return;
+	}
 
 	if (isWaitResetGame)
 	{
@@ -523,11 +542,6 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else
 			return;
-	}
-
-	if (simon->GetLife() == 0 || simon->GetIsWinnerBoss()) {
-		isGameOver = true;
-		return;
 	}
 
 	grid->GetListOfObjects(&coObjects, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -641,8 +655,18 @@ void CPlayScene::Update(DWORD dt)
 		if (simon->x >= camera->GetCameraPosition().x + SCREEN_WIDTH - simon->GetWidth() - 1) {
 			simon->x = mapWidth - SIMON_BBOX_WIDTH;
 		}
+
+		if (sound->isPlaying(MUSIC_SCENE))
+		{
+			sound->Stop(MUSIC_SCENE);
+		}
+		sound->Play(MUSIC_BOSS, true);
 	}
 	else {
+		if (sound->isPlaying(MUSIC_BOSS))
+		{
+			ReplayMusicGame();
+		}
 		camera->SetCameraPosition((int)cx, (int)cy);
 	}
 
@@ -753,8 +777,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_N:
 	{
-		simon->SetPosition(700,46);
-;		break;
+		simon->SetPosition(700, 46);
+		;		break;
 	}
 	case DIK_R:
 	{

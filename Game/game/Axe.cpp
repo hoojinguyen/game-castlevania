@@ -1,5 +1,6 @@
 #include "Axe.h"
 #include "Ground.h"
+#include "Sound.h"
 #include "BoundingMap.h"
 #include "Enemy.h"
 #include "Torch.h"
@@ -34,22 +35,23 @@ void Axe::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
+	bool runHit = false;
 
-	if (isEnable)
+	Sound::GetInstance()->Play(SOUND_AXE);
+
+	if (!CCamera::GetInstance()->CheckPositionInboundCamera(x, y))
+	{
+		isEnable = false;
+		Sound::GetInstance()->Stop(SOUND_AXE);
+	}
+
+	if (isEnable) {
 		vy += AXE_SPEED_Y * dt;
+	}
+
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		//if ((dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i))))
-		//{
-		//	float l1, t1, r1, b1, l2, t2, r2, b2;
-		//	GetBoundingBox(l1, t1, r1, b1);
-		//	coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-		//	if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
-		//		vy = -0.4;
-		//		isEnable = false;
-		//	}
-		//}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
 			float l1, t1, r1, b1, l2, t2, r2, b2;
@@ -59,6 +61,7 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if ((coObjects->at(i))->nx != 0)
 				{
 					if (enemy->isEnable != false) {
+						runHit = true;
 						enemy->SetHP(enemy->GetHP() - damage);
 						enemy->GetCollisionEffect()->SetEnable(true);
 						isEnable = false;
@@ -73,6 +76,7 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			candle->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (candle->isEnable) {
+					runHit = true;
 					candle->GetCollisionEffect()->SetEnable(true);
 					candle->GetDeadEffect()->SetEnable(true);
 					candle->isEnable = false;
@@ -88,6 +92,7 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			torch->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (torch->isEnable) {
+					runHit = true;
 					torch->GetCollisionEffect()->SetEnable(true);
 					torch->GetDeadEffect()->SetEnable(true);
 					torch->isEnable = false;
@@ -96,6 +101,9 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
+	}
+	if (runHit) {
+		Sound::GetInstance()->Play(SOUND_HIT);
 	}
 }
 

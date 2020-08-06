@@ -6,6 +6,7 @@
 Weapon::Weapon()
 {
 	isEnable = false;
+	speed = SUBWEAPON_SPEED_X;
 }
 
 Weapon::~Weapon()
@@ -15,9 +16,9 @@ Weapon::~Weapon()
 void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (nx > 0)
-		vx = SUBWEAPON_SPEED_X;
+		vx = speed;
 	else if (nx < 0)
-		vx = -SUBWEAPON_SPEED_X;
+		vx = -speed;
 
 	if (dynamic_cast<FireBomb*>(this))
 	{

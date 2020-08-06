@@ -190,6 +190,15 @@
     <ClCompile Include="BrickHidden.cpp">
       <Filter>Object\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="DSutil.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="dxutil.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -381,6 +390,15 @@
     <ClInclude Include="BrickHidden.h">
       <Filter>Object\Ground</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Framework\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="DSutil.h">
+      <Filter>Framework\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="dxutil.h">
+      <Filter>Framework\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Framework">
@@ -445,6 +463,9 @@
     </Filter>
     <Filter Include="Object\Board">
       <UniqueIdentifier>{1488bf1b-81d3-4d85-a6c8-8ed9457f716a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Sound">
+      <UniqueIdentifier>{20e3af95-1fb2-48d6-9e4c-ef5875452e15}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

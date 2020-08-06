@@ -1,4 +1,5 @@
 #include "Dagger.h"
+#include "Sound.h"
 #include "Ground.h"
 #include "BoundingMap.h"
 #include "Enemy.h"
@@ -7,11 +8,14 @@
 
 #define DAGGER_DAMAGE 1
 #define DAGGER_USE_HEART 1
+#define DAGGER_ATTACK_SPEED 0.2f
+
 
 Dagger::Dagger()
 {
 	damage = DAGGER_DAMAGE;
 	useHeart = DAGGER_USE_HEART;
+	speed = DAGGER_ATTACK_SPEED;
 	SetAnimationSet(3);
 }
 
@@ -41,18 +45,18 @@ void Dagger::GetBoundingBox(float& left, float& top, float& right, float& bottom
 void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Weapon::Update(dt, coObjects);
+	bool runHit = false;
+
+	Sound::GetInstance()->Play(SOUND_DAGGER);
+
+	if (!CCamera::GetInstance()->CheckPositionInboundCamera(x, y))
+	{
+		isEnable = false;
+		Sound::GetInstance()->Stop(SOUND_DAGGER);
+	}
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		//if (dynamic_cast<Ground*>(coObjects->at(i)) || dynamic_cast<BoundingMap*>(coObjects->at(i)))
-		//{
-		//	float l1, t1, r1, b1, l2, t2, r2, b2;
-		//	GetBoundingBox(l1, t1, r1, b1);
-		//	coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-		//	if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
-		//		isEnable = false;
-		//	}
-		//}
 		if (dynamic_cast<Enemy*>(coObjects->at(i))) {
 			Enemy* enemy = dynamic_cast<Enemy*>(coObjects->at(i));
 			float l1, t1, r1, b1, l2, t2, r2, b2;
@@ -63,6 +67,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if ((coObjects->at(i))->nx != 0)
 				{
 					if (enemy->isEnable != false) {
+						runHit = true;
 						enemy->SetHP(enemy->GetHP() - this->damage);
 						enemy->GetCollisionEffect()->SetEnable(true);
 						isEnable = false;
@@ -78,6 +83,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			candle->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (candle->isEnable) {
+					runHit = true;
 					candle->GetCollisionEffect()->SetEnable(true);
 					candle->GetDeadEffect()->SetEnable(true);
 					candle->isEnable = false;
@@ -93,6 +99,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			torch->GetBoundingBox(l2, t2, r2, b2);
 			if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2)) {
 				if (torch->isEnable) {
+					runHit = true;
 					torch->GetCollisionEffect()->SetEnable(true);
 					torch->GetDeadEffect()->SetEnable(true);
 					torch->isEnable = false;
@@ -101,6 +108,9 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
+	}
+	if (runHit) {
+		Sound::GetInstance()->Play(SOUND_HIT);
 	}
 }
 
