@@ -36,8 +36,6 @@
 
 using namespace std;
 
-
-
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
@@ -48,6 +46,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 }
 
 #pragma region Functions parseSection
+
 void CPlayScene::_ParseSection_SETTINGS(string line)
 {
 	vector<string> tokens = split(line);
@@ -489,6 +488,8 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	coObjects.clear();
+	listItems.clear();
+	listEnemies.clear();
 	simon = NULL;
 
 	if (tileMap)
@@ -520,6 +521,13 @@ void CPlayScene::Update(DWORD dt)
 		return;
 	}
 
+	if (!CheckOutSideBoundingMap()) {
+		this->Unload();
+		this->Load();
+		simon->Reset();
+		return;
+	}
+
 	if (isWaitResetGame)
 	{
 		TimeWaitedResetGame += dt;
@@ -538,6 +546,8 @@ void CPlayScene::Update(DWORD dt)
 		{
 			TimeWaitedResetGame = 0;
 			simon->SetWaitingTimeToRevive(false);
+			this->Unload();
+			this->Load();
 			simon->Reset();
 		}
 		else
@@ -550,6 +560,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(listItems.at(i));
 	}
+
 
 	simon->Update(dt, &coObjects);
 
@@ -676,12 +687,6 @@ void CPlayScene::Update(DWORD dt)
 		simon->x = 0;
 	if (simon->x + SIMON_BBOX_WIDTH > mapWidth)
 		simon->x = mapWidth - SIMON_BBOX_WIDTH;
-
-	if (!CheckOutSideBoundingMap()) {
-		this->Unload();
-		this->Load();
-		simon->Reset();
-	}
 }
 
 void CPlayScene::Render()
@@ -693,6 +698,10 @@ void CPlayScene::Render()
 
 	if (isWaitResetGame) // màn đen trước khi bắt đầu game
 		return; // thoát và ko vẽ gì
+
+	if (!CheckOutSideBoundingMap()) {
+		return;
+	}
 
 	if (simon->GetWaitingTimeToRevive() == true)
 		return;

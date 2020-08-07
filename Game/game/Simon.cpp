@@ -24,11 +24,11 @@ Simon* Simon::__instance = NULL;
 
 Simon::Simon()
 {
-	level = 0;
 	hp = SIMON_HP;
-	heart = 5;
+	heart = SIMON_HEART;
+	life = SIMON_LIFE;
+	level = 0;
 	score = 0;
-	life = 3;
 
 	state = SIMON_STATE_IDLE;
 
@@ -256,18 +256,13 @@ void Simon::Render()
 	{
 		ani = SIMON_ANI_INTRO;
 	}
-	else if (state == SIMON_STATE_HURT || isHurt)
-	{
-		if (!isOnStair) {
-			ani = nx > 0 ? SIMON_ANI_HURT_RIGHT : SIMON_ANI_HURT_LEFT;
-		}
-
-	}
 	else
 	{
-		if (isHurt)
+		if (state == SIMON_STATE_HURT  || isHurt)
 		{
-			ani = nx > 0 ? SIMON_ANI_HURT_RIGHT : SIMON_ANI_HURT_LEFT;
+			if (!isOnStair) {
+				ani = nx > 0 ? SIMON_ANI_HURT_RIGHT : SIMON_ANI_HURT_LEFT;
+			}
 		}
 		if (isSitting)
 		{
@@ -571,7 +566,7 @@ void Simon::CheckAABB(vector<LPGAMEOBJECT>* coObjects)
 			DWORD now = GetTickCount() - enemy->respawnTime;
 			if (!dynamic_cast<Zombie*>(enemy))
 			{
-				if (enemy->respawnTime != 0 && now > 20000 && !enemy->isEnable)
+				if (enemy->respawnTime != 0 && now > ENEMY_TIME_RESPAWN && !enemy->isEnable)
 				{
 					enemy->Respawn();
 				}
@@ -839,7 +834,7 @@ void Simon::HandleSimonAttackingWithSubWeapon(DWORD dt, vector<LPGAMEOBJECT>* co
 				{
 					continue;
 				}
-			
+
 				float l1, t1, r1, b1, l2, t2, r2, b2;
 				GetBoundingBox(l1, t1, r1, b1);
 				weapons[i]->GetBoundingBox(l2, t2, r2, b2);
@@ -860,7 +855,7 @@ void Simon::Reset()
 {
 	level = 0;
 	hp = SIMON_HP;
-	heart = 5;
+	heart = SIMON_HEART;
 	//score = 0;
 	life = life - 1;
 
@@ -900,6 +895,8 @@ void Simon::Reset()
 
 	this->SetIsWinnerBoss(false);
 	this->ResetBackupSimon();
+	this->ResetAnimationAttacking();
+	this->ResetAnimationHurt();
 }
 
 void Simon::ResetBackupSimon()

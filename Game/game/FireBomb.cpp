@@ -40,15 +40,6 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	Weapon::Update(dt, coObjects);
 	bool runHit = false;
 
-	//Sound::GetInstance()->Play(SOUND_FIREBOMB); // chạm đất thì mới playsound
-
-	if (isFiring == true)
-	{
-		vy = 0;
-		vx = 0;
-	}
-	if (isEnable == true)
-		vy += FIRE_BOMB_SPEED_Y * dt;
 
 	// Check AABB
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -69,9 +60,7 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						isEnable = false;
 					}
 				}
-
 			}
-
 		}
 		if (dynamic_cast<Candle*>(coObjects->at(i))) {
 			Candle* candle = dynamic_cast<Candle*>(coObjects->at(i));
@@ -106,6 +95,51 @@ void FireBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+	// turn off collision when die 
+	if (isEnable)
+		CalcPotentialCollisions(coObjects, coEvents);
+
+	// No collision occured, proceed normally
+	if (coEvents.size() != 0)
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+
+		// TODO: This is a very ugly designed function!!!!
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<FireBomb*>(this)) {
+				FireBomb* fireBomb = dynamic_cast<FireBomb*>(this);
+				if (dynamic_cast<Ground*>(e->obj))
+				{
+					if (e->ny < 0) {
+						fireBomb->isFiring = true;
+						Sound::GetInstance()->Play(SOUND_FIREBOMB); // chạm đất thì mới playsound
+					}
+				}
+			}
+		}
+	}
+
+	// clean up collision events
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	if (isFiring == true)
+	{
+		vy = 0;
+		vx = 0;
+	}
+	if (isEnable == true)
+		vy += FIRE_BOMB_SPEED_Y * dt;
+
 
 	if (isFiring == true)
 	{

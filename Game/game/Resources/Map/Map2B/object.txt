@@ -1,6 +1,6 @@
 #id|type|name|x|y|width|height|ani_set_id|type_item|hp/direction|damage/simonX|distance/SimonY|point
-0 14 ObjectHidden 352 151 24 8 3 -2
-1 1 Simon 379 155 16 32 1 -2 -1 455 60
+0 14 ObjectHidden 354 151 24 8 3 -2
+1 1 Simon 379 155 16 32 1 -2 -1 455 65
 2 16 TopStair 448 76 32 8 1 -2
 3 17 Ground 448 112 32 16 -1 -2
 4 17 Ground 352 79 96 16 -1 -2
@@ -19,7 +19,7 @@
 17 11 Candle 333 18 8 16 31 2
 18 11 Candle 240 32 8 16 31 3
 19 11 Candle 145 48 8 16 31 4
-20 11 Candle 103 37 8 16 31 5
+20 11 Candle 103 40 8 16 31 5
 21 11 Candle 44 15 8 16 31 2
 22 204 BlackKnight 380 47 16 32 74 2 2 2 20 300
 23 204 BlackKnight 220 47 16 32 74 3 2 2 20 300
