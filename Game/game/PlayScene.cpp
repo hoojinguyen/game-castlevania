@@ -546,9 +546,9 @@ void CPlayScene::Update(DWORD dt)
 		{
 			TimeWaitedResetGame = 0;
 			simon->SetWaitingTimeToRevive(false);
+			simon->Reset();
 			this->Unload();
 			this->Load();
-			simon->Reset();
 		}
 		else
 			return;
@@ -784,11 +784,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_N:
-	{
-		simon->SetPosition(700, 46);
-		;		break;
-	}
 	case DIK_R:
 	{
 		simon->SetHP(SIMON_HP);

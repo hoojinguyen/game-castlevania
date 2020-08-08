@@ -8,7 +8,7 @@
 
 #define AXE_SPEED_Y_DEFAULT 0.25
 #define AXE_SPEED_Y 0.0007
-#define AXE_DAMAGE 2
+#define AXE_DAMAGE 3
 #define AXE_USE_HEART 1
 
 Axe::Axe()

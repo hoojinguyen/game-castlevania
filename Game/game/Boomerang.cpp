@@ -6,7 +6,7 @@
 #include "Candle.h"
 
 #define DELTA_X 10
-#define BOOMERANG_DAMAGE 2
+#define BOOMERANG_DAMAGE 3
 #define BOOMERANG_USE_HEART 1
 #define BOOMERANG_ATTACK_SPEED 0.15f
 

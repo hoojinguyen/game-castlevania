@@ -61,6 +61,9 @@ Simon::Simon()
 	isWinnerBoss = false;
 
 	subWeaponSwitch = ITEM_DAGGER;
+
+	vx = 0;
+	vy = 0;
 }
 
 Simon* Simon::GetInstance()
@@ -258,7 +261,7 @@ void Simon::Render()
 	}
 	else
 	{
-		if (state == SIMON_STATE_HURT  || isHurt)
+		if (state == SIMON_STATE_HURT || isHurt)
 		{
 			if (!isOnStair) {
 				ani = nx > 0 ? SIMON_ANI_HURT_RIGHT : SIMON_ANI_HURT_LEFT;
@@ -682,7 +685,9 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-		bool isColisionGround = false;
+		//bool isColisionGround = false;
+		bool blockX = false;
+		bool blockY = false;
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -690,6 +695,10 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 
 			if (state != SIMON_STATE_DIE)
 			{
+				if ((dynamic_cast<Enemy*>(e->obj))) {
+					Enemy* enemy = dynamic_cast<Enemy*>(e->obj);
+					HandleCollisionSimonWithEnemy(enemy);
+				}
 				if (dynamic_cast<Item*>(e->obj))
 				{
 					Item* item = dynamic_cast<Item*>(e->obj);
@@ -702,17 +711,21 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 				{
 					BrickHidden* brick = dynamic_cast<BrickHidden*>(e->obj);
 					if (brick->GetState() == BRICK_STATE_NORMAL) {
-						isColisionGround = true;
+						//isColisionGround = true;
+						blockX = true;
+						blockY = true;
 					}
 				}
 				else if (dynamic_cast<BrickMoving*>(e->obj))
 				{
-					isColisionGround = true;
+					//isColisionGround = true;
+					blockY = true;
+					blockX = true;
 					if (e->ny < 0)
 					{
 						vx = e->obj->vx;
-						if (ny != 0)
-							vy = 0;
+						//if (ny != 0)
+						//	vy = 0;
 						if (isJumping)
 						{
 							y -= 8;
@@ -749,7 +762,9 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 					}
 					else
 					{
-						isColisionGround = true;
+						//isColisionGround = true;
+						blockX = true;
+						blockY = true;
 						Ground* ground = dynamic_cast<Ground*>(e->obj);
 						if (isJumping)
 						{
@@ -771,7 +786,9 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<BoundingMap*>(e->obj) || dynamic_cast<Wall*>(e->obj))
 				{
-					isColisionGround = true;
+					//isColisionGround = true;
+					blockX = true;
+					blockY = true;
 				}
 				else if (dynamic_cast<CObjectHidden*>(e->obj))
 				{
@@ -784,26 +801,46 @@ void Simon::CheckSweptAABB(vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (dynamic_cast<Ground*>(e->obj))
 				{
-					isColisionGround = true;
+					//isColisionGround = true;
+					blockX = true;
+					blockY = true;
 				}
 			}
 		}
 
-		if (isColisionGround)
-		{
-			x += min_tx * dx + nx * 0.4f;
-			y += min_ty * dy + ny * 0.4f;
+		//if (isColisionGround)
+		//{
+		//	x += min_tx * dx + nx * 0.4f;
+		//	y += min_ty * dy + ny * 0.4f;
 
+		//	if (nx != 0) vx = 0;
+		//	if (ny != 0) vy = 0;
+
+		//}
+		//else
+		//{
+		//	x += dx;
+		//	y += dy;
+		//}
+
+		if (blockX) {
+			x += min_tx * dx + nx * 0.4f;
 			if (nx != 0) vx = 0;
+
+		}
+		else {
+			x += dx;
+		}
+
+		if (blockY) {
+			y += min_ty * dy + ny * 0.4f;
 			if (ny != 0) vy = 0;
 
 		}
 		else
 		{
-			x += dx;
 			y += dy;
 		}
-
 	}
 
 	// clean up collision events
@@ -870,6 +907,9 @@ void Simon::Reset()
 	isUpStair = false;
 	isDownStair = false;
 	isHurt = false;
+
+	vx = 0;
+	vy = 0;
 
 	timeAttackStart = 0;
 
@@ -982,7 +1022,7 @@ void Simon::SetState(int state)
 	case SIMON_STATE_IDLE:
 		isSitting = false;
 		isRunning = false;
-		vx = 0;
+		//vx = 0;
 		break;
 	case SIMON_STATE_DIE:
 		//vy = -SIMON_DIE_DEFLECT_SPEED;
@@ -1152,7 +1192,7 @@ void Simon::SetState(int state)
 			{
 				vx = 0.03;
 			}
-			if (dy <= 0 || vy >= 0 || dy > 0)
+			//if (dy <= 0 || vy >= 0 || dy > 0)
 				vy = -0.2;
 		}
 		break;

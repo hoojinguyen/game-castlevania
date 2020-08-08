@@ -6,7 +6,7 @@
 #include "Torch.h"
 #include "Candle.h"
 
-#define DAGGER_DAMAGE 1
+#define DAGGER_DAMAGE 3
 #define DAGGER_USE_HEART 1
 #define DAGGER_ATTACK_SPEED 0.2f
 

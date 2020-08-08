@@ -59,8 +59,6 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 		Simon::GetInstance()->GetPosition(simonX, simonY);
 
-		nx = this->x >= simonX ? -1 : 1;
-
 		if (state == VAMPIRE_BAT_STATE_FLYING)
 		{
 			if (nx > 0) {
@@ -80,6 +78,7 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		}
 		else if (state == VAMPIRE_BAT_STATE_IDLE) {
 			if (abs(this->x - simonX) < this->distanceAttack && abs(this->y - simonY) < SIMON_BBOX_HEIGHT) {
+				nx = this->x >= simonX ? -1 : 1;
 				SetState(VAMPIRE_BAT_STATE_FLYING);
 			}
 		}

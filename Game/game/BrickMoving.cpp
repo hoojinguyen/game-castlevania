@@ -3,10 +3,12 @@
 
 #include "Ground.h"
 
+#define DISTANCE_START 32
+
 BrickMoving::BrickMoving()
 {
 	vx = -BRICK_MOVING_SPEED;
-	nx = -1;
+	nx = 1;
 }
 
 void BrickMoving::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -19,24 +21,18 @@ void BrickMoving::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void BrickMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	CGameObject::Update(dt);
 	x += dx;
+	if (vx > 0 && abs(x - DISTANCE_START) > 32) {
+		x = DISTANCE_START + 32;
+		vx = -vx;
+		nx = -1;
+	}
 
-	for (UINT i = 0; i < coObjects->size(); i++)
-	{
-		float l1, t1, r1, b1, l2, t2, r2, b2;
-		GetBoundingBox(l1, t1, r1, b1);
-		coObjects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-
-		if (CGame::AABBCheck(l1, t1, r1, b1, l2, t2, r2, b2))
-		{
-			if (dynamic_cast<Ground*>(coObjects->at(i))) {
-				x -= dx;
-				vx = -vx;
-				nx = -nx;
-			}
-
-		}
+	if (vx < 0 && x <= DISTANCE_START) {
+		x = DISTANCE_START;
+		vx = -vx;
+		nx = 1;
 	}
 
 }
